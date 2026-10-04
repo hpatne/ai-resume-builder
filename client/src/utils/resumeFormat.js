@@ -28,3 +28,15 @@ export function hasSectionContent(resume, sectionKey) {
   if (Array.isArray(value)) return value.length > 0
   return Boolean(value && value.trim())
 }
+
+// Which drawing layout (classic / modern / minimal) a template id uses.
+// Admin-created templates reuse one of the three layouts.
+export function getTemplateLayout(templates, templateId) {
+  return templates.find((template) => template.id === templateId)?.layout || templateId || 'classic'
+}
+
+// "2 Oct 2026" (Indian English date format)
+export function formatDate(isoDate) {
+  if (!isoDate) return ''
+  return new Date(isoDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+}
