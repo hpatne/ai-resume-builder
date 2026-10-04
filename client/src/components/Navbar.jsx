@@ -2,10 +2,12 @@
  * Navbar.jsx
  * Top navigation bar for the public pages (landing, templates, login, signup).
  * On phones the links collapse into a menu opened by the menu button.
+ * Shows Log in / Get started, or a dashboard button when already logged in.
  */
 import { useState } from 'react'
-import { NavLink, Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
 import Logo from './Logo'
 import Button from './Button'
 
@@ -14,30 +16,22 @@ const NAV_LINKS = [
   { to: '/#how-it-works', label: 'How it works', isSectionLink: true },
 ]
 
-// A link to a section of the home page is never "active"; page links highlight when open
-function NavItem({ link, className }) {
-  if (link.isSectionLink) {
-    return (
-      <Link to={link.to} className={className({ isActive: false })}>
-        {link.label}
-      </Link>
-    )
-  }
-  return (
-    <NavLink to={link.to} className={className}>
-      {link.label}
-    </NavLink>
-  )
-}
-
 function Navbar() {
+  const { user, isAdmin } = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const linkClasses = ({ isActive }) =>
-    `rounded px-1 text-[15px] font-semibold ${isActive ? 'text-ink underline decoration-board decoration-[3px]' : 'text-ink-soft hover:text-ink'}`
+  // Page links are underlined in yellow when open; a link to a home page section never is
+  const getLinkClasses = (link) => ({ isActive }) =>
+    `rounded px-1 text-[15px] font-semibold ${
+      isActive && !link.isSectionLink ? 'text-ink underline decoration-board decoration-[3px]' : 'text-ink-soft hover:text-ink'
+    }`
 
-  // Account buttons
-  const accountButtons = (
+  // Account buttons: logged-in users get a shortcut to their dashboard instead
+  const accountButtons = user ? (
+    <Button to={isAdmin ? '/admin' : '/dashboard'} size="sm">
+      {isAdmin ? 'Admin dashboard' : 'My dashboard'}
+    </Button>
+  ) : (
     <>
       <Button to="/login" variant="ghost" size="sm">Log in</Button>
       <Button to="/signup" size="sm">Get started</Button>
@@ -52,7 +46,9 @@ function Navbar() {
         {/* Desktop links */}
         <div className="hidden items-center gap-6 md:flex">
           {NAV_LINKS.map((link) => (
-            <NavItem key={link.to} link={link} className={linkClasses} />
+            <NavLink key={link.to} to={link.to} className={getLinkClasses(link)}>
+              {link.label}
+            </NavLink>
           ))}
           <div className="flex items-center gap-2">{accountButtons}</div>
         </div>
@@ -75,7 +71,9 @@ function Navbar() {
         <div id="mobile-menu" className="border-t border-line bg-paper px-4 pt-3 pb-4 md:hidden" onClick={() => setIsMenuOpen(false)}>
           <div className="flex flex-col gap-3">
             {NAV_LINKS.map((link) => (
-              <NavItem key={link.to} link={link} className={linkClasses} />
+              <NavLink key={link.to} to={link.to} className={getLinkClasses(link)}>
+              {link.label}
+            </NavLink>
             ))}
             <div className="flex gap-2 pt-1">{accountButtons}</div>
           </div>
