@@ -155,3 +155,17 @@
     transition-duration: 1ms !important;
   }
 }
+
+/* ATS score ring sweeps from empty to the score */
+@keyframes ring-sweep {
+  from {
+    stroke-dashoffset: var(--ring-from);
+  }
+  to {
+    stroke-dashoffset: var(--ring-to);
+  }
+}
+
+.animate-ring-sweep {
+  animation: ring-sweep 1100ms var(--ease-out-expo) both;
+}
