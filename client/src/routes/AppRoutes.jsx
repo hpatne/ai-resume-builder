@@ -17,6 +17,7 @@ import DashboardPage from '../pages/DashboardPage'
 import CreateResumePage from '../pages/CreateResumePage'
 import ResumeEditorPage from '../pages/ResumeEditorPage'
 import AtsCheckerPage from '../pages/AtsCheckerPage'
+import ProfilePage from '../pages/ProfilePage'
 import NotFoundPage from '../pages/NotFoundPage'
 
 function AppRoutes() {
@@ -38,6 +39,7 @@ function AppRoutes() {
           <Route path="/create" element={<CreateResumePage />} />
           <Route path="/editor/:resumeId" element={<ResumeEditorPage />} />
           <Route path="/ats-checker" element={<AtsCheckerPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
       </Route>
     </Routes>
