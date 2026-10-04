@@ -10,16 +10,29 @@ import Modal from '../Modal'
 import Button from '../Button'
 import Autocomplete from '../Autocomplete'
 import { validateRequiredFields, hasErrors } from '../../utils/validation'
+import { resolveCompany, resolveRole } from '../../utils/targetProfile'
 
 function RetargetDialog({ companies, roles, currentTarget, onApply, onClose }) {
   const [target, setTarget] = useState(currentTarget)
   const [useCompanyOrder, setUseCompanyOrder] = useState(true)
   const [errors, setErrors] = useState({})
 
+  // Validate, find the company/role profiles, and send the resume changes to the editor
   const handleApply = () => {
     const targetErrors = validateRequiredFields(target, { companyName: 'a target company', roleTitle: 'a job role' })
     setErrors(targetErrors)
-    if (!hasErrors(targetErrors)) onApply(target, useCompanyOrder)
+    if (hasErrors(targetErrors)) return
+
+    const company = resolveCompany(companies, target.companyId, target.companyName)
+    const role = resolveRole(roles, target.roleId, target.roleTitle)
+    onApply({
+      companyId: company.id,
+      companyName: company.name,
+      roleId: role.id,
+      roleTitle: role.title,
+      title: `${company.name} – ${role.title}`,
+      ...(useCompanyOrder && { sectionOrder: [...company.sectionOrder] }),
+    })
   }
 
   return (

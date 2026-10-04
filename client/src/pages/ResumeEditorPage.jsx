@@ -5,7 +5,7 @@
  *   right - LIVE PREVIEW: resumeData is kept in state here and passed as a prop to
  *           the template, so the preview re-renders on every keystroke
  * Toolbar: change template (content kept), Check ATS, Download PDF, Save.
- * On phones the two halves become "Edit" and "Preview" tabs.
+ * The forms + preview layout (and phone tabs) live in EditorWorkspace.jsx.
  */
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
@@ -23,10 +23,8 @@ import PageLoader from '../components/PageLoader'
 import EmptyState from '../components/EmptyState'
 import Button from '../components/Button'
 import TargetStrip from '../components/TargetStrip'
-import ResumePreview from '../components/templates/ResumePreview'
 import EditorToolbar from '../components/editor/EditorToolbar'
-import EditorSections from '../components/editor/EditorSections'
-import KeywordPanel from '../components/editor/KeywordPanel'
+import EditorWorkspace from '../components/editor/EditorWorkspace'
 import RetargetDialog from '../components/editor/RetargetDialog'
 
 function ResumeEditorPage() {
@@ -46,7 +44,6 @@ function ResumeEditorPage() {
   const [isSaving, setIsSaving] = useState(false)
   const [improvingSection, setImprovingSection] = useState('')
   const [openSections, setOpenSections] = useState([searchParams.get('section') || 'personal'])
-  const [activeTab, setActiveTab] = useState('edit') // phones only
   const [isRetargetOpen, setIsRetargetOpen] = useState(false)
 
   // ---- Load the resume once ----
@@ -114,19 +111,11 @@ function ResumeEditorPage() {
     showToast(result.note, 'success', { actionLabel: 'Undo', onAction: () => handleSectionChange(sectionKey, previousValue) })
   }
 
-  const handleRetarget = (newTarget, useCompanyOrder) => {
-    const newCompany = resolveCompany(companies, newTarget.companyId, newTarget.companyName)
-    const newRole = resolveRole(roles, newTarget.roleId, newTarget.roleTitle)
-    updateResume({
-      companyId: newCompany.id,
-      companyName: newCompany.name,
-      roleId: newRole.id,
-      roleTitle: newRole.title,
-      title: `${newCompany.name} – ${newRole.title}`,
-      ...(useCompanyOrder && { sectionOrder: [...newCompany.sectionOrder] }),
-    })
+  // RetargetDialog works out the new company/role and sends back the changes
+  const handleRetarget = (changes) => {
+    updateResume(changes)
     setIsRetargetOpen(false)
-    showToast(`Now targeting ${newCompany.name}. Check the keyword panel for what is missing.`)
+    showToast(`Now targeting ${changes.companyName}. Check the keyword panel for what is missing.`)
   }
 
   // ---- Handlers: saving ----
@@ -144,8 +133,6 @@ function ResumeEditorPage() {
     if (hasUnsavedChanges) await handleSave()
     navigate(`/ats-checker?resume=${resumeData.id}`)
   }
-
-  const tabClasses = (tab) => `h-10 flex-1 rounded-md text-[15px] font-semibold ${activeTab === tab ? 'bg-navy text-white' : 'text-ink-soft'}`
 
   return (
     <div className="space-y-4">
@@ -172,34 +159,15 @@ function ResumeEditorPage() {
         action={<Button variant="secondary" size="sm" onClick={() => setIsRetargetOpen(true)}>Change target</Button>}
       />
 
-      {/* Phone tabs */}
-      <div role="tablist" aria-label="Editor view" className="flex gap-1 rounded-lg border border-line bg-paper p-1 lg:hidden">
-        <button type="button" role="tab" aria-selected={activeTab === 'edit'} className={tabClasses('edit')} onClick={() => setActiveTab('edit')}>Edit</button>
-        <button type="button" role="tab" aria-selected={activeTab === 'preview'} className={tabClasses('preview')} onClick={() => setActiveTab('preview')}>Preview</button>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        {/* Left: keywords + forms */}
-        <div className={`${activeTab === 'edit' ? 'block' : 'hidden'} min-w-0 space-y-3 lg:block`}>
-          <KeywordPanel company={company} role={role} resumeData={resumeData} onAddSkill={handleAddSkill} />
-          <EditorSections
-            resumeData={resumeData}
-            onSectionChange={handleSectionChange}
-            onMoveSection={handleMoveSection}
-            onImprove={handleImprove}
-            improvingSection={improvingSection}
-            openSections={openSections}
-            onToggleSection={handleToggleSection}
-          />
-        </div>
-
-        {/* Right: live preview (this exact page is what gets printed) */}
-        <div className={`${activeTab === 'preview' ? 'block' : 'hidden'} min-w-0 lg:block`}>
-          <div className="rounded-lg bg-[#dfe3ea] p-3 sm:p-5 lg:sticky lg:top-6 lg:max-h-[calc(100dvh-3rem)] lg:overflow-y-auto">
-            <ResumePreview resume={resumeData} layout={getTemplateLayout(templates, resumeData.templateId)} printRef={printRef} showPageBreaks />
-          </div>
-        </div>
-      </div>
+      <EditorWorkspace
+        resumeData={resumeData}
+        layout={getTemplateLayout(templates, resumeData.templateId)}
+        company={company}
+        role={role}
+        printRef={printRef}
+        onAddSkill={handleAddSkill}
+        sectionProps={{ onSectionChange: handleSectionChange, onMoveSection: handleMoveSection, onImprove: handleImprove, improvingSection, openSections, onToggleSection: handleToggleSection }}
+      />
 
       {isRetargetOpen && (
         <RetargetDialog
