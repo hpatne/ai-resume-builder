@@ -12,6 +12,7 @@ import ProtectedRoute from './ProtectedRoute'
 import LandingPage from '../pages/LandingPage'
 import LoginPage from '../pages/LoginPage'
 import SignupPage from '../pages/SignupPage'
+import TemplatesPage from '../pages/TemplatesPage'
 import DashboardPage from '../pages/DashboardPage'
 import NotFoundPage from '../pages/NotFoundPage'
 
@@ -23,6 +24,7 @@ function AppRoutes() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/templates" element={<TemplatesPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
 
