@@ -14,6 +14,7 @@ import LoginPage from '../pages/LoginPage'
 import SignupPage from '../pages/SignupPage'
 import TemplatesPage from '../pages/TemplatesPage'
 import DashboardPage from '../pages/DashboardPage'
+import CreateResumePage from '../pages/CreateResumePage'
 import NotFoundPage from '../pages/NotFoundPage'
 
 function AppRoutes() {
@@ -32,6 +33,7 @@ function AppRoutes() {
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/create" element={<CreateResumePage />} />
         </Route>
       </Route>
     </Routes>

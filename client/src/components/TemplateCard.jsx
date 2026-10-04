@@ -61,7 +61,7 @@ function TemplateCard({ template, sampleResume, isRecommended, isSelected, onSel
         type="button"
         onClick={() => onSelect(template.id)}
         aria-pressed={isSelected}
-        className={`flex flex-col overflow-hidden rounded-lg border-2 bg-paper shadow-panel transition-shadow hover:shadow-pop ${borderClasses}`}
+        className={`flex flex-col overflow-hidden rounded-lg border-2 bg-paper text-left shadow-panel transition-shadow hover:shadow-pop ${borderClasses}`}
       >
         {preview}
         {details}
