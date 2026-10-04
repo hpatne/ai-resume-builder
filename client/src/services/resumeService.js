@@ -73,10 +73,15 @@ export function duplicateResume(resumeId) {
   return simulateRequest(copy, 400)
 }
 
-// Store the latest ATS score on the resume (shown as a badge on the dashboard)
+// Store the latest ATS score on the resume (shown as a badge on the dashboard).
+// "Last edited" is not changed, because checking a resume is not editing it.
 export function saveAtsScore(resumeId, score) {
   // TODO (Phase 2): replace mock with real API call to the Express backend
-  return updateResume(resumeId, { atsScore: score })
+  const resumes = getStoredResumes().map((resume) =>
+    resume.id === resumeId ? { ...resume, atsScore: score, atsCheckedAt: new Date().toISOString() } : resume
+  )
+  saveToStorage(RESUMES_KEY, resumes)
+  return simulateRequest(resumes.find((resume) => resume.id === resumeId), 200)
 }
 
 // Every resume of every user, for the admin dashboard

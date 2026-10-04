@@ -16,7 +16,7 @@ function DashboardLayout() {
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[256px_1fr]">
       {/* Desktop sidebar: fixed while the page scrolls */}
-      <aside className="hidden lg:block">
+      <aside className="hidden bg-navy lg:block">
         <div className="sticky top-0 h-dvh">
           <Sidebar />
         </div>

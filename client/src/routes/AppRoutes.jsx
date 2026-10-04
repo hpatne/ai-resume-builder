@@ -16,6 +16,7 @@ import TemplatesPage from '../pages/TemplatesPage'
 import DashboardPage from '../pages/DashboardPage'
 import CreateResumePage from '../pages/CreateResumePage'
 import ResumeEditorPage from '../pages/ResumeEditorPage'
+import AtsCheckerPage from '../pages/AtsCheckerPage'
 import NotFoundPage from '../pages/NotFoundPage'
 
 function AppRoutes() {
@@ -36,6 +37,7 @@ function AppRoutes() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/create" element={<CreateResumePage />} />
           <Route path="/editor/:resumeId" element={<ResumeEditorPage />} />
+          <Route path="/ats-checker" element={<AtsCheckerPage />} />
         </Route>
       </Route>
     </Routes>

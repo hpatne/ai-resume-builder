@@ -8,7 +8,7 @@
 
 // Common English words that are never useful keywords
 export const STOP_WORDS = new Set(
-  'a an and are as at be been but by can for from has have in into is it its of on or our that the their them they this to was we were will with you your who what when where which while within able about across after also any both each etc etc. more most must new not only other over per such than then there these those through using very well work working years year experience strong good great team role job candidate looking join plus preferred requirements responsibilities skills knowledge ability including like'.split(' ')
+  'a an and are as at be been but by can for from has have in into is it its of on or our that the their them they this to was we were will with you your who what when where which while within able about across after also any both each etc etc. more most must new not only other over per such than then there these those through using very well work working years year experience strong good great team role job candidate looking join plus preferred requirements responsibilities skills knowledge ability including like write code software build building develop apply follow take part problems real clear reliable join environments practices hiring ensure help'.split(' ')
 )
 
 // Join every text field of the resume, so we can search it in one go

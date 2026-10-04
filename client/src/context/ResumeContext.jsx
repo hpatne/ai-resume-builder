@@ -2,7 +2,7 @@
  * ResumeContext.jsx
  * Holds the logged-in user's list of resumes and the actions that change it.
  * Usage: const { resumes, isResumesLoading, createResume, saveResume,
- *                deleteResume, duplicateResume } = useResumes()
+ *                deleteResume, duplicateResume, saveScore } = useResumes()
  * Every action calls services/resumeService.js first, then updates the list,
  * so the dashboard always shows what is saved.
  */
@@ -52,6 +52,10 @@ export function ResumeProvider({ children }) {
       deleteResume: async (resumeId) => {
         await resumeService.deleteResume(resumeId)
         updateList((list) => list.filter((resume) => resume.id !== resumeId))
+      },
+      saveScore: async (resumeId, score) => {
+        const scoredResume = await resumeService.saveAtsScore(resumeId, score)
+        updateList((list) => list.map((resume) => (resume.id === resumeId ? scoredResume : resume)))
       },
       duplicateResume: async (resumeId) => {
         const copy = await resumeService.duplicateResume(resumeId)
