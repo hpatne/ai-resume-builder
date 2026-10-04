@@ -8,7 +8,8 @@
 import { useState } from 'react'
 import { CircleAlert } from 'lucide-react'
 
-function Autocomplete({ id, label, value, options, onTextChange, onSelect, placeholder, hint, error }) {
+// listPosition="inline" pushes content down instead of floating (used inside dialogs)
+function Autocomplete({ id, label, value, options, onTextChange, onSelect, placeholder, hint, error, listPosition = 'floating' }) {
   const [isOpen, setIsOpen] = useState(false)
   const [highlightedIndex, setHighlightedIndex] = useState(0)
 
@@ -68,7 +69,7 @@ function Autocomplete({ id, label, value, options, onTextChange, onSelect, place
 
       {/* Suggestion list */}
       {isOpen && matchingOptions.length > 0 && (
-        <ul id={listId} role="listbox" className="absolute z-30 mt-1 max-h-72 w-full overflow-y-auto rounded-md border border-line-strong bg-paper py-1 shadow-pop">
+        <ul id={listId} role="listbox" className={`${listPosition === 'inline' ? 'relative' : 'absolute'} z-30 mt-1 max-h-72 w-full overflow-y-auto rounded-md border border-line-strong bg-paper py-1 shadow-pop`}>
           {matchingOptions.map((option, index) => (
             <li
               key={option.id}

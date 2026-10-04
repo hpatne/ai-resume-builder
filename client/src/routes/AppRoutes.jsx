@@ -15,6 +15,7 @@ import SignupPage from '../pages/SignupPage'
 import TemplatesPage from '../pages/TemplatesPage'
 import DashboardPage from '../pages/DashboardPage'
 import CreateResumePage from '../pages/CreateResumePage'
+import ResumeEditorPage from '../pages/ResumeEditorPage'
 import NotFoundPage from '../pages/NotFoundPage'
 
 function AppRoutes() {
@@ -34,6 +35,7 @@ function AppRoutes() {
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/create" element={<CreateResumePage />} />
+          <Route path="/editor/:resumeId" element={<ResumeEditorPage />} />
         </Route>
       </Route>
     </Routes>

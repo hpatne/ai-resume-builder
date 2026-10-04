@@ -17,12 +17,12 @@ function TargetStrip({ companyName, roleTitle, detail, action, size = 'md' }) {
     >
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2 px-4 py-2.5">
         {/* `key` makes React re-mount this block when the target changes, replaying the flip */}
-        <div key={`${companyName}-${roleTitle}`} className="animate-board-flip flex min-w-0 flex-1 flex-wrap items-baseline gap-x-3">
+        <div key={`${companyName}-${roleTitle}`} className="animate-board-flip flex min-w-0 basis-full flex-col gap-x-3 sm:flex-1 sm:basis-auto sm:flex-row sm:flex-wrap sm:items-baseline">
           {hasTarget ? (
             <>
               <span className="sr-only">Target company:</span>
               <span className={`board-text leading-tight break-words ${companySize}`}>{companyName || 'Any company'}</span>
-              <span aria-hidden="true" className="h-5 w-[3px] self-center bg-ink" />
+              <span aria-hidden="true" className="hidden h-5 w-[3px] self-center bg-ink sm:block" />
               <span className="sr-only">Job role:</span>
               <span className={`font-board leading-tight font-semibold ${roleSize}`}>{roleTitle || 'Any role'}</span>
             </>
