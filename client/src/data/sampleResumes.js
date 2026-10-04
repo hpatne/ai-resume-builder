@@ -1,0 +1,196 @@
+/*
+ * sampleResumes.js
+ * SAMPLE DATA: resumes that exist before anyone signs up, so the demo account
+ * has a populated dashboard and the admin dashboard has numbers to show.
+ * The demo user (u-demo) owns three resumes, each tailored to a different
+ * company + role, which shows the multiple-resume feature (objective O6).
+ * TODO (Phase 2): replace mock with real API call to the Express backend
+ */
+const demoPersonal = {
+  fullName: 'Aarav Sharma',
+  email: 'demo@resumeai.dev',
+  phone: '+91 98200 12345',
+  location: 'Mumbai, Maharashtra',
+  linkedin: 'linkedin.com/in/aarav-sharma-demo',
+  portfolio: 'github.com/aarav-demo',
+}
+
+const demoEducation = [
+  {
+    id: 'edu-1',
+    degree: 'B.E. in Computer Engineering',
+    institution: 'Vidyanagar Institute of Technology (sample)',
+    location: 'Mumbai',
+    startYear: '2023',
+    endYear: '2027',
+    score: 'CGPA 8.6 / 10',
+  },
+]
+
+const sampleResumes = [
+  {
+    id: 'r-nimbus-frontend',
+    userId: 'u-demo',
+    title: 'Nimbus Labs – Frontend Developer',
+    companyId: 'nimbus-labs',
+    companyName: 'Nimbus Labs',
+    roleId: 'frontend-developer',
+    roleTitle: 'Frontend Developer',
+    templateId: 'modern',
+    sectionOrder: ['summary', 'skills', 'projects', 'experience', 'education', 'certifications'],
+    personal: demoPersonal,
+    summary:
+      'Frontend developer skilled in React, JavaScript and responsive design, focused on fast and accessible user interfaces. Looking to help Nimbus Labs turn product requirements into clean, reusable components, with a strong base in data structures and performance.',
+    skills: ['JavaScript', 'React', 'HTML5', 'CSS3', 'Tailwind CSS', 'Git', 'REST APIs', 'Responsive Design', 'Data Structures'],
+    experience: [
+      {
+        id: 'exp-1',
+        jobTitle: 'Frontend Developer Intern',
+        company: 'Brightpath Software (sample)',
+        location: 'Remote',
+        startDate: 'May 2026',
+        endDate: 'Jul 2026',
+        bullets:
+          'Built 12 reusable React components for an internal dashboard, cutting new-page development time by 30%\nImproved the Lighthouse performance score from 62 to 91 by lazy-loading images and splitting bundles\nFixed 40+ cross-browser and accessibility issues reported during QA',
+      },
+    ],
+    education: demoEducation,
+    projects: [
+      {
+        id: 'proj-1',
+        name: 'Campus Events Portal',
+        techStack: 'React, Tailwind CSS, Firebase',
+        link: 'github.com/aarav-demo/campus-events',
+        bullets:
+          'Built a responsive portal used by 800+ students to discover and register for college events\nAdded search and filters with debounced input, keeping results under 100 ms',
+      },
+      {
+        id: 'proj-2',
+        name: 'Weather Dashboard',
+        techStack: 'JavaScript, REST APIs, Chart.js',
+        link: '',
+        bullets:
+          'Fetched live forecast data from a public REST API and charted 7-day trends\nCached responses in local storage to cut repeat API calls by 70%',
+      },
+    ],
+    certifications: [{ id: 'cert-1', name: 'Responsive Web Design', issuer: 'freeCodeCamp', year: '2025' }],
+    atsScore: 82,
+    createdAt: '2026-09-25T09:00:00.000Z',
+    updatedAt: '2026-10-02T18:20:00.000Z',
+  },
+  {
+    id: 'r-corewave-se',
+    userId: 'u-demo',
+    title: 'Corewave IT Services – Software Engineer',
+    companyId: 'corewave-it',
+    companyName: 'Corewave IT Services',
+    roleId: 'software-engineer',
+    roleTitle: 'Software Engineer',
+    templateId: 'classic',
+    sectionOrder: ['summary', 'education', 'skills', 'experience', 'certifications', 'projects'],
+    personal: demoPersonal,
+    summary:
+      'Final-year computer engineering student with strong foundations in Java, OOP and problem solving. Worked on team projects using agile practices and keen to learn client technologies at Corewave IT Services.',
+    skills: ['Java', 'Python', 'OOP', 'SQL', 'Git', 'Problem Solving'],
+    experience: [
+      {
+        id: 'exp-1',
+        jobTitle: 'Software Developer Intern',
+        company: 'Brightpath Software (sample)',
+        location: 'Remote',
+        startDate: 'May 2026',
+        endDate: 'Jul 2026',
+        bullets:
+          'Worked on refactoring a legacy Java module\nResponsible for writing unit tests for the billing service\nHelped the team with documentation',
+      },
+    ],
+    education: demoEducation,
+    projects: [
+      {
+        id: 'proj-1',
+        name: 'Railway Reservation Simulator',
+        techStack: 'Java, OOP, File I/O',
+        link: '',
+        bullets: 'Modelled trains, coaches and bookings with classes and interfaces\nImplemented waitlist confirmation using a priority queue',
+      },
+    ],
+    certifications: [{ id: 'cert-1', name: 'Programming in Java', issuer: 'NPTEL', year: '2025' }],
+    atsScore: 64,
+    createdAt: '2026-09-20T11:00:00.000Z',
+    updatedAt: '2026-09-28T16:45:00.000Z',
+  },
+  {
+    id: 'r-ledgerline-da',
+    userId: 'u-demo',
+    title: 'Ledgerline Capital – Data Analyst',
+    companyId: 'ledgerline-capital',
+    companyName: 'Ledgerline Capital',
+    roleId: 'data-analyst',
+    roleTitle: 'Data Analyst',
+    templateId: 'minimal',
+    sectionOrder: ['summary', 'experience', 'skills', 'certifications', 'education', 'projects'],
+    personal: demoPersonal,
+    summary:
+      'Data analyst skilled in SQL, Excel and Python, turning raw data into clear reports. Looking to support accurate, compliant reporting at Ledgerline Capital.',
+    skills: ['SQL', 'Excel', 'Python', 'Pandas', 'Power BI', 'Reporting'],
+    experience: [],
+    education: demoEducation,
+    projects: [
+      {
+        id: 'proj-1',
+        name: 'College Placement Dashboard',
+        techStack: 'SQL, Power BI',
+        link: '',
+        bullets: 'Modelled 5 years of placement data and built branch-wise KPI views\nHighlighted top recruiters and salary trends for the placement cell',
+      },
+    ],
+    certifications: [{ id: 'cert-1', name: 'Data Analytics with Python', issuer: 'NPTEL', year: '2026' }],
+    atsScore: null,
+    createdAt: '2026-09-18T10:00:00.000Z',
+    updatedAt: '2026-09-20T12:10:00.000Z',
+  },
+  {
+    id: 'r-priya-sprintly',
+    userId: 'u-priya',
+    title: 'Sprintly – Full Stack Developer',
+    companyId: 'sprintly',
+    companyName: 'Sprintly',
+    roleId: 'full-stack-developer',
+    roleTitle: 'Full Stack Developer',
+    templateId: 'modern',
+    sectionOrder: ['summary', 'projects', 'skills', 'experience', 'education', 'certifications'],
+    personal: { fullName: 'Priya Nair', email: 'priya@example.com', phone: '+91 90000 11111', location: 'Kochi, Kerala', linkedin: '', portfolio: '' },
+    summary: 'Full stack developer who ships end-to-end MERN applications.',
+    skills: ['JavaScript', 'React', 'Node.js', 'Express', 'MongoDB'],
+    experience: [],
+    education: [{ id: 'edu-1', degree: 'B.Tech in Information Technology', institution: 'Coastal College of Engineering (sample)', location: 'Kochi', startYear: '2022', endYear: '2026', score: 'CGPA 8.9 / 10' }],
+    projects: [],
+    certifications: [],
+    atsScore: 71,
+    createdAt: '2026-09-05T10:00:00.000Z',
+    updatedAt: '2026-09-30T10:00:00.000Z',
+  },
+  {
+    id: 'r-rohan-meridian',
+    userId: 'u-rohan',
+    title: 'Meridian Advisory – Data Analyst',
+    companyId: 'meridian-advisory',
+    companyName: 'Meridian Advisory',
+    roleId: 'data-analyst',
+    roleTitle: 'Data Analyst',
+    templateId: 'classic',
+    sectionOrder: ['summary', 'experience', 'projects', 'education', 'skills', 'certifications'],
+    personal: { fullName: 'Rohan Mehta', email: 'rohan@example.com', phone: '+91 90000 22222', location: 'Ahmedabad, Gujarat', linkedin: '', portfolio: '' },
+    summary: 'Analytical graduate with SQL and Excel skills.',
+    skills: ['SQL', 'Excel', 'Statistics'],
+    experience: [],
+    education: [],
+    projects: [],
+    certifications: [],
+    atsScore: null,
+    createdAt: '2026-09-22T10:00:00.000Z',
+    updatedAt: '2026-09-22T10:00:00.000Z',
+  },
+]
+
+export default sampleResumes

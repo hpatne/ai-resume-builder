@@ -23,7 +23,7 @@ export default defineConfig([
       // Context files export a Provider component plus its hook (e.g. useAuth)
       'react-refresh/only-export-components': [
         'warn',
-        { allowConstantExport: true, allowExportNames: ['useAuth', 'useResumes', 'useToast'] },
+        { allowConstantExport: true, allowExportNames: ['useAuth', 'useResumes', 'useToast', 'useCatalog'] },
       ],
     },
   },

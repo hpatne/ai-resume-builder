@@ -1,0 +1,86 @@
+/*
+ * companies.js
+ * SAMPLE DATA: five fictional companies (invented names, not real employers).
+ * Each profile drives the customisation (deliverable D6):
+ *   preferredTemplate -> template recommended first in the wizard
+ *   sectionOrder      -> order of sections in the generated resume
+ *   emphasis          -> whether projects or experience get more space
+ *   keywords          -> shown in the editor keyword panel and used by the ATS check
+ *   summaryLine       -> sentence the mock AI adds to the summary for this company
+ * Admins can add, edit and delete companies on /admin/companies.
+ * TODO (Phase 2): replace mock with real API call to the Express backend
+ */
+const companies = [
+  {
+    id: 'nimbus-labs',
+    name: 'Nimbus Labs',
+    type: 'Product-based',
+    industry: 'Technology (SaaS)',
+    location: 'Bengaluru',
+    preferredTemplate: 'modern',
+    emphasis: 'projects',
+    sectionOrder: ['summary', 'skills', 'projects', 'experience', 'education', 'certifications'],
+    keywords: ['data structures', 'algorithms', 'system design', 'scalable', 'performance', 'code review', 'unit testing', 'ownership'],
+    focus: 'Problem solving, clean code and projects that show real depth.',
+    summaryLine: 'Strong grounding in data structures, algorithms and writing scalable, well-tested code.',
+    isSample: true,
+  },
+  {
+    id: 'corewave-it',
+    name: 'Corewave IT Services',
+    type: 'Service-based',
+    industry: 'IT Services & Consulting',
+    location: 'Pune',
+    preferredTemplate: 'classic',
+    emphasis: 'experience',
+    sectionOrder: ['summary', 'education', 'skills', 'experience', 'certifications', 'projects'],
+    keywords: ['client', 'SDLC', 'agile', 'communication', 'teamwork', 'documentation', 'certification', 'quick learner'],
+    focus: 'Strong academics, broad fundamentals, certifications and readiness to learn client technologies.',
+    summaryLine: 'A quick learner who works well in agile teams and communicates clearly with clients.',
+    isSample: true,
+  },
+  {
+    id: 'sprintly',
+    name: 'Sprintly',
+    type: 'Startup',
+    industry: 'Consumer Tech',
+    location: 'Bengaluru (hybrid)',
+    preferredTemplate: 'modern',
+    emphasis: 'projects',
+    sectionOrder: ['summary', 'projects', 'skills', 'experience', 'education', 'certifications'],
+    keywords: ['shipped', 'MVP', 'end-to-end', 'fast-paced', 'ownership', 'user feedback', 'iterate', 'full stack'],
+    focus: 'People who ship: end-to-end projects, speed and ownership over titles.',
+    summaryLine: 'Enjoys owning features end-to-end and shipping fast based on user feedback.',
+    isSample: true,
+  },
+  {
+    id: 'meridian-advisory',
+    name: 'Meridian Advisory',
+    type: 'Consulting',
+    industry: 'Management & Technology Consulting',
+    location: 'Gurugram',
+    preferredTemplate: 'classic',
+    emphasis: 'experience',
+    sectionOrder: ['summary', 'experience', 'projects', 'education', 'skills', 'certifications'],
+    keywords: ['stakeholder', 'client-facing', 'analysis', 'presentation', 'problem solving', 'structured thinking', 'impact', 'recommendations'],
+    focus: 'Structured thinking, client communication and measurable impact.',
+    summaryLine: 'Brings structured thinking and clear presentation of analysis to stakeholders.',
+    isSample: true,
+  },
+  {
+    id: 'ledgerline-capital',
+    name: 'Ledgerline Capital',
+    type: 'Finance',
+    industry: 'Banking & Financial Services',
+    location: 'Mumbai',
+    preferredTemplate: 'minimal',
+    emphasis: 'experience',
+    sectionOrder: ['summary', 'experience', 'skills', 'certifications', 'education', 'projects'],
+    keywords: ['accuracy', 'compliance', 'risk', 'reporting', 'reconciliation', 'regulatory', 'attention to detail', 'SQL'],
+    focus: 'Accuracy, compliance awareness and clear, auditable reporting.',
+    summaryLine: 'Known for accuracy and attention to detail in reporting and compliance work.',
+    isSample: true,
+  },
+]
+
+export default companies
