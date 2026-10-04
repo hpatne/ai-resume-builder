@@ -14,6 +14,7 @@ import { loadCollection, saveToStorage } from '../utils/storage'
 import { simulateRequest, createId } from '../utils/mockApi'
 
 const SEED_DATA = { companies: seedCompanies, roles: seedRoles, templates: seedTemplates }
+const ID_PREFIXES = { companies: 'company', roles: 'role', templates: 'template' }
 
 function readCollection(collectionName) {
   return loadCollection(collectionName, SEED_DATA[collectionName])
@@ -23,7 +24,7 @@ function readCollection(collectionName) {
 function saveItem(collectionName, item) {
   const items = readCollection(collectionName)
   const isNew = !item.id || !items.some((existing) => existing.id === item.id)
-  const savedItem = isNew ? { ...item, id: item.id || createId(collectionName.slice(0, -1)) } : item
+  const savedItem = isNew ? { ...item, id: item.id || createId(ID_PREFIXES[collectionName]) } : item
   const updatedItems = isNew ? [...items, savedItem] : items.map((existing) => (existing.id === item.id ? savedItem : existing))
   saveToStorage(collectionName, updatedItems)
   return simulateRequest(updatedItems, 400)

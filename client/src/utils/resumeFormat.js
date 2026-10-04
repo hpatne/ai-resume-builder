@@ -30,9 +30,13 @@ export function hasSectionContent(resume, sectionKey) {
 }
 
 // Which drawing layout (classic / modern / minimal) a template id uses.
-// Admin-created templates reuse one of the three layouts.
+// Admin-created templates reuse one of the three layouts. If the template was
+// deleted by an admin, the resume falls back to the Classic layout.
 export function getTemplateLayout(templates, templateId) {
-  return templates.find((template) => template.id === templateId)?.layout || templateId || 'classic'
+  const template = templates.find((item) => item.id === templateId)
+  if (template) return template.layout
+  // Catalog still loading: the built-in ids are also layout names
+  return templates.length === 0 ? templateId : 'classic'
 }
 
 // "2 Oct 2026" (Indian English date format)

@@ -9,12 +9,18 @@ import { X } from 'lucide-react'
 
 function Modal({ title, onClose, children, footer, size = 'md' }) {
   const dialogRef = useRef(null)
+  // Keep the latest onClose in a ref, so the effect below runs only once
+  // (parents often pass a new function on every render)
+  const onCloseRef = useRef(onClose)
+  useEffect(() => {
+    onCloseRef.current = onClose
+  })
 
   // When opened: focus the dialog, close on Escape, and stop the page behind from scrolling
   useEffect(() => {
     dialogRef.current?.focus()
     const handleKeyDown = (event) => {
-      if (event.key === 'Escape') onClose()
+      if (event.key === 'Escape') onCloseRef.current()
     }
     document.addEventListener('keydown', handleKeyDown)
     document.body.style.overflow = 'hidden'
@@ -22,7 +28,7 @@ function Modal({ title, onClose, children, footer, size = 'md' }) {
       document.removeEventListener('keydown', handleKeyDown)
       document.body.style.overflow = ''
     }
-  }, [onClose])
+  }, [])
 
   const widthClass = size === 'lg' ? 'max-w-2xl' : 'max-w-md'
 
