@@ -1,0 +1,157 @@
+/*
+ * index.css
+ * Global styles and DESIGN TOKENS for the whole app.
+ * Tailwind reads the @theme block below, so a token like --color-navy becomes
+ * classes such as bg-navy / text-navy / border-navy everywhere in the code.
+ *
+ * Visual idea: the resume is a "ticket" to one destination company.
+ * - navy  : railway-navy app shell (sidebar, footer)
+ * - board : station-board yellow, used ONLY for the target company + role strip
+ *           and for selected states, so the target always stands out
+ * - maroon: missing keywords and errors
+ * - signal: matched keywords and success
+ */
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Barlow', ui-sans-serif, system-ui, sans-serif;
+  --font-board: 'Barlow Condensed', 'Barlow', ui-sans-serif, sans-serif;
+
+  --color-ground: #f3f5f8;
+  --color-paper: #ffffff;
+  --color-ink: #121620;
+  --color-ink-soft: #464e5c;
+  --color-ink-faint: #5a6271;
+  --color-line: #d6dbe3;
+  --color-line-strong: #a9b2c0;
+
+  --color-navy: #12284a;
+  --color-navy-deep: #0b1a33;
+  --color-navy-soft: #1d3a66;
+  --color-navy-ink: #c5d1e6;
+
+  --color-board: #f5c11b;
+  --color-board-deep: #c99a00;
+  --color-board-soft: #fff4c7;
+
+  --color-maroon: #8c2a1f;
+  --color-maroon-soft: #f9e5e1;
+  --color-signal: #17703f;
+  --color-signal-soft: #def2e5;
+  --color-amber: #8a5300;
+  --color-amber-soft: #fcefd6;
+
+  --shadow-panel: 0 1px 2px rgb(18 22 32 / 0.06), 0 4px 14px rgb(18 22 32 / 0.05);
+  --shadow-paper: 0 2px 4px rgb(18 22 32 / 0.08), 0 14px 36px rgb(18 22 32 / 0.12);
+  --shadow-pop: 0 8px 24px rgb(11 26 51 / 0.18), 0 2px 6px rgb(11 26 51 / 0.12);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------- Base element styles ---------- */
+@layer base {
+  html {
+    background: var(--color-ground);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    min-height: 100dvh;
+    scrollbar-color: var(--color-line-strong) transparent;
+  }
+
+  /* Browser surfaces themed from the palette (selection, caret, focus, links) */
+  ::selection {
+    background: var(--color-board);
+    color: var(--color-ink);
+  }
+
+  input,
+  textarea,
+  select {
+    caret-color: var(--color-navy);
+    accent-color: var(--color-navy);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-navy);
+    outline-offset: 2px;
+  }
+
+  .on-navy :focus-visible {
+    outline-color: var(--color-board);
+  }
+
+  a {
+    text-underline-offset: 3px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
+/* ---------- Small shared utilities ---------- */
+@layer components {
+  /* Station-board lettering: condensed, bold, uppercase */
+  .board-text {
+    font-family: var(--font-board);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  /* Scores, dates and counts line up in columns */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ---------- Motion ---------- */
+/* The one signature motion: the target board "flips" when the target changes,
+   like a station departure board updating. */
+@keyframes board-flip {
+  from {
+    transform: translateY(-55%);
+    opacity: 0;
+    clip-path: inset(0 0 60% 0);
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.animate-board-flip {
+  animation: board-flip 420ms var(--ease-out-expo) both;
+}
+
+@keyframes toast-in {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-toast-in {
+  animation: toast-in 260ms var(--ease-out-expo) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}
