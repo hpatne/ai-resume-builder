@@ -1,12 +1,27 @@
 /*
  * App.jsx
- * Root component. Pages and routing are added feature by feature.
+ * Root component. Wraps the app in:
+ *   BrowserRouter    - enables page URLs (React Router)
+ *   ToastProvider    - pop-up notifications available everywhere
+ *   CatalogProvider  - companies, roles and templates shared by all pages
+ * and then renders AppRoutes, which decides which page to show.
  */
+import { BrowserRouter } from 'react-router-dom'
+import { ToastProvider } from './context/ToastContext'
+import { CatalogProvider } from './context/CatalogContext'
+import AppRoutes from './routes/AppRoutes'
+import ScrollToTop from './routes/ScrollToTop'
+
 function App() {
   return (
-    <main className="grid min-h-dvh place-items-center p-6">
-      <h1 className="board-text text-4xl">AI Resume Builder</h1>
-    </main>
+    <BrowserRouter>
+      <ScrollToTop />
+      <ToastProvider>
+        <CatalogProvider>
+          <AppRoutes />
+        </CatalogProvider>
+      </ToastProvider>
+    </BrowserRouter>
   )
 }
 

@@ -3,7 +3,8 @@
  * MOCK "AI" for resume writing (deliverable D5). No real AI is called in
  * Phase 1: content is assembled from the target company + role profiles, so
  * the result is visibly tailored and the UI (buttons, loading, undo) is real.
- *   generateResume() - writes a full first draft in the create wizard
+ *   buildResumeDraft() - assembles a full first draft (also used by the landing demo)
+ *   generateResume() - the same draft returned after an "AI is writing" delay (wizard)
  *   improveSection() - rewrites one section in the editor ("Improve with AI")
  *
  * TODO (Phase 2): replace mock with real API call to the Express backend,
@@ -51,8 +52,8 @@ function writeProjects(company, role) {
   }))
 }
 
-export function generateResume({ basics, company, role, templateId }) {
-  // TODO (Phase 2): replace mock with real API call to the Express backend
+// Builds the full draft object instantly (also used by the landing page demo)
+export function buildResumeDraft({ basics, company, role, templateId }) {
   const graduationYear = Number(basics.graduationYear) || new Date().getFullYear()
 
   const draft = {
@@ -88,7 +89,12 @@ export function generateResume({ basics, company, role, templateId }) {
     projects: writeProjects(company, role),
     certifications: role.certifications.map((cert) => ({ id: createId('cert'), name: cert.name, issuer: cert.issuer, year: '' })),
   }
+  return draft
+}
 
+export function generateResume({ basics, company, role, templateId }) {
+  // TODO (Phase 2): replace mock with real API call to the Express backend
+  const draft = buildResumeDraft({ basics, company, role, templateId })
   // A longer delay makes the "AI is writing" loading state visible in the demo
   return simulateRequest(draft, 2200)
 }

@@ -21,7 +21,7 @@ function TargetStrip({ companyName, roleTitle, detail, action, size = 'md' }) {
           {hasTarget ? (
             <>
               <span className="sr-only">Target company:</span>
-              <span className={`board-text truncate leading-tight ${companySize}`}>{companyName || 'Any company'}</span>
+              <span className={`board-text leading-tight break-words ${companySize}`}>{companyName || 'Any company'}</span>
               <span aria-hidden="true" className="h-5 w-[3px] self-center bg-ink" />
               <span className="sr-only">Job role:</span>
               <span className={`font-board leading-tight font-semibold ${roleSize}`}>{roleTitle || 'Any role'}</span>
