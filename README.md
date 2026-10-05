@@ -32,9 +32,6 @@ on specific companies, industries, and job roles while improving ATS compatibili
 | O5 | Reduce the time and effort required to create high-quality resumes while improving shortlisting chances through ATS-compatible, role-focused resumes. |
 | O6 | Provide a secure and user-friendly platform for storing, managing, and updating multiple resumes. |
 
-How each objective and deliverable maps to pages and files: see the traceability table in
-[docs/CODE_GUIDE.md](docs/CODE_GUIDE.md).
-
 ## Features (Phase 1)
 
 - **Target first:** the create wizard starts with the target company and job role (autocomplete or custom entry) and shows what that company looks for.
@@ -90,8 +87,7 @@ ai-resume-builder/
 │       │   └── admin/         DataTable, CompanyForm, RoleForm, TemplateForm …
 │       └── pages/             one file per page (+ pages/admin/)
 ├── server/                    README only: backend comes in Phase 2
-├── docs/                      code guide, research, architecture, design system,
-│                              Phase 2 placeholders (SRS, ER, DFD), screenshots
+├── docs/screenshots/          screenshots used in this README
 └── README.md
 ```
 
@@ -148,10 +144,3 @@ All company names (Nimbus Labs, Corewave IT Services, Sprintly, Meridian Advisor
 | Phase 3 | AI integration for generation and improvement, server-side ATS engine | Planned |
 | Phase 4 | Testing (unit, integration, UAT, reports) and deployment | Planned |
 
-## Documentation
-
-- [docs/CODE_GUIDE.md](docs/CODE_GUIDE.md): viva guide, with traceability, a feature-to-file table and explanations
-- [docs/FRONTEND_ARCHITECTURE.md](docs/FRONTEND_ARCHITECTURE.md): how the frontend is organised
-- [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md): colours, type and components
-- [docs/REFERENCE_RESEARCH.md](docs/REFERENCE_RESEARCH.md): user-flow research and the patterns we adopted
-- Phase 2 placeholders: [SRS](docs/SRS.md), [ER diagram](docs/ER-Diagram.md), [DFD](docs/DFD.md), [System architecture](docs/System-Architecture.md)
