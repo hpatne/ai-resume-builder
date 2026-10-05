@@ -1,8 +1,4 @@
-/*
- * WizardProgress.jsx
- * Step indicator for the create wizard: Target -> Template -> Details.
- * Finished steps show a tick; the current step is highlighted in yellow.
- */
+// Step indicator for the wizard (Target, Template, Details).
 import { Check } from 'lucide-react'
 
 const STEP_NAMES = ['Target', 'Template', 'Details']

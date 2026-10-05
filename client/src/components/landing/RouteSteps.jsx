@@ -1,9 +1,4 @@
-/*
- * RouteSteps.jsx
- * "How it works" on the landing page, drawn as a route map: five stops from
- * entering the target to downloading the PDF. Horizontal on desktop,
- * vertical on phones. The first stop is yellow because the target comes first.
- */
+// Landing page "How it works" steps.
 const STEPS = [
   { title: 'Enter company + role', text: 'Type where you are applying. We load that company’s profile and the role’s skills.' },
   { title: 'Pick a template', text: 'Templates recommended for that company come first; every other template stays one click away.' },
@@ -21,7 +16,6 @@ function RouteSteps() {
         </h2>
 
         <ol className="relative mt-10 grid gap-8 md:grid-cols-5 md:gap-6">
-          {/* The route line: vertical on phones, horizontal on desktop */}
           <span aria-hidden="true" className="absolute top-2 bottom-2 left-[13px] w-[3px] bg-ink md:top-[13px] md:right-[10%] md:bottom-auto md:left-0 md:h-[3px] md:w-auto" />
 
           {STEPS.map((step, index) => (

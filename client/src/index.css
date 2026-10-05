@@ -1,16 +1,7 @@
-/*
- * index.css
- * Global styles and DESIGN TOKENS for the whole app.
- * Tailwind reads the @theme block below, so a token like --color-navy becomes
- * classes such as bg-navy / text-navy / border-navy everywhere in the code.
- *
- * Visual idea: the resume is a "ticket" to one destination company.
- * - navy  : railway-navy app shell (sidebar, footer)
- * - board : station-board yellow, used ONLY for the target company + role strip
- *           and for selected states, so the target always stands out
- * - maroon: missing keywords and errors
- * - signal: matched keywords and success
- */
+/* Global styles and colour tokens.
+   Tokens in @theme become Tailwind classes (e.g. --color-navy -> bg-navy).
+   navy = app shell, board (yellow) = target strip and selected items,
+   maroon = missing / errors, signal (green) = found / success. */
 @import 'tailwindcss';
 
 @theme {
@@ -48,7 +39,7 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ---------- Base element styles ---------- */
+/* Base styles */
 @layer base {
   html {
     background: var(--color-ground);
@@ -63,7 +54,6 @@
     scrollbar-color: var(--color-line-strong) transparent;
   }
 
-  /* Browser surfaces themed from the palette (selection, caret, focus, links) */
   ::selection {
     background: var(--color-board);
     color: var(--color-ink);
@@ -96,9 +86,9 @@
   }
 }
 
-/* ---------- Small shared utilities ---------- */
+/* Shared helpers */
 @layer components {
-  /* Station-board lettering: condensed, bold, uppercase */
+  /* Condensed, bold, uppercase labels */
   .board-text {
     font-family: var(--font-board);
     font-weight: 700;
@@ -106,15 +96,14 @@
     letter-spacing: 0.02em;
   }
 
-  /* Scores, dates and counts line up in columns */
+  /* Numbers line up in columns */
   .tabular {
     font-variant-numeric: tabular-nums;
   }
 }
 
-/* ---------- Motion ---------- */
-/* The one signature motion: the target board "flips" when the target changes,
-   like a station departure board updating. */
+/* Animations */
+/* Target strip text flips in when the target changes */
 @keyframes board-flip {
   from {
     transform: translateY(-55%);
@@ -156,7 +145,7 @@
   }
 }
 
-/* ATS score ring sweeps from empty to the score */
+/* ATS ring fills up to the score */
 @keyframes ring-sweep {
   from {
     stroke-dashoffset: var(--ring-from);

@@ -1,7 +1,4 @@
-/*
- * CertificationsForm.jsx
- * Editor form for certifications (uses EntryListEditor).
- */
+// Editor form for certifications.
 import EntryListEditor from './EntryListEditor'
 import { createId } from '../../utils/mockApi'
 

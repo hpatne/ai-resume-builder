@@ -1,10 +1,4 @@
-/*
- * AppRoutes.jsx
- * Every URL in the app and the page it shows.
- * Public pages share PublicLayout (navbar + footer).
- * Logged-in pages share DashboardLayout (sidebar) and are wrapped in
- * ProtectedRoute; admin pages are additionally wrapped in AdminRoute.
- */
+// All the links in the app and which page each one shows.
 import { Routes, Route } from 'react-router-dom'
 import PublicLayout from '../components/PublicLayout'
 import DashboardLayout from '../components/DashboardLayout'
@@ -37,7 +31,7 @@ function AppRoutes() {
         <Route path="*" element={<NotFoundPage />} />
       </Route>
 
-      {/* Logged-in user pages */}
+      {/* Logged-in pages */}
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
@@ -48,7 +42,7 @@ function AppRoutes() {
         </Route>
       </Route>
 
-      {/* Admin pages (also use the sidebar layout) */}
+      {/* Admin pages */}
       <Route element={<AdminRoute />}>
         <Route element={<DashboardLayout />}>
           <Route path="/admin" element={<AdminDashboardPage />} />

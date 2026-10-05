@@ -1,9 +1,4 @@
-/*
- * RoleForm.jsx
- * Add / edit a job role (admin): required skills, keywords, the sample
- * summary and sample bullet points the mock AI uses for this role.
- * (Sample projects and certifications are kept as they are.)
- */
+// Admin form to add or edit a job role.
 import { useState } from 'react'
 import Modal from '../Modal'
 import Button from '../Button'

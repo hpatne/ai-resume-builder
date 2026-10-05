@@ -1,9 +1,4 @@
-/*
- * Toast.jsx
- * Renders the stack of toast notifications in the bottom-right corner.
- * The list itself lives in ToastContext; this file only draws it.
- * A toast can carry one action button (e.g. "Undo" after Improve with AI).
- */
+// Shows the pop-up notifications in the corner.
 import { CircleCheck, CircleAlert, Info, X } from 'lucide-react'
 
 const TYPE_ICONS = {

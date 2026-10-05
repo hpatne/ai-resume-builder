@@ -1,8 +1,4 @@
-/*
- * FormAlert.jsx
- * Error banner shown above a form when the whole submission fails
- * (e.g. "Incorrect email or password"). Screen readers announce it.
- */
+// Red error box shown above a form when submitting fails.
 import { CircleAlert } from 'lucide-react'
 
 function FormAlert({ message }) {

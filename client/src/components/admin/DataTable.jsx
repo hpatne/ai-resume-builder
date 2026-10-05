@@ -1,10 +1,4 @@
-/*
- * DataTable.jsx
- * Dense admin table. `columns` is a list of { key, label, render? }; `render`
- * lets a column show something other than the raw value. If onEdit/onDelete
- * are given, each row gets Edit and Delete buttons.
- * Scrolls sideways on small screens instead of squashing the columns.
- */
+// Table used on the admin pages, with edit and delete buttons.
 import { Pencil, Trash2 } from 'lucide-react'
 
 function DataTable({ caption, columns, rows, onEdit, onDelete, getRowName }) {

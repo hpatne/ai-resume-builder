@@ -1,10 +1,5 @@
-/*
- * AdminRoute.jsx
- * Guards the admin pages (/admin/...). Not logged in -> /login.
- * Logged in but not an admin -> back to the normal dashboard.
- * TODO (Phase 2): the Express backend must also check the admin role on every
- * admin API call; hiding pages in the browser alone is not security.
- */
+// Only lets admins open admin pages.
+// TODO (Phase 2): the server must also check the admin role.
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import PageLoader from '../components/PageLoader'

@@ -1,8 +1,4 @@
-/*
- * AtsTeaser.jsx
- * Landing page section that previews the ATS checker with a clearly labelled
- * sample report (score, matched and missing keywords).
- */
+// Landing page section that previews the ATS checker.
 import { Check } from 'lucide-react'
 import ScoreCircle from '../ScoreCircle'
 import KeywordChips from '../KeywordChips'

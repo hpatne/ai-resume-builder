@@ -1,8 +1,4 @@
-/*
- * SkillsForm.jsx
- * Editor form for skills: a list of removable tags plus a box to add more.
- * Press Enter (or comma) to add; duplicates are ignored.
- */
+// Editor form for skills (add and remove tags).
 import { useState } from 'react'
 import { X, Plus } from 'lucide-react'
 

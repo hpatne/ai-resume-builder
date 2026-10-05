@@ -1,9 +1,5 @@
-/*
- * resumeFormat.js
- * Small formatting helpers shared by the three resume templates.
- */
-
-// Bullet points are stored as plain text, one bullet per line
+// Small helpers used by the resume templates.
+// Bullets are stored one per line
 export function splitBullets(bulletText) {
   return (bulletText || '')
     .split('\n')
@@ -17,29 +13,26 @@ export function formatDateRange(start, end) {
   return start || end || ''
 }
 
-// Contact details that are filled in, in a fixed order
 export function getContactItems(personal) {
   return [personal.email, personal.phone, personal.location, personal.linkedin, personal.portfolio].filter(Boolean)
 }
 
-// Does this section have anything to show? Empty sections are left out of the resume.
+// Empty sections are left out of the resume
 export function hasSectionContent(resume, sectionKey) {
   const value = resume[sectionKey]
   if (Array.isArray(value)) return value.length > 0
   return Boolean(value && value.trim())
 }
 
-// Which drawing layout (classic / modern / minimal) a template id uses.
-// Admin-created templates reuse one of the three layouts. If the template was
-// deleted by an admin, the resume falls back to the Classic layout.
+// Template id -> layout. Deleted templates fall back to Classic.
 export function getTemplateLayout(templates, templateId) {
   const template = templates.find((item) => item.id === templateId)
   if (template) return template.layout
-  // Catalog still loading: the built-in ids are also layout names
+  // Still loading: built-in ids match the layout names
   return templates.length === 0 ? templateId : 'classic'
 }
 
-// "2 Oct 2026" (Indian English date format)
+// "2 Oct 2026"
 export function formatDate(isoDate) {
   if (!isoDate) return ''
   return new Date(isoDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })

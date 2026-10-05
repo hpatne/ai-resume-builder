@@ -1,8 +1,4 @@
-/*
- * ResumeFilters.jsx
- * Search box plus company and role filters above the dashboard resume grid.
- * The dashboard owns the filter values; this component only shows the inputs.
- */
+// Search box and company/role filters on the dashboard.
 import { Search } from 'lucide-react'
 import Select from './Select'
 

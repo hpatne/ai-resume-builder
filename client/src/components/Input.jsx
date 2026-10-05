@@ -1,13 +1,8 @@
-/*
- * Input.jsx
- * Labelled text input with optional hint, error message and an element on the
- * right side (used by PasswordInput for the show/hide button).
- * Used by: every form (login, signup, wizard, editor, profile, admin).
- */
+// Text input with a label, hint and error message.
 import { CircleAlert } from 'lucide-react'
 
 function Input({ id, label, error, hint, required = false, endAdornment, className = '', ...rest }) {
-  // Connect hint/error text to the input so screen readers announce it
+  // Lets screen readers read the hint or error
   const describedBy = error ? `${id}-error` : hint ? `${id}-hint` : undefined
 
   return (

@@ -1,13 +1,9 @@
-/*
- * SectionOrderEditor.jsx
- * Lets an admin set a company's preferred section order with up/down buttons
- * (keyboard-friendly; no drag-and-drop needed).
- */
+// Up/down list to set a company's section order.
 import { ArrowUp, ArrowDown } from 'lucide-react'
 import { SECTION_LABELS } from '../../data/sections'
 
 function SectionOrderEditor({ value, onChange }) {
-  // Swap a section with its neighbour (direction -1 = up, +1 = down)
+  // direction: -1 = up, +1 = down
   const moveSection = (index, direction) => {
     const newOrder = [...value]
     ;[newOrder[index], newOrder[index + direction]] = [newOrder[index + direction], newOrder[index]]

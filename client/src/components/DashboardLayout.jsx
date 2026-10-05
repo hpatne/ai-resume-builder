@@ -1,9 +1,4 @@
-/*
- * DashboardLayout.jsx
- * Page frame for every logged-in page: navy Sidebar on the left (desktop) or a
- * top bar with a menu button that opens the sidebar as a drawer (phones/tablets).
- * React Router renders the current page where <Outlet /> is.
- */
+// Layout for logged-in pages: sidebar on desktop, menu drawer on phones.
 import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
@@ -15,14 +10,12 @@ function DashboardLayout() {
 
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[256px_1fr]">
-      {/* Desktop sidebar: fixed while the page scrolls */}
       <aside className="hidden bg-navy lg:block">
         <div className="sticky top-0 h-dvh">
           <Sidebar />
         </div>
       </aside>
 
-      {/* Phone / tablet top bar */}
       <header className="on-navy sticky top-0 z-30 flex h-14 items-center justify-between bg-navy px-4 lg:hidden">
         <Logo tone="light" to="/dashboard" />
         <button
@@ -36,7 +29,6 @@ function DashboardLayout() {
         </button>
       </header>
 
-      {/* Phone / tablet drawer */}
       {isDrawerOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-navy-deep/60" onClick={() => setIsDrawerOpen(false)} aria-hidden="true" />

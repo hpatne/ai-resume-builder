@@ -1,11 +1,4 @@
-/*
- * ResumePreview.jsx
- * Shows a resume as an A4 sheet of paper, scaled down to fit its container.
- * The real page is always 794 px wide (A4 at 96 dpi); a CSS transform shrinks
- * it on screen, while the printed PDF uses the full-size, unscaled page.
- * Dashed lines mark where page 2, 3... will start in the PDF.
- * Used by: resume editor (live preview), wizard and gallery thumbnails, landing demo.
- */
+// Shows a resume as an A4 page, scaled to fit the screen.
 import { useEffect, useRef, useState } from 'react'
 import TemplateRenderer from './TemplateRenderer'
 
@@ -20,7 +13,7 @@ function ResumePreview({ resume, layout, printRef, showPageBreaks = false, maxSc
   const [scale, setScale] = useState(0.5)
   const [contentHeight, setContentHeight] = useState(PAGE_HEIGHT)
 
-  // Re-measure whenever the container is resized or the resume grows/shrinks
+  // Recalculate the scale when the screen or the resume changes size
   useEffect(() => {
     const measure = () => {
       if (!containerRef.current || !pageRef.current) return
@@ -42,7 +35,7 @@ function ResumePreview({ resume, layout, printRef, showPageBreaks = false, maxSc
           <TemplateRenderer ref={pageRef} resume={resume} layout={layout} />
         </div>
 
-        {/* Page-break markers (only on screen, never printed) */}
+        {/* Page-break lines (screen only, not printed) */}
         {showPageBreaks &&
           Array.from({ length: pageCount - 1 }, (_, index) => (
             <div

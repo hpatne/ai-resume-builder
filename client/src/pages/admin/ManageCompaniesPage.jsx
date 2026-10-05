@@ -1,9 +1,4 @@
-/*
- * ManageCompaniesPage.jsx  (route: /admin/companies, admin only)
- * Table of company profiles with add / edit / delete (deliverables D6, D8).
- * Each profile's preferred template, section order, emphasis and keywords
- * change what the wizard, editor and ATS checker show for that company.
- */
+// Admin page to manage companies (/admin/companies).
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { useCatalog } from '../../context/CatalogContext'
@@ -20,7 +15,7 @@ import CompanyForm from '../../components/admin/CompanyForm'
 function ManageCompaniesPage() {
   const { companies, templates, setCompanies } = useCatalog()
   const { showToast } = useToast()
-  // editingCompany: null = form closed, {} = adding new, a company = editing it
+  // null = closed, {} = adding, object = editing
   const [editingCompany, setEditingCompany] = useState(null)
   const [companyToDelete, setCompanyToDelete] = useState(null)
   const [isSaving, setIsSaving] = useState(false)

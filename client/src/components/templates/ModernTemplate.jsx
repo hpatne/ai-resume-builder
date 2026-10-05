@@ -1,10 +1,4 @@
-/*
- * ModernTemplate.jsx
- * "Modern" resume layout: clean sans-serif, a navy name band and skill tags.
- * Recommended for product-based companies and startups.
- * ATS-safe: single column, real text (the band is only a background colour).
- * Sections are drawn in the order given by resume.sectionOrder (set per company).
- */
+// Modern resume design (navy header band).
 import { SECTION_LABELS } from '../../data/sections'
 import { splitBullets, formatDateRange, getContactItems, hasSectionContent } from '../../utils/resumeFormat'
 
@@ -13,7 +7,7 @@ const ACCENT = '#1d3a66'
 function ModernTemplate({ resume }) {
   const { personal } = resume
 
-  // Draws one section's content; called once per section in sectionOrder
+  // Draws one section (sections follow resume.sectionOrder)
   const renderSection = (sectionKey) => {
     switch (sectionKey) {
       case 'summary':
@@ -76,14 +70,13 @@ function ModernTemplate({ resume }) {
 
   return (
     <article className="resume-page bg-white px-12 py-10 text-[13px] leading-[1.5] text-[#1b1f27] print:p-0" style={{ fontFamily: 'Barlow, Arial, sans-serif' }}>
-      {/* Header band: name, target role and contact details */}
       <header className="mb-4 rounded-[4px] px-6 py-5 text-white" style={{ backgroundColor: ACCENT, printColorAdjust: 'exact', WebkitPrintColorAdjust: 'exact' }}>
         <h1 className="text-[30px] leading-none font-bold">{personal.fullName || 'Your Name'}</h1>
         {resume.roleTitle && <p className="mt-1.5 text-[15px] font-medium text-[#dbe4f2]">{resume.roleTitle}</p>}
         <p className="mt-2 text-[12px] text-[#dbe4f2]">{getContactItems(personal).join('   ·   ')}</p>
       </header>
 
-      {/* Sections, in the company-specific order */}
+      {/* Sections in the company's preferred order */}
       {resume.sectionOrder
         .filter((sectionKey) => hasSectionContent(resume, sectionKey))
         .map((sectionKey) => (

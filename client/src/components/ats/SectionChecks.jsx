@@ -1,8 +1,4 @@
-/*
- * SectionChecks.jsx
- * Checklist of the sections an ATS expects (contact, summary, skills,
- * experience/projects, education). Failed checks link to that editor section.
- */
+// Checklist of the sections a resume should have.
 import { Link } from 'react-router-dom'
 import { CircleCheck, CircleX } from 'lucide-react'
 

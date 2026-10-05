@@ -1,9 +1,4 @@
-/*
- * ManageRolesPage.jsx  (route: /admin/roles, admin only)
- * Table of job roles with add / edit / delete (deliverables D6, D8).
- * A role's required skills and keywords drive the AI draft, the keyword
- * panel and the ATS score.
- */
+// Admin page to manage job roles (/admin/roles).
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { useCatalog } from '../../context/CatalogContext'
@@ -18,7 +13,7 @@ import RoleForm from '../../components/admin/RoleForm'
 function ManageRolesPage() {
   const { roles, setRoles } = useCatalog()
   const { showToast } = useToast()
-  // editingRole: null = form closed, {} = adding new, a role = editing it
+  // null = closed, {} = adding, object = editing
   const [editingRole, setEditingRole] = useState(null)
   const [roleToDelete, setRoleToDelete] = useState(null)
   const [isSaving, setIsSaving] = useState(false)

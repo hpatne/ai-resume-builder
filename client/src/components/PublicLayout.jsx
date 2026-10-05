@@ -1,8 +1,4 @@
-/*
- * PublicLayout.jsx
- * Page frame for public pages: Navbar on top, page content, Footer at the bottom.
- * React Router renders the current page where <Outlet /> is.
- */
+// Layout for public pages: navbar, page, footer.
 import { Outlet } from 'react-router-dom'
 import Navbar from './Navbar'
 import Footer from './Footer'

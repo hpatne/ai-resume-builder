@@ -1,8 +1,4 @@
-/*
- * FeatureIndex.jsx
- * Landing page feature list: the six main features, laid out as a ruled index
- * (two columns on desktop, one on phones).
- */
+// Landing page list of the main features.
 import { PenLine, Building2, ScanSearch, Columns2, FileDown, Files } from 'lucide-react'
 
 const FEATURES = [

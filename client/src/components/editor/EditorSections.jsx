@@ -1,9 +1,4 @@
-/*
- * EditorSections.jsx
- * The editor's list of section forms. Personal info is always first; the
- * other six follow resumeData.sectionOrder, which is exactly the order they
- * appear on the resume, so moving a section here moves it in the preview.
- */
+// All the section forms in the editor, in the resume's section order.
 import { SECTION_LABELS } from '../../data/sections'
 import EditorSection from './EditorSection'
 import PersonalInfoForm from './PersonalInfoForm'
@@ -23,7 +18,7 @@ const SECTION_FORMS = {
   certifications: CertificationsForm,
 }
 
-// Sections the mock AI can improve
+// Sections the AI can improve
 const AI_SECTIONS = ['summary', 'skills', 'experience', 'projects']
 
 function EditorSections({ resumeData, onSectionChange, onMoveSection, onImprove, improvingSection, openSections, onToggleSection }) {

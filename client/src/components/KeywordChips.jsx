@@ -1,10 +1,4 @@
-/*
- * KeywordChips.jsx
- * Shows a list of keywords as chips. Matched keywords are green with a tick,
- * missing ones are maroon. If `onAdd` is given, missing chips become buttons
- * that add the keyword to the resume.
- * Used by: editor keyword panel, ATS checker results, wizard company insight, landing demo.
- */
+// Keyword tags: green = found in the resume, red = missing.
 import { Check, Plus, X } from 'lucide-react'
 
 function KeywordChips({ keywords, onAdd }) {

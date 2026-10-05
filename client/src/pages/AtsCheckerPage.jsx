@@ -1,12 +1,4 @@
-/*
- * AtsCheckerPage.jsx  (route: /ats-checker, protected)
- * ATS Compatibility Checker (objective O5, deliverable D7):
- *   1. pick a saved resume (its target company + role is shown)
- *   2. paste a job description (or use the sample for that role)
- *   3. get a score out of 100, matched/missing keywords, section checks and
- *      prioritised fixes, each with a "Fix in editor" link
- * The score formula lives in utils/atsScore.js.
- */
+// ATS Checker page (/ats-checker).
 import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { ScanSearch, ClipboardList } from 'lucide-react'
@@ -34,7 +26,6 @@ function AtsCheckerPage() {
   const { showToast } = useToast()
   const [searchParams] = useSearchParams()
 
-  // ---- State ----
   const [selectedId, setSelectedId] = useState(searchParams.get('resume') || '')
   const [jobDescription, setJobDescription] = useState('')
   const [jdError, setJdError] = useState('')
@@ -46,13 +37,11 @@ function AtsCheckerPage() {
     return <EmptyState icon={<ScanSearch size={24} aria-hidden="true" />} title="No resume to check yet" description="Create a resume first, then come back to score it against a job description." action={<Button to="/create">Create a resume</Button>} />
   }
 
-  // The chosen resume (first one if none chosen) and its target
   const resume = resumes.find((item) => item.id === selectedId) || resumes[0]
   const company = resolveCompany(companies, resume.companyId, resume.companyName)
   const role = resolveRole(roles, resume.roleId, resume.roleTitle)
   const sampleJd = sampleJobDescriptions[role.id]
 
-  // ---- Handlers ----
   const handleResumeChange = (event) => {
     setSelectedId(event.target.value)
     setReport(null) // an old report would describe a different resume
@@ -65,7 +54,7 @@ function AtsCheckerPage() {
     }
     setJdError('')
     setIsAnalyzing(true)
-    // Every skill we know from the role data helps spot hard skills in the job description
+    // All known skills, used to spot hard skills in the job description
     const knownSkills = [...new Set(roles.flatMap((item) => item.requiredSkills))]
     const newReport = await analyzeResume({ resume, jobDescription, company, role, knownSkills })
     await saveScore(resume.id, newReport.score)
@@ -79,7 +68,6 @@ function AtsCheckerPage() {
       <PageHeader title="ATS checker" description="Score a resume against a job description the way an applicant tracking system would." />
 
       <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        {/* Input column */}
         <section aria-label="Resume and job description" className="space-y-4 rounded-lg border border-line bg-paper p-5 xl:sticky xl:top-6">
           <Select id="ats-resume" label="Resume to check" value={resume.id} onChange={handleResumeChange} options={resumes.map((item) => ({ value: item.id, label: item.title }))} />
           <TargetStrip companyName={company.name} roleTitle={role.title} />
@@ -105,7 +93,6 @@ function AtsCheckerPage() {
           </div>
         </section>
 
-        {/* Results column */}
         <div>
           {isAnalyzing && (
             <div role="status" className="flex flex-col items-center gap-3 rounded-lg border border-line bg-paper px-6 py-16 text-center">

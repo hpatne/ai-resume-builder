@@ -1,7 +1,4 @@
-/*
- * ProfileDetailsForm.jsx
- * Profile page form to change the user's name and email (with validation).
- */
+// Profile page form for changing name and email.
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'

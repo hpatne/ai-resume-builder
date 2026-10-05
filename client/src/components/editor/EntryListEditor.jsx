@@ -1,15 +1,9 @@
-/*
- * EntryListEditor.jsx
- * Shared form for sections made of repeated entries (experience, projects,
- * education, certifications). It draws one block of fields per entry, plus
- * "Add" and "Remove" buttons. Each section file only says WHICH fields it has.
- */
+// Shared form for repeated entries (experience, projects, education, certifications).
 import { Plus, Trash2 } from 'lucide-react'
 import Input from '../Input'
 import TextArea from '../TextArea'
 
 function EntryListEditor({ entries, onChange, fields, entryName, createEmptyEntry, getEntryTitle }) {
-  // Change one field of one entry
   const updateEntry = (entryId, fieldName, fieldValue) => {
     onChange(entries.map((entry) => (entry.id === entryId ? { ...entry, [fieldName]: fieldValue } : entry)))
   }

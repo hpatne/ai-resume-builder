@@ -1,8 +1,4 @@
-/*
- * ManageTemplatesPage.jsx  (route: /admin/templates, admin only)
- * Table of templates with add / edit / delete (deliverables D2, D6, D8).
- * The last template cannot be deleted, so users can always build a resume.
- */
+// Admin page to manage templates (/admin/templates).
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { useCatalog } from '../../context/CatalogContext'
@@ -17,7 +13,7 @@ import TemplateForm from '../../components/admin/TemplateForm'
 function ManageTemplatesPage() {
   const { templates, roles, setTemplates } = useCatalog()
   const { showToast } = useToast()
-  // editingTemplate: null = form closed, {} = adding new, a template = editing it
+  // null = closed, {} = adding, object = editing
   const [editingTemplate, setEditingTemplate] = useState(null)
   const [templateToDelete, setTemplateToDelete] = useState(null)
   const [isSaving, setIsSaving] = useState(false)

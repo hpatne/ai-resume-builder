@@ -1,10 +1,4 @@
-/*
- * DashboardPage.jsx  (route: /dashboard, protected)
- * The user's home: every saved resume as a card (objective O6, deliverable D8).
- * - search and filter by company or role
- * - Edit, Duplicate, Download (PDF) and Delete (after confirmation)
- * - an empty state that sends new users to the create wizard
- */
+// Dashboard (/dashboard): the user's resumes.
 import { useEffect, useRef, useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { FilePlus2, FileText, SearchX } from 'lucide-react'
@@ -26,13 +20,12 @@ function DashboardPage() {
   const { templates } = useCatalog()
   const { showToast } = useToast()
 
-  // ---- State ----
   const [filters, setFilters] = useState({ search: '', company: '', role: '' })
   const [resumeToDelete, setResumeToDelete] = useState(null)
   const [resumeToPrint, setResumeToPrint] = useState(null)
   const printRef = useRef(null)
 
-  // ---- PDF download: render the resume off-screen, then open the print window ----
+  // PDF download: print a hidden copy of the resume
   const printResume = useReactToPrint({
     contentRef: printRef,
     documentTitle: resumeToPrint ? buildPdfFileName(resumeToPrint) : 'Resume',
@@ -44,7 +37,6 @@ function DashboardPage() {
     if (resumeToPrint) printResume()
   }, [resumeToPrint, printResume])
 
-  // ---- Handlers ----
   const handleDownload = (resume) => {
     showToast('In the print window, choose “Save as PDF”.', 'info')
     setResumeToPrint(resume)
@@ -62,7 +54,6 @@ function DashboardPage() {
     showToast(`Deleted “${title}”.`)
   }
 
-  // ---- Search and filters ----
   const companyNames = [...new Set(resumes.map((resume) => resume.companyName))].sort()
   const roleTitles = [...new Set(resumes.map((resume) => resume.roleTitle))].sort()
   const searchText = filters.search.trim().toLowerCase()
@@ -86,7 +77,6 @@ function DashboardPage() {
         }
       />
 
-      {/* Loading skeletons */}
       {isResumesLoading && (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,380px),1fr))] gap-5" aria-hidden="true">
           {[1, 2, 3].map((item) => (
@@ -95,7 +85,6 @@ function DashboardPage() {
         </div>
       )}
 
-      {/* New user: nothing saved yet */}
       {!isResumesLoading && resumes.length === 0 && (
         <EmptyState
           icon={<FileText size={24} aria-hidden="true" />}

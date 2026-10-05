@@ -1,10 +1,4 @@
-/*
- * EditorSection.jsx
- * One collapsible section in the editor's left column. The header has the
- * section name, an entry count, move up/down buttons (to reorder sections on
- * the resume) and, for some sections, "Improve with AI".
- * Up/down buttons are used instead of drag-and-drop so it works with a keyboard.
- */
+// One collapsible section in the editor, with move up/down and AI buttons.
 import { ChevronDown, ArrowUp, ArrowDown } from 'lucide-react'
 import ImproveWithAiButton from './ImproveWithAiButton'
 
@@ -22,7 +16,6 @@ function EditorSection({ sectionKey, title, count, isOpen, onToggle, onMoveUp, o
 
         {onImprove && <ImproveWithAiButton onClick={onImprove} isLoading={isImproving} />}
 
-        {/* Reorder: only the six movable sections get these buttons */}
         {(onMoveUp || onMoveDown) && (
           <div className="flex">
             <button type="button" onClick={onMoveUp} disabled={!onMoveUp} aria-label={`Move ${title} up`} className={moveButtonClasses}>

@@ -1,13 +1,6 @@
-/*
- * validation.js
- * Form validation rules. Each function returns an `errors` object such as
- * { email: 'Enter a valid email address' }; an empty string means "no error".
- * Used by: Login, Signup, Profile (edit profile + change password), create wizard.
- * The Phase 2 backend will repeat these checks on the server.
- */
+// Form checks. Each function returns an errors object.
 export const PASSWORD_MIN_LENGTH = 8
 
-// something@something.something
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
 export function validateEmail(email) {
@@ -57,7 +50,6 @@ export function validatePasswordChange({ currentPassword, newPassword, confirmPa
   }
 }
 
-// Fields every target (wizard step 1) and basics form (step 3) must have
 export function validateRequiredFields(values, requiredFieldLabels) {
   const errors = {}
   Object.entries(requiredFieldLabels).forEach(([field, label]) => {
@@ -66,7 +58,6 @@ export function validateRequiredFields(values, requiredFieldLabels) {
   return errors
 }
 
-// True if any field has an error message
 export function hasErrors(errors) {
   return Object.values(errors).some(Boolean)
 }

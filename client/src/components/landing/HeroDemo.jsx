@@ -1,10 +1,4 @@
-/*
- * HeroDemo.jsx
- * Live demo on the landing page that proves our core idea in one glance:
- * pick a different target company + role and the template, section order,
- * draft content and keywords all change. It uses the same sample data and the
- * same draft builder as the real create wizard.
- */
+// Landing page demo: switch the target and the resume changes.
 import { useMemo, useState } from 'react'
 import { useCatalog } from '../../context/CatalogContext'
 import { buildResumeDraft } from '../../services/aiService'
@@ -15,7 +9,6 @@ import TargetStrip from '../TargetStrip'
 import ResumePreview from '../templates/ResumePreview'
 import KeywordChips from '../KeywordChips'
 
-// Three sample targets that look very different from each other
 const DEMO_TARGETS = [
   { companyId: 'nimbus-labs', roleId: 'frontend-developer' },
   { companyId: 'corewave-it', roleId: 'software-engineer' },
@@ -39,7 +32,7 @@ function HeroDemo() {
   const { companies, roles, templates } = useCatalog()
   const [activeIndex, setActiveIndex] = useState(0)
 
-  // Only show targets whose company and role still exist (an admin may delete them)
+  // Skip targets an admin has deleted
   const availableTargets = useMemo(
     () =>
       DEMO_TARGETS.map((target) => ({
@@ -51,7 +44,6 @@ function HeroDemo() {
 
   const activeTarget = availableTargets[activeIndex] || availableTargets[0]
 
-  // Build the draft for the selected target (re-built only when the target changes)
   const demo = useMemo(() => {
     if (!activeTarget) return null
     const { company, role } = activeTarget
@@ -71,7 +63,6 @@ function HeroDemo() {
 
   return (
     <div className="rounded-lg border border-line bg-paper p-3 shadow-panel sm:p-4">
-      {/* Target switcher */}
       <div role="group" aria-label="Try a sample target" className="mb-3 flex flex-wrap gap-1.5">
         {availableTargets.map((target, index) => {
           const isActive = target === activeTarget
@@ -98,13 +89,11 @@ function HeroDemo() {
       />
 
       <div className="mt-3 grid gap-4 sm:grid-cols-[1fr_190px]">
-        {/* Resume preview, faded at the bottom */}
         <div className="relative max-h-[430px] overflow-hidden rounded bg-ground p-3">
           <ResumePreview key={demo.company.id} resume={demo.draft} layout={demo.template?.layout} maxScale={0.62} />
           <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-ground to-transparent" />
         </div>
 
-        {/* What changed for this target */}
         <div className="space-y-4 text-sm">
           <div>
             <h3 className="board-text text-[13px] text-ink-soft">Section order</h3>

@@ -1,12 +1,4 @@
-/*
- * ResumeEditorPage.jsx  (route: /editor/:resumeId, protected)
- * Split-screen editor (objective O4; deliverables D5, D6):
- *   left  - keyword panel + section forms (add/remove entries, reorder, Improve with AI)
- *   right - LIVE PREVIEW: resumeData is kept in state here and passed as a prop to
- *           the template, so the preview re-renders on every keystroke
- * Toolbar: change template (content kept), Check ATS, Download PDF, Save.
- * The forms + preview layout (and phone tabs) live in EditorWorkspace.jsx.
- */
+// Resume editor (/editor/:resumeId) with live preview.
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useReactToPrint } from 'react-to-print'
@@ -37,7 +29,6 @@ function ResumeEditorPage() {
   const { showToast } = useToast()
   const printRef = useRef(null)
 
-  // ---- State ----
   const [resumeData, setResumeData] = useState(null) // the resume being edited
   const [savedSnapshot, setSavedSnapshot] = useState('') // last saved version, to detect unsaved changes
   const [loadError, setLoadError] = useState('')
@@ -46,7 +37,6 @@ function ResumeEditorPage() {
   const [openSections, setOpenSections] = useState([searchParams.get('section') || 'personal'])
   const [isRetargetOpen, setIsRetargetOpen] = useState(false)
 
-  // ---- Load the resume once ----
   useEffect(() => {
     getResumeById(resumeId, user.id)
       .then((resume) => {
@@ -56,7 +46,7 @@ function ResumeEditorPage() {
       .catch((error) => setLoadError(error.message))
   }, [resumeId, user.id])
 
-  // Coming from "Fix in editor" (ATS checker): scroll to the section to fix
+  // From "Fix in editor": scroll to that section
   const requestedSection = searchParams.get('section')
   const isLoaded = Boolean(resumeData)
   useEffect(() => {
@@ -83,12 +73,11 @@ function ResumeEditorPage() {
   const company = resolveCompany(companies, resumeData.companyId, resumeData.companyName)
   const role = resolveRole(roles, resumeData.roleId, resumeData.roleTitle)
 
-  // ---- Handlers: editing ----
   const updateResume = (changes) => setResumeData((current) => ({ ...current, ...changes }))
   const handleSectionChange = (sectionKey, value) => updateResume({ [sectionKey]: value })
   const handleToggleSection = (sectionKey) => setOpenSections((open) => (open.includes(sectionKey) ? open.filter((key) => key !== sectionKey) : [...open, sectionKey]))
 
-  // Swap a section with its neighbour (direction -1 = up, +1 = down)
+  // direction: -1 = up, +1 = down
   const handleMoveSection = (index, direction) => {
     const newOrder = [...resumeData.sectionOrder]
     ;[newOrder[index], newOrder[index + direction]] = [newOrder[index + direction], newOrder[index]]
@@ -100,7 +89,7 @@ function ResumeEditorPage() {
     showToast(`Added “${skill}” to Skills.`)
   }
 
-  // Improve with AI: keep the old value so the user can undo
+  // Keep the old value so the user can undo
   const handleImprove = async (sectionKey) => {
     const previousValue = resumeData[sectionKey]
     setImprovingSection(sectionKey)
@@ -111,14 +100,12 @@ function ResumeEditorPage() {
     showToast(result.note, 'success', { actionLabel: 'Undo', onAction: () => handleSectionChange(sectionKey, previousValue) })
   }
 
-  // RetargetDialog works out the new company/role and sends back the changes
   const handleRetarget = (changes) => {
     updateResume(changes)
     setIsRetargetOpen(false)
     showToast(`Now targeting ${changes.companyName}. Check the keyword panel for what is missing.`)
   }
 
-  // ---- Handlers: saving ----
   const handleSave = async () => {
     setIsSaving(true)
     const savedResume = await saveResume(resumeData.id, resumeData)

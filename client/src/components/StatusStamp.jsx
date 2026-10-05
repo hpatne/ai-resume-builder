@@ -1,9 +1,4 @@
-/*
- * StatusStamp.jsx
- * Small "rubber stamp" badge for a resume's state, e.g. DRAFT or ATS 82.
- * State is always stamped visibly, so nothing about a resume changes silently.
- * Used by: ResumeCard (dashboard), resume editor (unsaved changes), admin tables.
- */
+// Small stamp-style badge, e.g. "ATS 82" or "Saved".
 const TONE_CLASSES = {
   neutral: 'border-ink-faint text-ink-soft',
   signal: 'border-signal text-signal',

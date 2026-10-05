@@ -1,10 +1,4 @@
-/*
- * CreateResumePage.jsx  (route: /create, protected)
- * The 3-step create wizard (objectives O2, O3; deliverables D5, D6):
- *   1. Target company + job role  ->  2. Template  ->  3. Basic details + "Generate with AI"
- * The yellow target strip stays on top, so the choice that drives everything is
- * always visible. The finished draft is saved and opened in the editor.
- */
+// Create Resume wizard (/create): target, template, details, then AI draft.
 import { useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, PenLine } from 'lucide-react'
@@ -36,26 +30,23 @@ function CreateResumePage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
 
-  // ---- Wizard state ----
   const [step, setStep] = useState(1)
   const [target, setTarget] = useState({ companyName: '', companyId: '', roleTitle: '', roleId: '' })
-  // '' means "use the template recommended for the company"; ?template=... from the gallery pre-selects one
+  // '' = use the company's recommended template
   const [chosenTemplateId, setChosenTemplateId] = useState(searchParams.get('template') || '')
   const [basics, setBasics] = useState({ fullName: user.name, email: user.email, phone: '', location: '', degree: '', institution: '', graduationYear: '', score: '', experienceLevel: 'internship', lastCompany: '' })
   const [errors, setErrors] = useState({})
   const [isGenerating, setIsGenerating] = useState(false)
 
-  // ---- Everything below is worked out from the target ----
+  // Worked out from the target
   const company = resolveCompany(companies, target.companyId, target.companyName)
   const role = resolveRole(roles, target.roleId, target.roleTitle)
   const selectedTemplateId = chosenTemplateId || company.preferredTemplate
   const selectedTemplate = templates.find((template) => template.id === selectedTemplateId) || templates[0]
   const recommendedIds = [...new Set([company.preferredTemplate, ...templates.filter((template) => template.roles.includes(role.id)).map((template) => template.id)])]
 
-  // Preview content for step 2: a draft built for this target (shows its section order)
   const previewResume = useMemo(() => buildResumeDraft({ basics, company, role, templateId: selectedTemplateId }), [basics, company, role, selectedTemplateId])
 
-  // ---- Handlers ----
   const handleNext = () => {
     if (step === 1) {
       const targetErrors = validateRequiredFields(target, { companyName: 'a target company', roleTitle: 'a job role' })
@@ -71,7 +62,6 @@ function CreateResumePage() {
     setErrors({ ...errors, [event.target.name]: '' })
   }
 
-  // Validate step 3, ask the (mock) AI for a draft, save it, open the editor
   const handleGenerate = async () => {
     const basicsErrors = { ...validateRequiredFields(basics, REQUIRED_BASICS), email: validateEmail(basics.email) }
     setErrors(basicsErrors)
@@ -111,7 +101,6 @@ function CreateResumePage() {
           {step === 2 && <StepTemplate templates={templates} selectedTemplateId={selectedTemplate?.id} onSelect={setChosenTemplateId} recommendedIds={recommendedIds} previewResume={previewResume} companyName={company.name} />}
           {step === 3 && <StepBasics basics={basics} onChange={handleBasicsChange} errors={errors} />}
 
-          {/* Back / Next / Generate */}
           <div className="mt-8 flex items-center justify-between gap-3 border-t border-line pt-5">
             {step > 1 ? (
               <Button variant="secondary" onClick={() => setStep(step - 1)}>

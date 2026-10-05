@@ -1,9 +1,4 @@
-/*
- * KeywordResults.jsx
- * Matched (green) and missing (maroon) keywords from the job description,
- * split into hard skills and other keywords, each with a found / total count.
- * Missing keywords are listed first because they are what the user acts on.
- */
+// Found and missing keywords from the job description.
 import KeywordChips from '../KeywordChips'
 
 function KeywordResults({ hardSkills, otherKeywords }) {

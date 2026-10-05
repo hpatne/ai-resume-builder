@@ -1,9 +1,4 @@
-/*
- * TemplateForm.jsx
- * Add / edit a template (admin). A template reuses one of the three built-in
- * layouts and says which company types, industries and roles it suits; those
- * drive the gallery filters and the wizard's "Recommended" stamp.
- */
+// Admin form to add or edit a template.
 import { useState } from 'react'
 import Modal from '../Modal'
 import Button from '../Button'
@@ -31,7 +26,6 @@ function TemplateForm({ template, roles, onSave, onCancel, isSaving }) {
 
   const handleChange = (event) => setFormValues({ ...formValues, [event.target.name]: event.target.value })
 
-  // Tick / untick a role
   const toggleRole = (roleId) => {
     const roleIds = formValues.roleIds.includes(roleId) ? formValues.roleIds.filter((id) => id !== roleId) : [...formValues.roleIds, roleId]
     setFormValues({ ...formValues, roleIds })

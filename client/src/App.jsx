@@ -1,13 +1,4 @@
-/*
- * App.jsx
- * Root component. Wraps the app in:
- *   BrowserRouter    - enables page URLs (React Router)
- *   ToastProvider    - pop-up notifications available everywhere
- *   AuthProvider     - who is logged in (user / admin)
- *   ResumeProvider   - the logged-in user's list of resumes
- *   CatalogProvider  - companies, roles and templates shared by all pages
- * and then renders AppRoutes, which decides which page to show.
- */
+// Root of the app: sets up routing and the shared data providers.
 import { BrowserRouter } from 'react-router-dom'
 import { ToastProvider } from './context/ToastContext'
 import { AuthProvider } from './context/AuthContext'

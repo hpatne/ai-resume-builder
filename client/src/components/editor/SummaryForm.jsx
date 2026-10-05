@@ -1,8 +1,4 @@
-/*
- * SummaryForm.jsx
- * Editor form for the professional summary, with a live word count
- * (40–80 words reads best and is what the ATS check looks for).
- */
+// Editor form for the summary, with a word count.
 import TextArea from '../TextArea'
 
 function SummaryForm({ value, onChange }) {

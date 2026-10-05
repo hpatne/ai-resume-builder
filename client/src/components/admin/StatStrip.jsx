@@ -1,8 +1,4 @@
-/*
- * StatStrip.jsx
- * Admin dashboard totals shown as one ruled strip (like a departures board):
- * users, resumes, templates, companies and roles, each linking to its page.
- */
+// Row of totals on the admin dashboard.
 import { Link } from 'react-router-dom'
 
 function StatStrip({ stats }) {

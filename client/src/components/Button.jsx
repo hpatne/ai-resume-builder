@@ -1,10 +1,4 @@
-/*
- * Button.jsx
- * The one button component used across the app, so every button looks and
- * behaves the same. Pass `to` to render a router link styled as a button.
- * Variants: primary (navy), board (station-board yellow, main call to action),
- * secondary (outlined), ghost (text only), danger (maroon, destructive actions).
- */
+// The button used across the app. Pass `to` to make it a link.
 import { Link } from 'react-router-dom'
 import Spinner from './Spinner'
 
@@ -41,7 +35,6 @@ function Button({
     className,
   ].join(' ')
 
-  // Router link that looks like a button
   if (to) {
     return (
       <Link to={to} className={classes} {...rest}>
@@ -50,7 +43,6 @@ function Button({
     )
   }
 
-  // Normal button; while loading it is disabled and shows a spinner
   return (
     <button
       type={type}

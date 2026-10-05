@@ -1,30 +1,14 @@
-/*
- * aiService.js
- * MOCK "AI" for resume writing (deliverable D5). No real AI is called in
- * Phase 1: content is assembled from the target company + role profiles, so
- * the result is visibly tailored and the UI (buttons, loading, undo) is real.
- *   buildResumeDraft() - assembles a full first draft (also used by the landing demo)
- *   generateResume() - the same draft returned after an "AI is writing" delay (wizard)
- *   improveSection() - rewrites one section in the editor ("Improve with AI")
- *
- * TODO (Phase 2): replace mock with real API call to the Express backend,
- * which will call an AI model with the company/role data (POST /api/ai/generate,
- * POST /api/ai/improve).
- */
+// Mock AI: writes the first draft and improves sections using the company and role data.
 import { simulateRequest, createId } from '../utils/mockApi'
 import { containsKeyword } from '../utils/keywordUtils'
 
-// ---------- Writing the first draft ----------
-
-// Summary = role's sample summary with the company name filled in,
-// plus the company-specific sentence (e.g. "Known for accuracy...")
+// Role summary + the company's own sentence
 function writeSummary(company, role) {
   const roleSummary = role.sampleSummary.replaceAll('{company}', company.name)
   return company.summaryLine ? `${roleSummary} ${company.summaryLine}` : roleSummary
 }
 
-// Companies that value experience get more experience bullets;
-// companies that value projects get every sample project.
+// Experience-focused companies get more bullets; project-focused ones get more projects
 function writeExperience(basics, company, role) {
   if (basics.experienceLevel === 'fresher') return []
   const bulletCount = company.emphasis === 'experience' ? 4 : 3
@@ -52,7 +36,7 @@ function writeProjects(company, role) {
   }))
 }
 
-// Builds the full draft object instantly (also used by the landing page demo)
+// Builds the draft right away (also used by the landing page demo)
 export function buildResumeDraft({ basics, company, role, templateId }) {
   const graduationYear = Number(basics.graduationYear) || new Date().getFullYear()
 
@@ -95,13 +79,11 @@ export function buildResumeDraft({ basics, company, role, templateId }) {
 export function generateResume({ basics, company, role, templateId }) {
   // TODO (Phase 2): replace mock with real API call to the Express backend
   const draft = buildResumeDraft({ basics, company, role, templateId })
-  // A longer delay makes the "AI is writing" loading state visible in the demo
+  // Delay so the loading screen is visible
   return simulateRequest(draft, 2200)
 }
 
-// ---------- Improving one section ----------
-
-// Weak openings that recruiters skip over, and stronger replacements
+// Weak openings and stronger replacements
 const WEAK_PHRASES = [
   [/^worked on/i, 'Led work on'],
   [/^responsible for/i, 'Took ownership of'],
@@ -111,7 +93,7 @@ const WEAK_PHRASES = [
   [/^made /i, 'Built '],
 ]
 
-// Rewrites each bullet line: stronger opening verb, capital letter, no full stop
+// Stronger first word, capital letter, no full stop
 function strengthenBullets(bulletText) {
   return bulletText
     .split('\n')
@@ -127,16 +109,11 @@ function strengthenBullets(bulletText) {
     .join('\n')
 }
 
-// Count bullet lines that have no number in them (results should be measurable)
 function countUnmeasuredBullets(entries) {
   return entries.flatMap((entry) => entry.bullets.split('\n').filter((line) => line.trim() && !/\d/.test(line))).length
 }
 
-/*
- * Returns { value, note }:
- *   value - the new content for that section (the editor puts it in place)
- *   note  - a short message explaining what changed, shown in a toast
- */
+// Returns { value, note }: the new section content and a short message for the toast
 export function improveSection(sectionKey, resume, { company, role }) {
   // TODO (Phase 2): replace mock with real API call to the Express backend
   let result
@@ -146,7 +123,7 @@ export function improveSection(sectionKey, resume, { company, role }) {
     if (currentSummary.length < 60) {
       result = { value: writeSummary(company, role), note: `Summary rewritten for ${role.title} at ${company.name}.` }
     } else {
-      // Keep the user's text, add keywords that are still missing
+      // Keep the user's text and add missing keywords
       const missingKeywords = [...company.keywords, ...role.keywords].filter((word) => !containsKeyword(currentSummary, word)).slice(0, 2)
       const addition = missingKeywords.length ? ` Comfortable with ${missingKeywords.join(' and ')}.` : ''
       const hasCompanyLine = company.summaryLine && currentSummary.includes(company.summaryLine)

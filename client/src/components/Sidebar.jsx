@@ -1,9 +1,4 @@
-/*
- * Sidebar.jsx
- * Navy navigation rail for logged-in pages. Admins see an extra Admin group.
- * The current page is highlighted in station-board yellow.
- * On phones DashboardLayout shows it as a slide-in drawer (`onNavigate` closes it).
- */
+// Left menu for logged-in users (admins see extra links).
 import { NavLink, useNavigate } from 'react-router-dom'
 import { LayoutDashboard, FilePlus2, LayoutTemplate, ScanSearch, UserRound, ShieldCheck, Building2, BriefcaseBusiness, LogOut } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
@@ -33,7 +28,6 @@ function Sidebar({ onNavigate }) {
     navigate('/login')
   }
 
-  // Draws one group of links
   const renderLinks = (links) =>
     links.map(({ to, label, icon: Icon, end }) => (
       <li key={to}>
@@ -69,7 +63,6 @@ function Sidebar({ onNavigate }) {
         )}
       </nav>
 
-      {/* Logged-in user and log out */}
       <div className="mt-4 border-t border-white/10 px-2 pt-4">
         <p className="truncate text-[15px] font-semibold text-white">{user?.name}</p>
         <p className="truncate text-sm text-navy-ink">{user?.email}</p>

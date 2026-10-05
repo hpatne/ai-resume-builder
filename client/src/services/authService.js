@@ -1,14 +1,4 @@
-/*
- * authService.js
- * MOCK authentication: signup, login, logout, profile update, change password.
- * Accounts live in localStorage (seeded from data/users.js).
- * Used by: AuthContext (which the Login, Signup and Profile pages call).
- *
- * TODO (Phase 2): replace mock with real API call to the Express backend
- *   login  -> POST /api/auth/login   (returns a JWT)
- *   signup -> POST /api/auth/signup
- *   profile/password -> PUT /api/users/me
- */
+// Mock login, signup and profile. Accounts are saved in the browser.
 import seedUsers from '../data/users'
 import { loadCollection, saveToStorage, loadFromStorage, removeFromStorage } from '../utils/storage'
 import { simulateRequest, simulateError, createId } from '../utils/mockApi'
@@ -20,7 +10,7 @@ function getStoredUsers() {
   return loadCollection(USERS_KEY, seedUsers)
 }
 
-// Never hand the password to the UI
+// Never send the password to the UI
 function withoutPassword(user) {
   const { password: _password, ...safeUser } = user
   return safeUser
@@ -65,7 +55,6 @@ export function logout() {
   return simulateRequest(true, 150)
 }
 
-// Who is logged in right now (checked once when the app starts)
 export function getCurrentUser() {
   // TODO (Phase 2): replace mock with real API call to the Express backend (GET /api/auth/me)
   const session = loadFromStorage(SESSION_KEY, null)
@@ -98,7 +87,6 @@ export function changePassword(userId, currentPassword, newPassword) {
   return simulateRequest(true, 500)
 }
 
-// Used by the admin dashboard to count users
 export function getAllUsers() {
   // TODO (Phase 2): replace mock with real API call to the Express backend (admin only)
   return simulateRequest(getStoredUsers().map(withoutPassword), 300)

@@ -1,7 +1,4 @@
-/*
- * ExperienceForm.jsx
- * Editor form for work experience and internships (uses EntryListEditor).
- */
+// Editor form for work experience.
 import EntryListEditor from './EntryListEditor'
 import { createId } from '../../utils/mockApi'
 

@@ -1,10 +1,4 @@
-/*
- * LandingPage.jsx  (route: /)
- * Public home page. Objectives shown: O1 (AI, ATS-friendly resumes) and O5
- * (less time, better shortlisting), deliverable D2 (UI/UX).
- * Sections: hero with live target demo -> features -> how it works (route map)
- * -> ATS checker preview -> final call to action.
- */
+// Home page (/).
 import Button from '../components/Button'
 import HeroDemo from '../components/landing/HeroDemo'
 import FeatureIndex from '../components/landing/FeatureIndex'
@@ -14,7 +8,6 @@ import AtsTeaser from '../components/landing/AtsTeaser'
 function LandingPage() {
   return (
     <>
-      {/* Hero: the promise on the left, the live proof on the right */}
       <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 pt-10 pb-16 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:pt-14">
         <div>
           <h1 className="font-board text-[44px] leading-[1.02] font-bold tracking-[-0.01em] sm:text-[56px]">
@@ -42,7 +35,6 @@ function LandingPage() {
       <RouteSteps />
       <AtsTeaser />
 
-      {/* Final call to action */}
       <section className="on-navy bg-navy">
         <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-4 py-14 sm:px-6 md:flex-row md:items-center">
           <h2 className="font-board max-w-xl text-4xl leading-tight font-bold text-white">

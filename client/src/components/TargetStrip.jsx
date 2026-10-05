@@ -1,10 +1,4 @@
-/*
- * TargetStrip.jsx
- * The app's signature element: a yellow "station board" naming the TARGET
- * COMPANY and JOB ROLE. It stays visible on the wizard, editor and ATS checker,
- * so the user (and the reviewer) can always see what the resume is tailored to.
- * When the target changes, the text flips in like a departure board updating.
- */
+// Yellow strip showing the target company and role.
 function TargetStrip({ companyName, roleTitle, detail, action, size = 'md' }) {
   const companySize = size === 'lg' ? 'text-3xl sm:text-4xl' : 'text-2xl'
   const roleSize = size === 'lg' ? 'text-xl sm:text-2xl' : 'text-lg'
@@ -16,7 +10,7 @@ function TargetStrip({ companyName, roleTitle, detail, action, size = 'md' }) {
       className="overflow-hidden rounded-md border-[3px] border-ink bg-board text-ink shadow-panel"
     >
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2 px-4 py-2.5">
-        {/* `key` makes React re-mount this block when the target changes, replaying the flip */}
+        {/* key replays the flip animation when the target changes */}
         <div key={`${companyName}-${roleTitle}`} className="animate-board-flip flex min-w-0 basis-full flex-col gap-x-3 sm:flex-1 sm:basis-auto sm:flex-row sm:flex-wrap sm:items-baseline">
           {hasTarget ? (
             <>

@@ -1,8 +1,4 @@
-/*
- * EditorToolbar.jsx
- * Top bar of the resume editor: editable title, saved/unsaved stamp,
- * template switcher (content is kept), Check ATS, Download PDF and Save.
- */
+// Editor top bar: title, template, Check ATS, Download PDF, Save.
 import { FileDown, ScanSearch, Save } from 'lucide-react'
 import Select from '../Select'
 import Button from '../Button'

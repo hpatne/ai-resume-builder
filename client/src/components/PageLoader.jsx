@@ -1,7 +1,4 @@
-/*
- * PageLoader.jsx
- * Centred spinner with a short message, shown while a page's data loads.
- */
+// Loading spinner shown while a page loads.
 import Spinner from './Spinner'
 
 function PageLoader({ message = 'Loading…' }) {

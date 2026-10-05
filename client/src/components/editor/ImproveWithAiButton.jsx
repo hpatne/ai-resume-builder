@@ -1,8 +1,4 @@
-/*
- * ImproveWithAiButton.jsx
- * Small button on a section header that asks the (mock) AI to rewrite that
- * section. Shows a spinner and "Improving…" while waiting.
- */
+// "Improve with AI" button with a loading state.
 import { PenLine } from 'lucide-react'
 import Spinner from '../Spinner'
 

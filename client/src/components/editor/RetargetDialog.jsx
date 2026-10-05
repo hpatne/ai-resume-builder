@@ -1,10 +1,4 @@
-/*
- * RetargetDialog.jsx
- * "Change target" dialog in the editor: point this resume at a different
- * company and/or role (useful after duplicating a resume for a new
- * application). Content is kept; optionally the new company's section order
- * is applied. The keyword panel and ATS check then follow the new target.
- */
+// Pop-up to change a resume's target company and role.
 import { useState } from 'react'
 import Modal from '../Modal'
 import Button from '../Button'
@@ -17,7 +11,6 @@ function RetargetDialog({ companies, roles, currentTarget, onApply, onClose }) {
   const [useCompanyOrder, setUseCompanyOrder] = useState(true)
   const [errors, setErrors] = useState({})
 
-  // Validate, find the company/role profiles, and send the resume changes to the editor
   const handleApply = () => {
     const targetErrors = validateRequiredFields(target, { companyName: 'a target company', roleTitle: 'a job role' })
     setErrors(targetErrors)

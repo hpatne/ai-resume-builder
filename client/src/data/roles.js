@@ -1,17 +1,4 @@
-/*
- * roles.js
- * SAMPLE DATA: six job roles. Each role drives the content the mock AI writes
- * (deliverable D5) and the keywords the ATS checker looks for (D7):
- *   requiredSkills     -> hard skills; pre-filled into the Skills section and
- *                         weighted highest in the ATS score
- *   keywords           -> softer role keywords used by the keyword panel / ATS
- *   sampleSummary      -> summary template; {company} is replaced with the target
- *   experienceBullets  -> bullet points for the Experience section
- *   projects           -> sample projects for the Projects section
- *   certifications     -> suggested certifications
- * Admins can add, edit and delete roles on /admin/roles.
- * TODO (Phase 2): replace mock with real API call to the Express backend
- */
+// Sample job roles with skills, keywords and example content.
 const roles = [
   {
     id: 'frontend-developer',

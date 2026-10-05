@@ -1,8 +1,4 @@
-/*
- * StepBasics.jsx
- * Wizard step 3: the few details the AI cannot guess (name, contact,
- * education, experience level). The page then calls "Generate with AI".
- */
+// Wizard step 3: basic details form.
 import Input from '../Input'
 import Select from '../Select'
 
@@ -13,7 +9,6 @@ const EXPERIENCE_OPTIONS = [
 ]
 
 function StepBasics({ basics, onChange, errors }) {
-  // Every input uses its `name` to update the matching field in `basics`
   const field = (name, label, extra = {}) => (
     <Input id={`basics-${name}`} name={name} label={label} value={basics[name]} onChange={onChange} error={errors[name]} {...extra} />
   )

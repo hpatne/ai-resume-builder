@@ -1,12 +1,4 @@
-/*
- * resumeService.js
- * MOCK resume storage: create, read, update, delete and duplicate resumes.
- * Resumes live in localStorage (seeded from data/sampleResumes.js).
- * Used by: ResumeContext (dashboard), resume editor, ATS checker, admin dashboard.
- *
- * TODO (Phase 2): replace mock with real API call to the Express backend
- *   GET/POST /api/resumes, GET/PUT/DELETE /api/resumes/:id
- */
+// Mock storage for resumes (create, load, save, delete, copy).
 import seedResumes from '../data/sampleResumes'
 import { loadCollection, saveToStorage } from '../utils/storage'
 import { simulateRequest, simulateError, createId } from '../utils/mockApi'
@@ -17,7 +9,6 @@ function getStoredResumes() {
   return loadCollection(RESUMES_KEY, seedResumes)
 }
 
-// All resumes of one user, most recently edited first
 export function getResumes(userId) {
   // TODO (Phase 2): replace mock with real API call to the Express backend
   const userResumes = getStoredResumes()
@@ -62,7 +53,6 @@ export function deleteResume(resumeId) {
   return simulateRequest(true, 350)
 }
 
-// Copy a resume so the user can tailor a new version for another job
 export function duplicateResume(resumeId) {
   // TODO (Phase 2): replace mock with real API call to the Express backend
   const original = getStoredResumes().find((resume) => resume.id === resumeId)
@@ -73,8 +63,7 @@ export function duplicateResume(resumeId) {
   return simulateRequest(copy, 400)
 }
 
-// Store the latest ATS score on the resume (shown as a badge on the dashboard).
-// "Last edited" is not changed, because checking a resume is not editing it.
+// Saving a score does not change "last edited"
 export function saveAtsScore(resumeId, score) {
   // TODO (Phase 2): replace mock with real API call to the Express backend
   const resumes = getStoredResumes().map((resume) =>
@@ -84,7 +73,6 @@ export function saveAtsScore(resumeId, score) {
   return simulateRequest(resumes.find((resume) => resume.id === resumeId), 200)
 }
 
-// Every resume of every user, for the admin dashboard
 export function getAllResumes() {
   // TODO (Phase 2): replace mock with real API call to the Express backend (admin only)
   return simulateRequest(getStoredResumes(), 300)

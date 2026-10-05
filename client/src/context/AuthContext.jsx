@@ -1,11 +1,4 @@
-/*
- * AuthContext.jsx
- * Keeps track of WHO is logged in and shares it with the whole app.
- * Any component can call:
- *   const { user, isAdmin, login, signup, logout, updateUser } = useAuth()
- * ProtectedRoute and AdminRoute read `user` to decide if a page may open.
- * The actual checks happen in services/authService.js (mock for now).
- */
+// Keeps track of the logged-in user. Use it with useAuth().
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import * as authService from '../services/authService'
 
@@ -13,10 +6,10 @@ const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
-  // true until we know whether someone is already logged in (from a previous visit)
+  // true until we know if someone is already logged in
   const [isAuthLoading, setIsAuthLoading] = useState(true)
 
-  // On app start: restore the saved session, if any
+  // Restore a saved login when the app starts
   useEffect(() => {
     authService.getCurrentUser().then((currentUser) => {
       setUser(currentUser)
@@ -29,7 +22,6 @@ export function AuthProvider({ children }) {
       user,
       isAuthLoading,
       isAdmin: user?.role === 'admin',
-      // Each action calls the service, then stores the returned user in state
       login: async (email, password) => {
         const loggedInUser = await authService.login(email, password)
         setUser(loggedInUser)

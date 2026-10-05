@@ -1,7 +1,4 @@
-/*
- * EducationForm.jsx
- * Editor form for education (uses EntryListEditor).
- */
+// Editor form for education.
 import EntryListEditor from './EntryListEditor'
 import { createId } from '../../utils/mockApi'
 

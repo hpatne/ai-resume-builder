@@ -1,7 +1,4 @@
-/*
- * NotFoundPage.jsx  (route: any unknown URL)
- * Shown when the URL does not match any page.
- */
+// 404 page for unknown links.
 import Button from '../components/Button'
 
 function NotFoundPage() {

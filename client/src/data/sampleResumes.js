@@ -1,11 +1,4 @@
-/*
- * sampleResumes.js
- * SAMPLE DATA: resumes that exist before anyone signs up, so the demo account
- * has a populated dashboard and the admin dashboard has numbers to show.
- * The demo user (u-demo) owns three resumes, each tailored to a different
- * company + role, which shows the multiple-resume feature (objective O6).
- * TODO (Phase 2): replace mock with real API call to the Express backend
- */
+// Sample resumes so the demo account has data.
 const demoPersonal = {
   fullName: 'Aarav Sharma',
   email: 'demo@resumeai.dev',

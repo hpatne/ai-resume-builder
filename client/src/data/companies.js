@@ -1,15 +1,4 @@
-/*
- * companies.js
- * SAMPLE DATA: five fictional companies (invented names, not real employers).
- * Each profile drives the customisation (deliverable D6):
- *   preferredTemplate -> template recommended first in the wizard
- *   sectionOrder      -> order of sections in the generated resume
- *   emphasis          -> whether projects or experience get more space
- *   keywords          -> shown in the editor keyword panel and used by the ATS check
- *   summaryLine       -> sentence the mock AI adds to the summary for this company
- * Admins can add, edit and delete companies on /admin/companies.
- * TODO (Phase 2): replace mock with real API call to the Express backend
- */
+// Sample companies (made-up names). Each one sets the template, section order, emphasis and keywords.
 const companies = [
   {
     id: 'nimbus-labs',

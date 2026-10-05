@@ -1,8 +1,4 @@
-/*
- * EmptyState.jsx
- * Friendly placeholder shown when a list has nothing in it yet
- * (no resumes, no search results, no ATS check run yet).
- */
+// Message shown when a list is empty.
 function EmptyState({ icon, title, description, action }) {
   return (
     <div className="flex flex-col items-center rounded-md border border-dashed border-line-strong bg-paper px-6 py-12 text-center">

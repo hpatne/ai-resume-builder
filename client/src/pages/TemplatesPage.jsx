@@ -1,10 +1,4 @@
-/*
- * TemplatesPage.jsx  (route: /templates, public)
- * Gallery of ATS-friendly templates (objective O4, deliverables D2 and D6),
- * filterable by industry, company type and job role. Every card shows the same
- * sample resume, so only the layout differs, just like "Change template" in
- * the editor (content is kept).
- */
+// Templates gallery (/templates) with filters.
 import { useState } from 'react'
 import { SearchX } from 'lucide-react'
 import { useCatalog } from '../context/CatalogContext'
@@ -15,7 +9,7 @@ import TemplateCard from '../components/TemplateCard'
 import EmptyState from '../components/EmptyState'
 import PageLoader from '../components/PageLoader'
 
-// The demo user's Nimbus Labs resume is used as preview content for every template
+// Same sample resume in every template, so only the design changes
 const PREVIEW_RESUME = sampleResumes[0]
 const EMPTY_FILTERS = { industry: '', companyType: '', roleId: '' }
 
@@ -23,12 +17,10 @@ function TemplatesPage() {
   const { templates, roles, isCatalogLoading } = useCatalog()
   const [filters, setFilters] = useState(EMPTY_FILTERS)
 
-  // Filter options come from the data, so admin changes appear here automatically
   const industries = [...new Set(templates.flatMap((template) => template.industries))].sort()
   const companyTypes = [...new Set(templates.flatMap((template) => template.companyTypes))].sort()
   const toOptions = (values, allLabel) => [{ value: '', label: allLabel }, ...values.map((value) => ({ value, label: value }))]
 
-  // A template is shown if it matches every filter that is set
   const visibleTemplates = templates.filter(
     (template) =>
       (!filters.industry || template.industries.includes(filters.industry)) &&
@@ -49,7 +41,6 @@ function TemplatesPage() {
         In the create wizard, the ones that suit your target company come first.
       </p>
 
-      {/* Filters */}
       <div className="mt-8 grid gap-3 rounded-lg border border-line bg-paper p-4 sm:grid-cols-3">
         <Select id="filter-industry" label="Industry" value={filters.industry} onChange={updateFilter('industry')} options={toOptions(industries, 'All industries')} />
         <Select id="filter-company-type" label="Company type" value={filters.companyType} onChange={updateFilter('companyType')} options={toOptions(companyTypes, 'All company types')} />

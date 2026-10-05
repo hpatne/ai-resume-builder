@@ -1,8 +1,4 @@
-/*
- * ScrollToTop.jsx
- * Scrolls to the top when the page changes (single-page apps keep the old
- * scroll position otherwise). Links with a #hash scroll to that section instead.
- */
+// Scrolls to the top when the page changes.
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 

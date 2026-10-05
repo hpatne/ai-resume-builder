@@ -1,9 +1,4 @@
-/*
- * AdminDashboardPage.jsx  (route: /admin, admin only)
- * Admin overview (deliverable D8): totals, how many resumes target each
- * company, and the latest resumes across all users. Also offers "Reset demo
- * data" to restore the original sample data before a demo.
- */
+// Admin overview (/admin).
 import { useEffect, useState } from 'react'
 import { RotateCcw } from 'lucide-react'
 import { getAdminStats } from '../../services/adminService'
@@ -23,12 +18,11 @@ function AdminDashboardPage() {
   const [stats, setStats] = useState(null)
   const [isResetOpen, setIsResetOpen] = useState(false)
 
-  // Load the numbers once when the page opens
   useEffect(() => {
     getAdminStats().then(setStats)
   }, [])
 
-  // Clear saved data and reload: the app starts again from the sample data (logged out)
+  // Clear browser data and go back to the sample data
   const handleReset = () => {
     resetAllData()
     window.location.assign('/login')

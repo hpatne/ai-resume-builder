@@ -1,7 +1,4 @@
-/*
- * eslint.config.js
- * Code-quality rules for the frontend (run with `npm run lint`).
- */
+// Code-quality rules (run with: npm run lint).
 import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
@@ -20,7 +17,7 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
-      // Context files export a Provider component plus its hook (e.g. useAuth)
+      // Context files also export a hook like useAuth
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true, allowExportNames: ['useAuth', 'useResumes', 'useToast', 'useCatalog'] },

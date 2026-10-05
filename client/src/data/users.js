@@ -1,14 +1,5 @@
-/*
- * users.js
- * SAMPLE DATA: mock accounts used for login in Phase 1.
- * Passwords are stored in plain text ONLY because this is mock data in the
- * browser. In Phase 2 the Express backend will hash passwords (bcrypt) and
- * issue a token (JWT); the frontend will never see a password again.
- * TODO (Phase 2): replace mock with real API call to the Express backend
- *
- * Demo logins:  demo@resumeai.dev / demo1234   (user, has 3 sample resumes)
- *               admin@resumeai.dev / admin1234 (admin)
- */
+// Demo accounts. Passwords are plain text only because this is mock data.
+// Login: demo@resumeai.dev / demo1234, admin@resumeai.dev / admin1234
 const users = [
   {
     id: 'u-demo',

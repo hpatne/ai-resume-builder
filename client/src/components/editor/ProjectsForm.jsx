@@ -1,7 +1,4 @@
-/*
- * ProjectsForm.jsx
- * Editor form for projects (uses EntryListEditor).
- */
+// Editor form for projects.
 import EntryListEditor from './EntryListEditor'
 import { createId } from '../../utils/mockApi'
 

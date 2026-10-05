@@ -1,13 +1,8 @@
-/*
- * main.jsx
- * Entry point of the React app. Vite loads this file first (see index.html).
- * It loads the self-hosted fonts and global CSS, then mounts <App /> into #root.
- */
+// Starting point: loads fonts and styles, then shows <App /> on the page.
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
-// Self-hosted fonts (no external font requests): Barlow for UI text,
-// Barlow Condensed for board-style labels and headings.
+// Fonts are bundled with the app (no Google Fonts request)
 import '@fontsource/barlow/400.css'
 import '@fontsource/barlow/500.css'
 import '@fontsource/barlow/600.css'

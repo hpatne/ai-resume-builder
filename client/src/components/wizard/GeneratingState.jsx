@@ -1,9 +1,4 @@
-/*
- * GeneratingState.jsx
- * Loading screen shown while the (mock) AI writes the draft. It lists what is
- * being tailored, one line at a time, so the user can see the target being
- * applied instead of staring at a spinner.
- */
+// Loading screen while the AI writes the resume.
 import { useEffect, useState } from 'react'
 import { Check } from 'lucide-react'
 import Spinner from '../Spinner'
@@ -11,7 +6,6 @@ import Spinner from '../Spinner'
 function GeneratingState({ steps }) {
   const [completedCount, setCompletedCount] = useState(0)
 
-  // Tick one line off roughly every half second
   useEffect(() => {
     const timer = setInterval(() => {
       setCompletedCount((count) => Math.min(count + 1, steps.length - 1))

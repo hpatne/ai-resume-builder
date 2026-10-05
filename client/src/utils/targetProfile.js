@@ -1,13 +1,7 @@
-/*
- * targetProfile.js
- * Finds the company and role profile behind the user's TARGET (our core idea).
- * If the user typed a company or role that is not in our data, it builds a
- * sensible generic profile instead, so custom targets still work.
- * Used by: create wizard, resume editor, ATS checker, mock AI service.
- */
+// Finds the company and role details for a resume's target.
 import { DEFAULT_SECTION_ORDER } from '../data/sections'
 
-// Profile used when the company is not in our sample data
+// Used when the company isn't in our data
 export function buildCustomCompany(name) {
   return {
     id: '',
@@ -24,7 +18,7 @@ export function buildCustomCompany(name) {
   }
 }
 
-// Profile used when the role is not in our sample data
+// Used when the role isn't in our data
 export function buildCustomRole(title) {
   return {
     id: '',
@@ -40,7 +34,7 @@ export function buildCustomRole(title) {
   }
 }
 
-// Find the company by id first, then by name (ignoring case), else build a custom one
+// Find by id, then by name, else make a custom one
 export function resolveCompany(companies, companyId, companyName) {
   const byId = companies.find((company) => company.id && company.id === companyId)
   if (byId) return byId
@@ -48,7 +42,6 @@ export function resolveCompany(companies, companyId, companyName) {
   return byName || buildCustomCompany(companyName || 'Any company')
 }
 
-// Same idea for roles
 export function resolveRole(roles, roleId, roleTitle) {
   const byId = roles.find((role) => role.id && role.id === roleId)
   if (byId) return byId
@@ -56,8 +49,7 @@ export function resolveRole(roles, roleId, roleTitle) {
   return byTitle || buildCustomRole(roleTitle || 'Any role')
 }
 
-// All keywords for a target: role skills first (most important), then role and
-// company keywords, without duplicates. `type` tells the ATS checker which are hard skills.
+// Role skills first, then role and company keywords (no duplicates)
 export function getTargetKeywords(company, role) {
   const keywordList = []
   const seen = new Set()

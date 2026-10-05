@@ -1,9 +1,4 @@
-/*
- * LoginPage.jsx  (route: /login)
- * Log in form with validation, password show/hide and demo-account shortcuts.
- * Deliverable D4 (authentication). After login, users go back to the page they
- * tried to open, or to their dashboard (admins go to the admin dashboard).
- */
+// Login page (/login).
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -14,7 +9,7 @@ import Button from '../components/Button'
 import FormAlert from '../components/FormAlert'
 import AuthAside from '../components/AuthAside'
 
-// Mock accounts from data/users.js, offered as one-click fill buttons for the demo
+// Demo accounts (mock data)
 const DEMO_ACCOUNTS = [
   { label: 'Fill demo user', email: 'demo@resumeai.dev', password: 'demo1234' },
   { label: 'Fill admin', email: 'admin@resumeai.dev', password: 'admin1234' },
@@ -25,20 +20,17 @@ function LoginPage() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  // ---- Form state ----
   const [formValues, setFormValues] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({})
   const [formError, setFormError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Update one field and clear its error message
   const handleChange = (event) => {
     const { name, value } = event.target
     setFormValues({ ...formValues, [name]: value })
     setErrors({ ...errors, [name]: '' })
   }
 
-  // Validate, then call the (mock) login; on success go to the right page
   const handleLogin = async (event) => {
     event.preventDefault()
     const validationErrors = validateLoginForm(formValues)
@@ -74,7 +66,6 @@ function LoginPage() {
             </Button>
           </form>
 
-          {/* Demo accounts (mock data) to make the review demo quick */}
           <div className="mt-6 rounded-md border border-dashed border-line-strong bg-paper p-4">
             <p className="text-sm font-semibold">Demo accounts</p>
             <p className="mt-0.5 text-sm text-ink-faint">demo@resumeai.dev / demo1234 · admin@resumeai.dev / admin1234</p>

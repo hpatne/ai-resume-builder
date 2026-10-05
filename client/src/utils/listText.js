@@ -1,10 +1,5 @@
-/*
- * listText.js
- * Admin forms edit lists (keywords, skills) as one comma-separated text box.
- * These two helpers convert between that text and an array.
- */
-
-// "React, Node.js , react" -> ['React', 'Node.js'] (trimmed, no empties, no duplicates)
+// Converts "a, b, c" text to a list and back (used in admin forms).
+// "React, Node.js" -> ['React', 'Node.js']
 export function textToList(text) {
   const seen = new Set()
   return text

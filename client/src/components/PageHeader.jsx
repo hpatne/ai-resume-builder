@@ -1,8 +1,4 @@
-/*
- * PageHeader.jsx
- * Title row at the top of every app page: heading, one-line description and
- * optional action buttons on the right (they wrap below on small screens).
- */
+// Page title, short description and action buttons.
 function PageHeader({ title, description, actions }) {
   return (
     <header className="mb-6 flex flex-wrap items-end justify-between gap-4">

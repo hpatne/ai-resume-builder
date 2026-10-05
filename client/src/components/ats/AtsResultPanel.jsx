@@ -1,8 +1,4 @@
-/*
- * AtsResultPanel.jsx
- * The full ATS report: big score + how it was calculated, matched/missing
- * keywords, section checks and prioritised suggestions.
- */
+// Full ATS report: score, keywords, section checks and fixes.
 import ScoreCircle from '../ScoreCircle'
 import ScoreBreakdown from './ScoreBreakdown'
 import KeywordResults from './KeywordResults'

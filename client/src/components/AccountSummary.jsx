@@ -1,9 +1,4 @@
-/*
- * AccountSummary.jsx
- * Left card on the Profile page: photo placeholder (initials), name, email,
- * member-since date and resume statistics.
- * Photo upload needs file storage, so it is planned for Phase 2.
- */
+// Profile page card: photo placeholder, name, email and resume stats.
 import { Camera } from 'lucide-react'
 import { formatDate } from '../utils/resumeFormat'
 
@@ -21,7 +16,6 @@ function AccountSummary({ user, resumes }) {
   return (
     <section aria-label="Account summary" className="rounded-lg border border-line bg-paper p-5">
       <div className="flex items-center gap-4">
-        {/* Photo placeholder */}
         <div className="grid size-20 shrink-0 place-items-center rounded-full border-[3px] border-ink bg-board font-board text-3xl font-bold" aria-hidden="true">
           {initials}
         </div>

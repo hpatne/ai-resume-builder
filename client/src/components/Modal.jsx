@@ -1,22 +1,16 @@
-/*
- * Modal.jsx
- * Accessible pop-up dialog: dims the page, closes on Escape or backdrop click,
- * and moves keyboard focus into the dialog when it opens.
- * Used by: ConfirmDialog, admin add/edit forms.
- */
+// Pop-up dialog box.
 import { useEffect, useRef } from 'react'
 import { X } from 'lucide-react'
 
 function Modal({ title, onClose, children, footer, size = 'md' }) {
   const dialogRef = useRef(null)
-  // Keep the latest onClose in a ref, so the effect below runs only once
-  // (parents often pass a new function on every render)
+  // Keep the latest onClose in a ref so the effect below runs only once
   const onCloseRef = useRef(onClose)
   useEffect(() => {
     onCloseRef.current = onClose
   })
 
-  // When opened: focus the dialog, close on Escape, and stop the page behind from scrolling
+  // On open: focus the dialog, close on Escape, stop the page behind from scrolling
   useEffect(() => {
     dialogRef.current?.focus()
     const handleKeyDown = (event) => {
@@ -34,7 +28,6 @@ function Modal({ title, onClose, children, footer, size = 'md' }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-navy-deep/55 p-0 sm:items-center sm:p-4">
-      {/* Clicking the dark backdrop closes the dialog */}
       <div className="absolute inset-0" onClick={onClose} aria-hidden="true" />
 
       <div

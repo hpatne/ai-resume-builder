@@ -1,10 +1,4 @@
-/*
- * StepTarget.jsx
- * Wizard step 1: the user enters the TARGET COMPANY and JOB ROLE (objective O2).
- * Suggestions come from the company/role data; anything else can be typed as a
- * custom target. As soon as a target is known, the insight panel shows how it
- * will shape the resume.
- */
+// Wizard step 1: choose the target company and role.
 import Autocomplete from '../Autocomplete'
 import CompanyInsight from './CompanyInsight'
 
@@ -24,7 +18,7 @@ function StepTarget({ target, onTargetChange, companies, roles, errors, company,
           placeholder="e.g. Nimbus Labs"
           hint="Pick a sample company or type any other company name."
           error={errors.companyName}
-          // Typing clears the selected id: the text may now be a custom company
+          // Typing clears the id, so the text can be a custom company
           onTextChange={(text) => onTargetChange({ ...target, companyName: text, companyId: '' })}
           onSelect={(option) => onTargetChange({ ...target, companyName: option.label, companyId: option.id })}
         />

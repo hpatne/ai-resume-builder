@@ -1,8 +1,4 @@
-/*
- * Footer.jsx
- * Site footer for the public pages: product name, short description, links,
- * and an honest note that the companies shown are sample data.
- */
+// Footer for the public pages.
 import { Link } from 'react-router-dom'
 import Logo from './Logo'
 

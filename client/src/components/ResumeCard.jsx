@@ -1,9 +1,4 @@
-/*
- * ResumeCard.jsx
- * One resume on the dashboard: a real mini preview, the title, the target
- * company + role (yellow tag), template, last-edited date and an ATS stamp.
- * Actions: Edit, Duplicate, Download (PDF) and Delete.
- */
+// One resume card on the dashboard.
 import { Link } from 'react-router-dom'
 import { PencilLine, Copy, FileDown, Trash2 } from 'lucide-react'
 import ResumePreview from './templates/ResumePreview'
@@ -14,12 +9,10 @@ import { formatDate } from '../utils/resumeFormat'
 function ResumeCard({ resume, layout, templateName, onDuplicate, onDownload, onDelete }) {
   const hasScore = typeof resume.atsScore === 'number'
 
-  // Small secondary action button (icon + text)
   const actionClasses = 'inline-flex h-9 items-center gap-1.5 rounded-md px-2.5 text-sm font-semibold text-ink-soft hover:bg-ink/5 hover:text-ink'
 
   return (
     <article className="flex flex-col overflow-hidden rounded-lg border border-line bg-paper shadow-panel">
-      {/* Mini preview: the real template, scaled down; clicking opens the editor */}
       <Link to={`/editor/${resume.id}`} aria-label={`Edit ${resume.title}`} className="relative block h-52 overflow-hidden border-b border-line bg-ground px-6 pt-4">
         <ResumePreview resume={resume} layout={layout} maxScale={0.45} />
         <span className="absolute top-3 right-3">
@@ -34,7 +27,6 @@ function ResumeCard({ resume, layout, templateName, onDuplicate, onDownload, onD
       <div className="flex flex-1 flex-col p-4">
         <h2 className="text-lg leading-snug font-bold">{resume.title}</h2>
 
-        {/* Target company + role */}
         <p className="mt-2 self-start rounded-[3px] border-2 border-ink bg-board px-2 py-0.5 text-sm font-semibold">
           <span className="sr-only">Target: </span>
           {resume.companyName} · {resume.roleTitle}
@@ -47,7 +39,6 @@ function ResumeCard({ resume, layout, templateName, onDuplicate, onDownload, onD
           <dd className="tabular font-medium">{formatDate(resume.updatedAt)}</dd>
         </dl>
 
-        {/* Actions */}
         <div className="mt-4 flex flex-wrap items-center gap-1 border-t border-line pt-3">
           <Link to={`/editor/${resume.id}`} className="inline-flex h-9 items-center gap-1.5 rounded-md bg-navy px-3 text-sm font-semibold text-white hover:bg-navy-soft">
             <PencilLine size={16} aria-hidden="true" />

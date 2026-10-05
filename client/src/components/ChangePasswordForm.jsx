@@ -1,8 +1,4 @@
-/*
- * ChangePasswordForm.jsx
- * Profile page form to change the password: current password, new password
- * (min. 8 characters) and confirmation.
- */
+// Profile page form for changing the password.
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'

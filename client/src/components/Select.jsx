@@ -1,8 +1,4 @@
-/*
- * Select.jsx
- * Labelled dropdown. `options` is an array of { value, label }.
- * Used by: editor toolbar (template), ATS checker (resume picker), filters, admin forms.
- */
+// Dropdown with a label.
 import { ChevronDown } from 'lucide-react'
 
 function Select({ id, label, options, error, hideLabel = false, className = '', ...rest }) {

@@ -1,9 +1,4 @@
-/*
- * sampleJobDescriptions.js
- * SAMPLE DATA: one example job description per role, written for this project.
- * The ATS Checker's "Use a sample job description" button fills the text box
- * with the one matching the selected resume's role, which makes the demo quick.
- */
+// Example job descriptions for the ATS checker.
 const sampleJobDescriptions = {
   'frontend-developer': `Frontend Developer (0-2 years)
 We are looking for a Frontend Developer to build fast, accessible web interfaces.

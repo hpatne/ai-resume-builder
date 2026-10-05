@@ -1,9 +1,4 @@
-/*
- * SignupPage.jsx  (route: /signup)
- * Create-account form: name, email, password and confirm password, each
- * validated with a clear message. Deliverable D4 (authentication).
- * On success the user is logged in and sent to their dashboard.
- */
+// Signup page (/signup).
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -20,20 +15,17 @@ function SignupPage() {
   const { showToast } = useToast()
   const navigate = useNavigate()
 
-  // ---- Form state ----
   const [formValues, setFormValues] = useState({ name: '', email: '', password: '', confirmPassword: '' })
   const [errors, setErrors] = useState({})
   const [formError, setFormError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Update one field and clear its error message
   const handleChange = (event) => {
     const { name, value } = event.target
     setFormValues({ ...formValues, [name]: value })
     setErrors({ ...errors, [name]: '' })
   }
 
-  // Validate every field, then create the (mock) account
   const handleSignup = async (event) => {
     event.preventDefault()
     const validationErrors = validateSignupForm(formValues)

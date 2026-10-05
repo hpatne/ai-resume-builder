@@ -1,8 +1,4 @@
-/*
- * PersonalInfoForm.jsx
- * Editor form for the resume header: name and contact details.
- * `value` is resumeData.personal; every change sends back a new object.
- */
+// Editor form for name and contact details.
 import Input from '../Input'
 
 const PERSONAL_FIELDS = [

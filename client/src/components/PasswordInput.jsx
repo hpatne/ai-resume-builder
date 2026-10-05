@@ -1,14 +1,9 @@
-/*
- * PasswordInput.jsx
- * Password field with a show/hide toggle button.
- * Used by: Login, Signup and the Change Password form on the Profile page.
- */
+// Password field with a show/hide button.
 import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import Input from './Input'
 
 function PasswordInput(props) {
-  // false = dots (hidden), true = plain text (visible)
   const [isVisible, setIsVisible] = useState(false)
 
   const toggleButton = (

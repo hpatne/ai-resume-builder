@@ -1,8 +1,4 @@
-/*
- * Spinner.jsx
- * Small rotating loading indicator.
- * Used by: Button (loading state), page loaders, AI generation and ATS checks.
- */
+// Small loading spinner.
 function Spinner({ size = 18, label = 'Loading', className = '' }) {
   return (
     <span role="status" className={`inline-flex items-center ${className}`}>

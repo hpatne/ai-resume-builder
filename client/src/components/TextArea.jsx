@@ -1,9 +1,4 @@
-/*
- * TextArea.jsx
- * Labelled multi-line text field with optional hint and error message.
- * Used by: resume editor (summary, bullet points), ATS checker (job description),
- * admin forms.
- */
+// Multi-line text box with a label, hint and error message.
 import { CircleAlert } from 'lucide-react'
 
 function TextArea({ id, label, error, hint, required = false, rows = 4, className = '', ...rest }) {

@@ -1,9 +1,4 @@
-/*
- * CompanyBarList.jsx
- * Admin dashboard chart: how many resumes target each company, as a simple
- * horizontal bar list (one colour, each bar labelled with its name and count;
- * hovering a bar shows the same numbers as a tooltip).
- */
+// Bar list: how many resumes target each company.
 function CompanyBarList({ counts }) {
   const rows = Object.entries(counts).sort((first, second) => second[1] - first[1])
   const largest = Math.max(1, ...rows.map(([, count]) => count))

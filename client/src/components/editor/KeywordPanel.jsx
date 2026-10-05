@@ -1,10 +1,4 @@
-/*
- * KeywordPanel.jsx
- * Suggested keywords for the resume's target company + role (D6). Each
- * keyword is checked against the resume text on every change:
- *   green = already used, maroon = missing.
- * Missing role skills can be added to the Skills section with one click.
- */
+// Shows which target keywords are used or missing in the resume.
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { getTargetKeywords } from '../../utils/targetProfile'
@@ -14,7 +8,6 @@ import KeywordChips from '../KeywordChips'
 function KeywordPanel({ company, role, resumeData, onAddSkill }) {
   const [isOpen, setIsOpen] = useState(true)
 
-  // Check every target keyword against the current resume text
   const resumeText = resumeToText(resumeData)
   const keywords = getTargetKeywords(company, role).map((keyword) => ({ ...keyword, matched: containsKeyword(resumeText, keyword.word) }))
   const skillKeywords = keywords.filter((keyword) => keyword.type === 'skill')
@@ -35,7 +28,6 @@ function KeywordPanel({ company, role, resumeData, onAddSkill }) {
         <ChevronDown size={18} aria-hidden="true" className={`shrink-0 transition-transform ${isOpen ? '' : '-rotate-90'}`} />
       </button>
 
-      {/* Coverage bar */}
       <div className="mx-4 h-1.5 overflow-hidden rounded-full bg-line" aria-hidden="true">
         <div className="h-full rounded-full bg-signal transition-[width] duration-500" style={{ width: `${coveragePercent}%` }} />
       </div>

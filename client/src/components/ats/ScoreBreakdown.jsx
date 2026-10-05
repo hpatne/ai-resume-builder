@@ -1,8 +1,4 @@
-/*
- * ScoreBreakdown.jsx
- * Shows how the ATS score was built: one bar per part of the formula
- * (hard skills 40, other keywords 20, sections 20, quality 10, alignment 10).
- */
+// Bars showing how the ATS score was calculated.
 function ScoreBreakdown({ breakdown }) {
   return (
     <dl className="w-full space-y-3">

@@ -1,8 +1,4 @@
-/*
- * sections.js
- * The resume sections a user can fill in, and their display names.
- * Personal info is always at the top; these six can be reordered per company.
- */
+// Resume section names and the default order.
 export const SECTION_LABELS = {
   summary: 'Summary',
   skills: 'Skills',

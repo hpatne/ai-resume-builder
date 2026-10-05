@@ -1,32 +1,20 @@
-/*
- * atsScore.js
- * Calculates the ATS (Applicant Tracking System) score shown on the ATS
- * Checker page (deliverable D7). It is simple keyword matching, written to be
- * easy to explain; Phase 3 will move a stronger engine to the backend.
- *
- * THE FORMULA (total = 100 points)
- *   A. Hard skills match ..... 40 pts = 40 x (hard skills found / hard skills the job asks for)
- *   B. Other keywords ........ 20 pts = 20 x (other job keywords found / other job keywords)
- *   C. Sections present ...... 20 pts = 4 pts each: contact, summary, skills,
- *                                       experience or projects, education
- *   D. Content quality ....... 10 pts = 5 if summary is 40-80 words
- *                                     + 5 x (share of bullet points that contain a number)
- *   E. Target alignment ...... 10 pts = 5 if the summary or title names the job role
- *                                     + 5 x (share of the company's keywords used)
- * Hard skills weigh the most because recruiters filter on them first.
- */
+// Calculates the ATS score (out of 100) by matching keywords.
+// Hard skills found ........ 40
+// Other keywords found ..... 20
+// Sections present ......... 20 (4 each)
+// Content quality .......... 10 (summary length + bullets with numbers)
+// Matches the target ....... 10 (role named + company keywords used)
 import { resumeToText, containsKeyword, extractFrequentWords } from './keywordUtils'
 import { splitBullets, hasSectionContent } from './resumeFormat'
 
 const PRIORITY_ORDER = { high: 0, medium: 1, low: 2 }
 
-// Share of items found (0 to 1). An empty list counts as fully covered.
+// Share found, 0 to 1 (an empty list counts as all found)
 function shareFound(keywords) {
   if (keywords.length === 0) return 1
   return keywords.filter((keyword) => keyword.matched).length / keywords.length
 }
 
-// Remove duplicates, ignoring upper/lower case
 function uniqueWords(words) {
   const seen = new Set()
   return words.filter((word) => {
@@ -38,27 +26,26 @@ function uniqueWords(words) {
 }
 
 export function calculateAtsScore({ resume, jobDescription, company, role, knownSkills }) {
-  // ---- Step 1: turn the resume into one block of searchable text ----
+  // Step 1: the resume as one block of text
   const resumeText = resumeToText(resume)
   const jdText = jobDescription.toLowerCase()
 
-  // ---- Step 2: find the keywords the job description asks for ----
-  // Hard skills = any skill from our role data that the job description mentions.
-  // If it mentions none we know, fall back to the target role's required skills.
+  // Step 2: keywords the job asks for
+  // Hard skills = known skills found in the job text
+  // (if none are found, use the role's required skills)
   let hardSkillWords = knownSkills.filter((skill) => containsKeyword(jdText, skill))
   if (hardSkillWords.length === 0) hardSkillWords = role.requiredSkills
 
-  // Other keywords = role/company keywords found in the job description,
-  // plus words the job description repeats (not already counted as a skill)
+  // Other keywords = role/company keywords in the job text + words it repeats
   const targetWords = [...role.keywords, ...company.keywords].filter((word) => containsKeyword(jdText, word))
   const repeatedWords = extractFrequentWords(jdText, 6).filter((word) => !hardSkillWords.some((skill) => skill.toLowerCase().includes(word)))
   const otherWords = uniqueWords([...targetWords, ...repeatedWords]).filter((word) => !hardSkillWords.some((skill) => skill.toLowerCase() === word.toLowerCase()))
 
-  // ---- Step 3: mark each keyword as found (matched) or missing in the resume ----
+  // Step 3: mark each keyword as found or missing
   const hardSkills = uniqueWords(hardSkillWords).map((word) => ({ word, matched: containsKeyword(resumeText, word) }))
   const otherKeywords = otherWords.map((word) => ({ word, matched: containsKeyword(resumeText, word) }))
 
-  // ---- Step 4: section checks ----
+  // Step 4: section checks
   const allBullets = [...resume.experience, ...resume.projects].flatMap((entry) => splitBullets(entry.bullets))
   const bulletsWithNumbers = allBullets.filter((bullet) => /\d/.test(bullet))
   const quantifiedShare = allBullets.length ? bulletsWithNumbers.length / allBullets.length : 0
@@ -72,7 +59,7 @@ export function calculateAtsScore({ resume, jobDescription, company, role, known
     { id: 'education', label: 'Education', passed: hasSectionContent(resume, 'education'), section: 'education' },
   ]
 
-  // ---- Step 5: add up the points (see THE FORMULA above) ----
+  // Step 5: add up the points (formula at the top)
   const companyKeywords = company.keywords.map((word) => ({ word, matched: containsKeyword(resumeText, word) }))
   const mentionsRole = containsKeyword(`${resume.summary} ${resume.title}`, role.title)
 
@@ -86,7 +73,7 @@ export function calculateAtsScore({ resume, jobDescription, company, role, known
 
   const score = Math.min(100, breakdown.reduce((total, item) => total + item.points, 0))
 
-  // ---- Step 6: suggestions, most important first ----
+  // Step 6: suggestions, most important first
   const suggestions = []
   const missingSkills = hardSkills.filter((keyword) => !keyword.matched).map((keyword) => keyword.word)
   const missingWords = otherKeywords.filter((keyword) => !keyword.matched).map((keyword) => keyword.word)

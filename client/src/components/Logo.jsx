@@ -1,8 +1,4 @@
-/*
- * Logo.jsx
- * Product mark (a small station board) plus the "AI Resume Builder" wordmark.
- * `tone="light"` is used on the navy sidebar and footer.
- */
+// App logo and name.
 import { Link } from 'react-router-dom'
 
 function Logo({ tone = 'dark', to = '/' }) {

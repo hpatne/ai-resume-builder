@@ -1,11 +1,4 @@
-/*
- * ResumeContext.jsx
- * Holds the logged-in user's list of resumes and the actions that change it.
- * Usage: const { resumes, isResumesLoading, createResume, saveResume,
- *                deleteResume, duplicateResume, saveScore } = useResumes()
- * Every action calls services/resumeService.js first, then updates the list,
- * so the dashboard always shows what is saved.
- */
+// Keeps the logged-in user's resumes. Use it with useResumes().
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import * as resumeService from '../services/resumeService'
 import { useAuth } from './AuthContext'
@@ -16,11 +9,9 @@ export function ResumeProvider({ children }) {
   const { user } = useAuth()
   const userId = user?.id
 
-  // The list is stored together with the id of the user it belongs to,
-  // so after logging in as someone else we never show the previous user's resumes
+  // Store the user id with the list so we never show another user's resumes
   const [resumeState, setResumeState] = useState({ userId: null, list: [] })
 
-  // Load this user's resumes whenever the logged-in user changes
   useEffect(() => {
     if (!userId) return
     let isCancelled = false

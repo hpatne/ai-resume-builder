@@ -1,8 +1,4 @@
-/*
- * TagList.jsx
- * A simple row of neutral tags (e.g. a company's keywords, a role's skills).
- * For matched / missing keywords use KeywordChips instead.
- */
+// Row of simple grey tags.
 function TagList({ tags, label }) {
   return (
     <ul className="flex flex-wrap gap-1.5" aria-label={label}>

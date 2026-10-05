@@ -1,13 +1,5 @@
-/*
- * pdf.js
- * Settings for PDF download. We use react-to-print, which opens the browser's
- * print window with only the resume page in it; the user picks "Save as PDF".
- * WHY this and not an image-based PDF library: printing keeps the resume as
- * real, selectable text, which applicant tracking systems (ATS) can read.
- * Used by: resume editor (Download PDF) and dashboard cards (Download).
- */
-
-// A4 paper with comfortable margins; keep background colours (e.g. Modern header)
+// PDF download settings. We print the page so the text stays readable for ATS.
+// A4 page; keep background colours
 export const PRINT_PAGE_STYLE = `
   @page { size: A4; margin: 12mm 14mm; }
   html, body { background: #ffffff; }

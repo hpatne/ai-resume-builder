@@ -1,9 +1,4 @@
-/*
- * CompanyInsight.jsx
- * "What this company looks for" panel in the create wizard. It makes the
- * company + role customisation (deliverable D6) visible: emphasis, section
- * order, recommended template, keywords and the role's required skills.
- */
+// Wizard panel: what the chosen company looks for.
 import { ArrowRight } from 'lucide-react'
 import { SECTION_LABELS } from '../../data/sections'
 import TagList from '../TagList'

@@ -1,9 +1,4 @@
-/*
- * CompanyForm.jsx
- * Add / edit a company profile (admin). These fields drive customisation:
- * preferred template, emphasis, section order, keywords and the sentence the
- * mock AI adds to the summary. Opens inside a Modal.
- */
+// Admin form to add or edit a company.
 import { useState } from 'react'
 import Modal from '../Modal'
 import Button from '../Button'
@@ -21,7 +16,7 @@ const EMPHASIS_OPTIONS = [
 ]
 
 function CompanyForm({ company, templates, onSave, onCancel, isSaving }) {
-  // Lists are edited as comma-separated text and turned back into arrays on save
+  // Lists are edited as comma-separated text
   const [formValues, setFormValues] = useState({
     name: company?.name || '',
     type: company?.type || 'Product-based',

@@ -1,11 +1,4 @@
-/*
- * TemplateCard.jsx
- * One template: live preview with sample content, name, description and what
- * it is best for. Used in two places:
- *   - Templates gallery: shows a "Use this template" link (`actionTo`)
- *   - Create wizard step 2: the whole card is a selectable option (`onSelect`)
- * `isRecommended` adds a stamp when the template suits the chosen company/role.
- */
+// Template preview card (used in the gallery and the wizard).
 import { Link } from 'react-router-dom'
 import { Check } from 'lucide-react'
 import ResumePreview from './templates/ResumePreview'
@@ -54,7 +47,7 @@ function TemplateCard({ template, sampleResume, isRecommended, isSelected, onSel
     </div>
   )
 
-  // Wizard: the card is one big radio-like button
+  // In the wizard the whole card is a button
   if (onSelect) {
     return (
       <button
@@ -69,7 +62,6 @@ function TemplateCard({ template, sampleResume, isRecommended, isSelected, onSel
     )
   }
 
-  // Gallery: a card with a link button
   return (
     <article className={`flex flex-col overflow-hidden rounded-lg border bg-paper shadow-panel ${borderClasses}`}>
       {preview}

@@ -1,9 +1,4 @@
-/*
- * Navbar.jsx
- * Top navigation bar for the public pages (landing, templates, login, signup).
- * On phones the links collapse into a menu opened by the menu button.
- * Shows Log in / Get started, or a dashboard button when already logged in.
- */
+// Top menu for the public pages.
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
@@ -20,13 +15,12 @@ function Navbar() {
   const { user, isAdmin } = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  // Page links are underlined in yellow when open; a link to a home page section never is
+  // Section links (#how-it-works) are never shown as active
   const getLinkClasses = (link) => ({ isActive }) =>
     `rounded px-1 text-[15px] font-semibold ${
       isActive && !link.isSectionLink ? 'text-ink underline decoration-board decoration-[3px]' : 'text-ink-soft hover:text-ink'
     }`
 
-  // Account buttons: logged-in users get a shortcut to their dashboard instead
   const accountButtons = user ? (
     <Button to={isAdmin ? '/admin' : '/dashboard'} size="sm">
       {isAdmin ? 'Admin dashboard' : 'My dashboard'}
@@ -43,7 +37,6 @@ function Navbar() {
       <nav aria-label="Main" className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Logo />
 
-        {/* Desktop links */}
         <div className="hidden items-center gap-6 md:flex">
           {NAV_LINKS.map((link) => (
             <NavLink key={link.to} to={link.to} className={getLinkClasses(link)}>
@@ -53,7 +46,6 @@ function Navbar() {
           <div className="flex items-center gap-2">{accountButtons}</div>
         </div>
 
-        {/* Mobile menu button */}
         <button
           type="button"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -66,7 +58,6 @@ function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile menu panel */}
       {isMenuOpen && (
         <div id="mobile-menu" className="border-t border-line bg-paper px-4 pt-3 pb-4 md:hidden" onClick={() => setIsMenuOpen(false)}>
           <div className="flex flex-col gap-3">

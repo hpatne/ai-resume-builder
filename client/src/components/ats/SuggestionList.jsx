@@ -1,8 +1,4 @@
-/*
- * SuggestionList.jsx
- * Improvement suggestions ranked by impact (high -> medium -> low). Each one
- * has a "Fix in editor" link that opens the editor at the right section.
- */
+// List of fixes, most important first, with "Fix in editor" links.
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import StatusStamp from '../StatusStamp'

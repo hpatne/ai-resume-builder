@@ -1,12 +1,4 @@
-/*
- * catalogService.js
- * MOCK storage for the "catalog": the companies, roles and templates that drive
- * resume customisation. Everyone reads the catalog; only admins change it.
- * Used by: CatalogContext (read) and the admin Manage pages (add/edit/delete).
- *
- * TODO (Phase 2): replace mock with real API call to the Express backend
- *   GET /api/companies, /api/roles, /api/templates; admin-only POST/PUT/DELETE
- */
+// Mock storage for companies, roles and templates.
 import seedCompanies from '../data/companies'
 import seedRoles from '../data/roles'
 import seedTemplates from '../data/templates'
@@ -20,7 +12,7 @@ function readCollection(collectionName) {
   return loadCollection(collectionName, SEED_DATA[collectionName])
 }
 
-// Add a new item (no id yet) or replace an existing one (same id)
+// Adds a new item, or replaces the one with the same id
 function saveItem(collectionName, item) {
   const items = readCollection(collectionName)
   const isNew = !item.id || !items.some((existing) => existing.id === item.id)
@@ -36,7 +28,6 @@ function deleteItem(collectionName, itemId) {
   return simulateRequest(updatedItems, 350)
 }
 
-// Load all three lists at once
 export function getCatalog() {
   // TODO (Phase 2): replace mock with real API call to the Express backend
   return simulateRequest(

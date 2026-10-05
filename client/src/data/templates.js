@@ -1,13 +1,4 @@
-/*
- * templates.js
- * SAMPLE DATA: resume templates shown in the gallery and the wizard.
- * `layout` picks which React template component draws it (Classic, Modern or
- * Minimal in components/templates/). All three are single-column and ATS-safe:
- * real text, standard headings, no tables, images or text inside graphics.
- * `companyTypes`, `industries` and `roles` power the gallery filters and the
- * "recommended" badge in the wizard. Admins manage these on /admin/templates.
- * TODO (Phase 2): replace mock with real API call to the Express backend
- */
+// Resume templates and which companies and roles they suit.
 const templates = [
   {
     id: 'classic',

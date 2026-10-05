@@ -1,8 +1,4 @@
-/*
- * PrintableResume.jsx
- * Renders a resume off-screen at full A4 size so it can be printed to PDF
- * from pages that do not show a full preview (the dashboard's Download button).
- */
+// Hidden full-size copy of a resume, used for PDF download from the dashboard.
 import TemplateRenderer from './templates/TemplateRenderer'
 
 function PrintableResume({ resume, layout, printRef }) {

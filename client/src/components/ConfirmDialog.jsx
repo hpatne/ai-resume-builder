@@ -1,8 +1,4 @@
-/*
- * ConfirmDialog.jsx
- * "Are you sure?" dialog shown before destructive actions such as deleting a
- * resume, company, role or template.
- */
+// "Are you sure?" pop-up shown before deleting something.
 import Modal from './Modal'
 import Button from './Button'
 
