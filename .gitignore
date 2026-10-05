@@ -11,8 +11,3 @@ dist/
 # Logs and OS files
 *.log
 .DS_Store
-
-# Local design-tool workspace files
-.impeccable/
-PRODUCT.md
-DESIGN.md
