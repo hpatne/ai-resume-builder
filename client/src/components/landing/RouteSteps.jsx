@@ -1,10 +1,9 @@
 // Landing page "How it works" steps.
 const STEPS = [
-  { title: 'Enter company + role', text: 'Type where you are applying. We load that company’s profile and the role’s skills.' },
-  { title: 'Pick a template', text: 'Templates recommended for that company come first; every other template stays one click away.' },
-  { title: 'AI writes the draft', text: 'Add your basic details and get a tailored first draft with the right keywords.' },
-  { title: 'Edit and check ATS', text: 'Edit with live preview, improve sections with AI, and score it against the job description.' },
-  { title: 'Download PDF', text: 'Download a clean, text-based PDF and apply.' },
+  { title: 'Import or fill a form', text: 'Upload your PDF or Word resume, paste its text, or fill a short form with your own skills, projects and internships.' },
+  { title: 'Paste the job description', text: 'We find the skills the job asks for. Your summary and skills are tailored to it, using only what you wrote.' },
+  { title: 'Check your ATS score', text: 'See matched and missing skills, what to fix first, and exactly how the score is worked out.' },
+  { title: 'Download PDF', text: 'Download a clean, text-based PDF that applicant tracking systems can read, and apply.' },
 ]
 
 function RouteSteps() {
@@ -15,7 +14,7 @@ function RouteSteps() {
           How it works
         </h2>
 
-        <ol className="relative mt-10 grid gap-8 md:grid-cols-5 md:gap-6">
+        <ol className="relative mt-10 grid gap-8 md:grid-cols-4 md:gap-6">
           <span aria-hidden="true" className="absolute top-2 bottom-2 left-[13px] w-[3px] bg-ink md:top-[13px] md:right-[10%] md:bottom-auto md:left-0 md:h-[3px] md:w-auto" />
 
           {STEPS.map((step, index) => (

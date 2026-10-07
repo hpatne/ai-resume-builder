@@ -14,8 +14,8 @@ function LandingPage() {
             A resume written for the company you’re applying to
           </h1>
           <p className="mt-5 max-w-lg text-lg leading-relaxed text-ink-soft">
-            Enter your target company and job role first. The template, the AI-written draft, the section order,
-            the keywords and the ATS check all follow that choice.
+            Import your resume or fill a short form, paste the job description, and get a resume that uses your own
+            details with the skills that job asks for. Then check its ATS score and download the PDF.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <Button to="/signup" size="lg">
