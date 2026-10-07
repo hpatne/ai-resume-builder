@@ -1,12 +1,12 @@
 // One resume card on the dashboard.
 import { Link } from 'react-router-dom'
-import { PencilLine, Copy, FileDown, Trash2 } from 'lucide-react'
+import { PencilLine, Copy, FileDown, Trash2, Target } from 'lucide-react'
 import ResumePreview from './templates/ResumePreview'
 import StatusStamp from './StatusStamp'
 import { getScoreBand } from '../utils/scoreBand'
 import { formatDate } from '../utils/resumeFormat'
 
-function ResumeCard({ resume, layout, templateName, onDuplicate, onDownload, onDelete }) {
+function ResumeCard({ resume, layout, templateName, onDuplicate, onDownload, onDelete, onTailor }) {
   const hasScore = typeof resume.atsScore === 'number'
 
   const actionClasses = 'inline-flex h-9 items-center gap-1.5 rounded-md px-2.5 text-sm font-semibold text-ink-soft hover:bg-ink/5 hover:text-ink'
@@ -39,7 +39,16 @@ function ResumeCard({ resume, layout, templateName, onDuplicate, onDownload, onD
           <dd className="tabular font-medium">{formatDate(resume.updatedAt)}</dd>
         </dl>
 
-        <div className="mt-4 flex flex-wrap items-center gap-1 border-t border-line pt-3">
+        <button
+          type="button"
+          onClick={() => onTailor(resume)}
+          className="mt-4 inline-flex h-9 items-center justify-center gap-1.5 rounded-md border-2 border-ink bg-board px-3 text-sm font-semibold text-ink hover:bg-[#ffd13d]"
+        >
+          <Target size={16} aria-hidden="true" />
+          Tailor for a new job
+        </button>
+
+        <div className="mt-3 flex flex-wrap items-center gap-1 border-t border-line pt-3">
           <Link to={`/editor/${resume.id}`} className="inline-flex h-9 items-center gap-1.5 rounded-md bg-navy px-3 text-sm font-semibold text-white hover:bg-navy-soft">
             <PencilLine size={16} aria-hidden="true" />
             Edit
