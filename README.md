@@ -1,16 +1,16 @@
 # AI Resume Builder
 
-A MERN stack web app that builds **ATS-friendly resumes tailored to a specific target company and job role**.
-The user enters the company and role first; the recommended template, the AI-written draft, the section order,
-the keyword suggestions and the ATS check all follow that choice.
+A MERN stack web app that helps students and freshers make **ATS-friendly resumes for a specific job**.
+You import your resume (or fill a short form), paste the job description, and the site builds a resume from
+**your own details** with the skills that job asks for. Then you check its ATS score and download a PDF.
 
-> **Phase 1 (Review 1): frontend + GitHub repository.** The React frontend is complete and runs on mock data
-> through a mock service layer. The Node.js/Express/MongoDB backend and real AI integration come in later phases.
-> Every place that will call the backend is marked `// TODO (Phase 2): replace mock with real API call to the Express backend`.
+> **Current phase: frontend.** The React frontend is complete and works fully in the browser. The Node.js +
+> Express + MongoDB backend and the real AI model come in later phases (see [Roadmap](#roadmap)).
 
 ![Landing page](docs/screenshots/01-landing.png)
 
 ---
+
 
 ## Problem statement
 
@@ -32,68 +32,91 @@ on specific companies, industries, and job roles while improving ATS compatibili
 | O5 | Reduce the time and effort required to create high-quality resumes while improving shortlisting chances through ATS-compatible, role-focused resumes. |
 | O6 | Provide a secure and user-friendly platform for storing, managing, and updating multiple resumes. |
 
-## Features (Phase 1)
+## Features
 
-- **Target first:** the create wizard starts with the target company and job role (autocomplete or custom entry) and shows what that company looks for.
-- **Company and role based customisation:** 5 sample companies and 6 roles; each company sets the recommended template, section order, emphasis (projects or experience) and keywords.
-- **AI resume generation (mock):** "Generate with AI" writes a tailored first draft; "Improve with AI" rewrites one section, with Undo.
-- **Resume editor:** section forms with add/remove entries and section reordering, a **live A4 preview**, a keyword panel for the target, template switching that keeps the content, "Change target", and Edit/Preview tabs on phones.
-- **PDF download:** prints a text-based A4 PDF (no images of text), so applicant tracking systems can read it.
-- **ATS checker:** score out of 100 with a circular progress ring, a formula breakdown, matched and missing keywords, section checks and prioritised suggestions with "Fix in editor" links.
-- **Templates gallery:** Classic, Modern and Minimal single-column ATS-safe templates, filterable by industry, company type and role.
-- **User dashboard:** resume cards with mini previews, target, template, last edited date and ATS stamp; Edit, Duplicate, Download, Delete (with confirmation); search and filters; empty state.
-- **Authentication (mock):** signup and login with validation, password show/hide, protected routes, profile editing and password change.
-- **Admin dashboard:** totals, resumes per company, latest resumes, and add/edit/delete for templates, companies and roles. Changes show up immediately in the wizard, editor and ATS checker.
-- **Responsive** from 360 px phones to desktop, keyboard accessible, labelled form fields.
+| Feature | What it does |
+|---|---|
+| **Import a resume** | Upload a PDF or Word (.docx) file, or paste the text. Name, email, phone, LinkedIn, summary, skills, experience, projects, education and certifications are filled in. You check and correct them before editing. Scanned PDFs show a clear message. |
+| **Three ways to start** | "Create resume" offers: Import my resume, Fill a form, or Start blank. |
+| **Paste a job description** | The site finds the skills the job asks for (about 130 skills, with short forms like JS = JavaScript, k8s = Kubernetes) and shows them as chips. |
+| **Create form** | Your own skills, projects and internships. "Generate" uses only what you typed: it turns your sentences into bullet points and writes a 40–80 word summary. |
+| **Resume editor** | Edit every section with a live A4 preview, a live ATS score, and the job's skills (green = in your resume, grey = missing; click one to add it). |
+| **ATS checker** | Score out of 100 with matched and missing skills, fixes ranked by importance with "Fix in editor" links, and a "How this score works" box. |
+| **Tailor for a new job** | Make a copy of any resume for a new job description. Matching skills move to the top, the summary is rewritten, and you tick only the missing skills you really have. The original stays unchanged. |
+| **Templates and PDF** | Classic, Modern and Minimal templates. Downloads a text-based PDF that ATS systems can read. |
+| **Accounts and dashboard** | Sign up, log in, profile, and a dashboard of all your resumes (edit, duplicate, download, delete, search). |
+| **Admin** | Manage templates, sample companies and roles; see totals; reset the demo data. |
+| **Form validation** | Mobile numbers (+91, 10 digits), CGPA out of 10 or percentage with %, years, dates, links and passwords, with errors shown as you fill the form. |
+
+## What is real and what is demo mode
+
+| Part | Status now |
+|---|---|
+| Import from PDF / Word / text | **Real.** Text is read in the browser with `pdfjs-dist` and `mammoth`, then split into sections with simple rules. |
+| Skills found in a job description | **Real.** Whole-word matching against the skills list (`client/src/data/skillsList.js`). |
+| ATS score | **Real calculation**, explained on the results page. It is an estimate like Jobscan; real ATS systems differ. |
+| Editor, preview, PDF, validation, tailoring | **Real.** |
+| "Generate", "Improve with AI", tailored summary | **Demo mode.** Written rules, not an AI model: they clean up and rearrange only what you typed and never add new facts. Every AI button has a "Demo mode" badge. |
+| Accounts and saved resumes | **Demo mode.** Saved in your browser (`localStorage`), so they stay on one device. |
+
+### How the ATS score works
+
+| Part | Points |
+|---|---|
+| Skills from the job description found in the resume | 50 |
+| Job title mentioned in the summary or experience | 10 |
+| Sections present: contact, summary, skills, projects or experience, education | 20 (4 each) |
+| Bullet quality: bullets with numbers (8), bullets starting with an action verb (8), summary of 40–80 words (4) | 20 |
+
+Without a job description, only sections and bullet quality are checked and the result is shown out of 100.
+The logic is in one function, `calculateAtsScore()` in `client/src/utils/atsScore.js`.
+
+## How the AI part will be connected (Phase 3)
+
+All AI work goes through four functions in `client/src/services/aiService.js`:
+
+| Function | What it does |
+|---|---|
+| `generateBullets(text, jobDescription)` | Turns the user's sentences into bullet points |
+| `writeSummary(profile, jobDescription)` | Writes a 40–80 word summary from the user's own details |
+| `improveSection(section, content, jobDescription)` | Rephrases one section without adding facts |
+| `tailorSummary(resume, jobDescription)` | Rewrites the summary for a new job |
+
+Pages never contain AI logic; they only call these functions. In Phase 3, only the inside of each function
+changes: it will call our Express backend (for example `POST /api/ai/summary`), and the backend will call a real
+AI model. The API key stays on the server, because a key in frontend code can be seen by anyone.
 
 ## Tech stack
 
-| Layer | Phase 1 (now) | Later phases |
+| Layer | Now | Later phases |
 |---|---|---|
 | Frontend | React 19 + Vite, plain JavaScript, React Router, Tailwind CSS, Context API | same |
-| PDF | react-to-print (browser print, keeps a real text layer) | same |
-| Icons and fonts | lucide-react, self-hosted Barlow and Barlow Condensed | same |
-| Data | Mock data in `client/src/data`, saved in `localStorage` | MongoDB |
-| API | Mock services in `client/src/services` (Promises with a short delay) | Node.js + Express REST API |
-| AI | Template-based mock in `aiService.js` | AI model called from the backend |
+| File reading | pdfjs-dist (PDF), mammoth (Word .docx) | same |
+| PDF download | react-to-print (browser print, keeps real text) | same |
+| Data | Browser `localStorage` through the services in `client/src/services` | MongoDB |
+| API | Service functions that return Promises | Node.js + Express REST API |
+| AI | Rule-based demo in `aiService.js` | AI model called from the backend |
 
 ## Folder structure
 
 ```
 ai-resume-builder/
-├── client/                    React frontend (this phase)
-│   ├── index.html
-│   ├── vite.config.js
+├── client/                     React frontend
+│   ├── vercel.json             lets page links work on Vercel
 │   └── src/
-│       ├── main.jsx           entry point
-│       ├── App.jsx            router + context providers
-│       ├── index.css          design tokens and global styles
-│       ├── routes/            AppRoutes, ProtectedRoute, AdminRoute, ScrollToTop
-│       ├── context/           AuthContext, ResumeContext, CatalogContext, ToastContext
-│       ├── services/          authService, resumeService, aiService, atsService,
-│       │                      catalogService, adminService   (mock API layer)
-│       ├── data/              companies, roles, templates, sampleResumes, users,
-│       │                      sampleJobDescriptions, sections   (sample data)
-│       ├── utils/             atsScore, keywordUtils, validation, storage, targetProfile,
-│       │                      resumeFormat, pdf, mockApi, scoreBand, listText
-│       ├── components/        shared UI (Button, Input, Navbar, Sidebar, ResumeCard,
-│       │   │                  TargetStrip, ScoreCircle, Modal, Toast, EmptyState …)
-│       │   ├── templates/     ClassicTemplate, ModernTemplate, MinimalTemplate,
-│       │   │                  TemplateRenderer, ResumePreview
-│       │   ├── editor/        section forms, KeywordPanel, EditorToolbar, RetargetDialog …
-│       │   ├── wizard/        StepTarget, StepTemplate, StepBasics, CompanyInsight …
-│       │   ├── ats/           AtsResultPanel, ScoreBreakdown, KeywordResults …
-│       │   ├── landing/       HeroDemo, FeatureIndex, RouteSteps, AtsTeaser
-│       │   └── admin/         DataTable, CompanyForm, RoleForm, TemplateForm …
-│       └── pages/             one file per page (+ pages/admin/)
-├── server/                    README only: backend comes in Phase 2
-├── docs/screenshots/          screenshots used in this README
-└── README.md
+│       ├── pages/              one file per page (Dashboard, Create, Import, Editor, ATS checker …)
+│       ├── components/         shared UI, plus editor/, wizard/, ats/, landing/, admin/, templates/
+│       ├── services/           aiService (AI functions), atsService, resumeService, authService …
+│       ├── utils/              atsScore, jobDescription, resumeImport, validation, keywordUtils …
+│       ├── data/               skillsList, sample resumes, companies, roles, templates, job descriptions
+│       └── context/            logged-in user, resumes, catalog, toasts
+├── server/                     backend (Phase 2)
+└── docs/screenshots/
 ```
 
-## Setup
+## How to run
 
-Requirements: Node.js 20 or newer and npm.
+Requirements: Node.js 20 or newer.
 
 ```bash
 git clone https://github.com/suiishiii67/ai-resume-builder.git
@@ -102,45 +125,44 @@ npm install
 npm run dev
 ```
 
-Open the address Vite prints (usually http://localhost:5173).
+Open http://localhost:5173.
 
-Other scripts (run inside `client/`):
-
-| Command | What it does |
+| Command (inside `client/`) | What it does |
 |---|---|
+| `npm run dev` | Start the app for development |
 | `npm run build` | Production build into `client/dist` |
-| `npm run preview` | Serve the production build locally |
-| `npm run lint` | Check code quality with ESLint |
+| `npm run lint` | Check the code with ESLint |
 
-## Demo credentials
+### Deploy on Vercel
 
-| Account | Email | Password | Notes |
-|---|---|---|---|
-| User | `demo@resumeai.dev` | `demo1234` | Has 3 sample resumes for 3 different targets |
-| Admin | `admin@resumeai.dev` | `admin1234` | Opens the admin dashboard |
+Import the GitHub repo in Vercel, set **Root Directory** to `client`, and deploy. Vercel detects Vite
+automatically; `client/vercel.json` makes links like `/dashboard` work when the page is refreshed.
 
-The login page also has "Fill demo user" and "Fill admin" buttons. All data is stored in the browser.
-**Admin overview → Reset demo data** restores the original sample data.
+## Demo accounts
 
-All company names (Nimbus Labs, Corewave IT Services, Sprintly, Meridian Advisory, Ledgerline Capital) are
-**fictional sample data**.
+| Account | Email | Password |
+|---|---|---|
+| User | `demo@resumeai.dev` | `demo1234` |
+| Admin | `admin@resumeai.dev` | `admin1234` |
+
+The demo user has a complete B.Tech CSE fresher resume and a copy tailored for a Frontend Developer job.
+**Admin → Reset demo data** brings the sample data back. Company names in the sample data are made up.
 
 ## Screenshots
 
 | | |
 |---|---|
-| ![Dashboard](docs/screenshots/02-dashboard.png) Dashboard | ![Wizard step 1](docs/screenshots/03-wizard-target.png) Wizard: target company + role |
-| ![Wizard step 2](docs/screenshots/04-wizard-templates.png) Wizard: recommended templates | ![Editor](docs/screenshots/05-editor.png) Editor with live preview |
-| ![ATS checker](docs/screenshots/06-ats-checker.png) ATS checker | ![Admin](docs/screenshots/07-admin-companies.png) Admin: manage companies |
+| ![Dashboard](docs/screenshots/02-dashboard.png) Dashboard | ![Import](docs/screenshots/09-import.png) Import a resume |
+| ![Create](docs/screenshots/03-wizard-target.png) Paste a job description | ![Editor](docs/screenshots/05-editor.png) Editor with live score |
+| ![ATS checker](docs/screenshots/06-ats-checker.png) ATS checker | ![Tailor](docs/screenshots/10-tailor.png) Tailor for a new job |
 
-<img src="docs/screenshots/08-mobile-editor.png" alt="Editor preview tab on a phone" width="260">
+<img src="docs/screenshots/08-mobile-editor.png" alt="Editor on a phone" width="260">
 
 ## Roadmap
 
 | Phase | Scope | Status |
 |---|---|---|
-| Phase 1 | Frontend (React, all pages, mock services) + GitHub repository | **Done** |
-| Phase 2 | Backend: Node.js + Express REST API, MongoDB, real authentication (bcrypt, JWT), SRS, ER diagram, DFD, system architecture | Planned |
-| Phase 3 | AI integration for generation and improvement, server-side ATS engine | Planned |
-| Phase 4 | Testing (unit, integration, UAT, reports) and deployment | Planned |
-
+| Phase 1 | Frontend: all pages, import, job description matching, ATS score, tailoring | **Done** |
+| Phase 2 | Backend: Node.js + Express REST API, MongoDB, real login (bcrypt, JWT) | Planned |
+| Phase 3 | Real AI model behind `aiService.js`, called from the backend | Planned |
+| Phase 4 | Testing and deployment | Planned |
