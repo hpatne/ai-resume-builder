@@ -1,6 +1,7 @@
-// "Improve with AI" button with a loading state.
+// "Improve with AI" button with a loading state and a "Demo mode" badge.
 import { PenLine } from 'lucide-react'
 import Spinner from '../Spinner'
+import AiDemoBadge, { AI_DEMO_TOOLTIP } from '../AiDemoBadge'
 
 function ImproveWithAiButton({ onClick, isLoading, disabled }) {
   return (
@@ -9,10 +10,12 @@ function ImproveWithAiButton({ onClick, isLoading, disabled }) {
       onClick={onClick}
       disabled={isLoading || disabled}
       aria-busy={isLoading || undefined}
-      className="inline-flex h-8 items-center gap-1.5 rounded-md border border-navy/30 bg-paper px-2.5 text-sm font-semibold text-navy hover:border-navy hover:bg-navy hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+      title={AI_DEMO_TOOLTIP}
+      className="group inline-flex h-8 items-center gap-1.5 rounded-md border border-navy/30 bg-paper px-2.5 text-sm font-semibold text-navy hover:border-navy hover:bg-navy hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
     >
-      {isLoading ? <Spinner size={14} label="Improving" /> : <PenLine size={15} aria-hidden="true" />}
-      {isLoading ? 'Improving…' : 'Improve with AI'}
+      {isLoading ? <Spinner size={14} label="Writing" /> : <PenLine size={15} aria-hidden="true" />}
+      {isLoading ? 'Writing…' : 'Improve with AI'}
+      <AiDemoBadge />
     </button>
   )
 }

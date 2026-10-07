@@ -96,7 +96,7 @@ function ResumeEditorPage() {
   const handleImprove = async (sectionKey) => {
     const previousValue = resumeData[sectionKey]
     setImprovingSection(sectionKey)
-    const result = await improveSection(sectionKey, resumeData, { company, role })
+    const result = await improveSection(sectionKey, previousValue, resumeData.jobDescription)
     setImprovingSection('')
     handleSectionChange(sectionKey, result.value)
     setOpenSections((open) => (open.includes(sectionKey) ? open : [...open, sectionKey]))
