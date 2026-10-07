@@ -1,9 +1,8 @@
-// Runs the ATS check (mock).
+// Runs the ATS check (in the browser for now).
 import { calculateAtsScore } from '../utils/atsScore'
 import { simulateRequest } from '../utils/mockApi'
 
-export function analyzeResume({ resume, jobDescription, company, role, knownSkills }) {
+export function analyzeResume({ resume, jobDescription }) {
   // TODO (Phase 2): replace mock with real API call to the Express backend
-  const report = calculateAtsScore({ resume, jobDescription, company, role, knownSkills })
-  return simulateRequest(report, 1500)
+  return simulateRequest(calculateAtsScore(resume, jobDescription), 900)
 }

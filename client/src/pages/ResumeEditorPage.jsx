@@ -167,6 +167,7 @@ function ResumeEditorPage() {
         role={role}
         printRef={printRef}
         onAddSkill={handleAddSkill}
+        onCheckAts={handleCheckAts}
         sectionProps={{ onSectionChange: handleSectionChange, onMoveSection: handleMoveSection, onImprove: handleImprove, improvingSection, openSections, onToggleSection: handleToggleSection, showErrors }}
       />
 

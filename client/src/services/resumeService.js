@@ -63,11 +63,11 @@ export function duplicateResume(resumeId) {
   return simulateRequest(copy, 400)
 }
 
-// Saving a score does not change "last edited"
-export function saveAtsScore(resumeId, score) {
+// Saving a score does not change "last edited". extra = the job description it was checked against.
+export function saveAtsScore(resumeId, score, extra = {}) {
   // TODO (Phase 2): replace mock with real API call to the Express backend
   const resumes = getStoredResumes().map((resume) =>
-    resume.id === resumeId ? { ...resume, atsScore: score, atsCheckedAt: new Date().toISOString() } : resume
+    resume.id === resumeId ? { ...resume, ...extra, atsScore: score, atsCheckedAt: new Date().toISOString() } : resume
   )
   saveToStorage(RESUMES_KEY, resumes)
   return simulateRequest(resumes.find((resume) => resume.id === resumeId), 200)
