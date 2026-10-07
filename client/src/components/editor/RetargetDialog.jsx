@@ -43,6 +43,7 @@ function RetargetDialog({ companies, roles, currentTarget, onApply, onClose }) {
         <Autocomplete
           id="retarget-company"
           label="Target company"
+          required
           listPosition="inline"
           value={target.companyName}
           options={companies.map((company) => ({ id: company.id, label: company.name, meta: company.type }))}
@@ -54,6 +55,7 @@ function RetargetDialog({ companies, roles, currentTarget, onApply, onClose }) {
         <Autocomplete
           id="retarget-role"
           label="Job role"
+          required
           listPosition="inline"
           value={target.roleTitle}
           options={roles.map((role) => ({ id: role.id, label: role.title, meta: role.category }))}

@@ -8,7 +8,7 @@ function EditorSection({ sectionKey, title, count, isOpen, onToggle, onMoveUp, o
   return (
     <section id={`section-${sectionKey}`} className="scroll-mt-24 rounded-lg border border-line bg-paper">
       <header className="flex flex-wrap items-center gap-2 px-3 py-2.5 sm:px-4">
-        <button type="button" onClick={onToggle} aria-expanded={isOpen} aria-controls={`section-body-${sectionKey}`} className="flex min-w-0 flex-1 items-center gap-2 rounded py-1 text-left">
+        <button type="button" onClick={onToggle} aria-expanded={isOpen} aria-controls={`section-body-${sectionKey}`} className="flex min-w-[11rem] flex-1 items-center gap-2 rounded py-1 text-left">
           <ChevronDown size={18} aria-hidden="true" className={`shrink-0 transition-transform ${isOpen ? '' : '-rotate-90'}`} />
           <h3 className="board-text truncate text-[17px]">{title}</h3>
           {typeof count === 'number' && <span className="tabular rounded bg-ground px-1.5 text-sm font-semibold text-ink-faint">{count}</span>}

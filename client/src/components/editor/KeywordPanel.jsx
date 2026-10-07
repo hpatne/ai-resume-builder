@@ -12,6 +12,16 @@ function KeywordPanel({ company, role, resumeData, onAddSkill }) {
   // With a job description: its skills. Older resumes: the sample role and company keywords.
   const jobSkills = resumeData.jobSkills || []
   const hasJobSkills = jobSkills.length > 0
+  // No job description and no sample role: nothing to compare against yet
+  if (!hasJobSkills && role.isCustom) {
+    return (
+      <section aria-label="Keywords for this target" className="rounded-lg border border-dashed border-line-strong bg-paper px-4 py-3 text-[15px]">
+        <p className="font-semibold">No job description yet</p>
+        <p className="mt-0.5 text-sm text-ink-soft">Open the full ATS report and paste a job description. Its skills will show here, green when your resume has them.</p>
+      </section>
+    )
+  }
+
   const resumeText = resumeToText(resumeData)
   const plainText = resumeToPlainText(resumeData)
   const keywords = hasJobSkills

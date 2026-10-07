@@ -30,6 +30,7 @@ function StepTarget({ target, onTargetChange, companies, roles, errors, company,
         <Autocomplete
           id="target-role"
           label="Job title"
+          required
           value={target.roleTitle}
           options={roleOptions}
           placeholder="e.g. Frontend Developer"

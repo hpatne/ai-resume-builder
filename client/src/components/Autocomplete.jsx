@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { CircleAlert } from 'lucide-react'
 
 // listPosition="inline" is used inside pop-ups
-function Autocomplete({ id, label, value, options, onTextChange, onSelect, placeholder, hint, error, listPosition = 'floating' }) {
+function Autocomplete({ id, label, value, options, onTextChange, onSelect, placeholder, hint, error, required = false, listPosition = 'floating' }) {
   const [isOpen, setIsOpen] = useState(false)
   const [highlightedIndex, setHighlightedIndex] = useState(0)
 
@@ -35,7 +35,8 @@ function Autocomplete({ id, label, value, options, onTextChange, onSelect, place
   return (
     <div className="relative">
       <label htmlFor={id} className="mb-1.5 block text-sm font-semibold">
-        {label} <span className="text-maroon">*</span>
+        {label}
+        {required && <span className="text-maroon"> *</span>}
       </label>
       <input
         id={id}
