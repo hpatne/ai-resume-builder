@@ -9,6 +9,7 @@ import { useToast } from '../context/ToastContext'
 import { resolveCompany, resolveRole, getTargetKeywords } from '../utils/targetProfile'
 import { validateRequiredFields, validateBasicsForm, hasErrors } from '../utils/validation'
 import { buildResumeDraft, generateResume } from '../services/aiService'
+import { findSkillsInText } from '../utils/jobDescription'
 import { SECTION_LABELS } from '../data/sections'
 import PageHeader from '../components/PageHeader'
 import TargetStrip from '../components/TargetStrip'
@@ -35,7 +36,7 @@ function CreateResumePage() {
   const [searchParams] = useSearchParams()
 
   const [step, setStep] = useState(1)
-  const [target, setTarget] = useState({ companyName: '', companyId: '', roleTitle: '', roleId: '' })
+  const [target, setTarget] = useState({ jobDescription: '', companyName: '', companyId: '', roleTitle: '', roleId: '' })
   // '' = use the company's recommended template
   const [chosenTemplateId, setChosenTemplateId] = useState(searchParams.get('template') || '')
   const [basics, setBasics] = useState({ fullName: user.name, email: user.email, phone: '', location: '', degree: '', institution: '', graduationYear: '', score: '', experienceLevel: 'internship', lastCompany: '' })
@@ -53,7 +54,11 @@ function CreateResumePage() {
 
   const handleNext = () => {
     if (step === 1) {
-      const targetErrors = validateRequiredFields(target, { companyName: 'a target company', roleTitle: 'a job role' })
+      const jobDescriptionLength = target.jobDescription.trim().length
+      const targetErrors = {
+        ...validateRequiredFields(target, { roleTitle: 'the job title' }),
+        jobDescription: jobDescriptionLength > 0 && jobDescriptionLength < 80 ? 'Paste the full job description (at least 80 characters), or leave it empty.' : '',
+      }
       setErrors(targetErrors)
       if (hasErrors(targetErrors)) return
     }
@@ -80,8 +85,17 @@ function CreateResumePage() {
 
     setIsGenerating(true)
     const draft = await generateResume({ basics, company, role, templateId: selectedTemplate.id })
-    const newResume = await createResume({ ...draft, createdVia: 'form' })
-    showToast(`Draft ready for ${company.name}. Review it, then check your ATS score.`)
+    // Save the job the resume is for; an empty company stays empty
+    const companyName = target.companyName.trim() ? company.name : ''
+    const newResume = await createResume({
+      ...draft,
+      title: [companyName, role.title].filter(Boolean).join(' – '),
+      companyName,
+      jobDescription: target.jobDescription.trim(),
+      jobSkills: findSkillsInText(target.jobDescription),
+      createdVia: 'form',
+    })
+    showToast('Draft ready. Review it, then check your ATS score.')
     navigate(`/editor/${newResume.id}`)
   }
 
@@ -100,7 +114,7 @@ function CreateResumePage() {
       <PageHeader title="Create a resume" description="Start with where you are applying. Everything else is tailored to it." />
 
       <div className="mb-6">
-        <TargetStrip companyName={target.companyName} roleTitle={target.roleTitle} detail={target.companyName && `${company.type} · ${selectedTemplate?.name} template`} />
+        <TargetStrip companyName={target.companyName} roleTitle={target.roleTitle} detail={target.roleTitle && `${selectedTemplate?.name} template`} />
       </div>
 
       {isGenerating ? (

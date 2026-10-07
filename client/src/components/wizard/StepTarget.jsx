@@ -1,41 +1,57 @@
-// Wizard step 1: choose the target company and role.
+// Wizard step 1: paste the job description, then the job title and company.
 import Autocomplete from '../Autocomplete'
+import JobDescriptionBox from '../JobDescriptionBox'
 import CompanyInsight from './CompanyInsight'
+import { guessJobTitle } from '../../utils/jobDescription'
 
 function StepTarget({ target, onTargetChange, companies, roles, errors, company, role, templateName }) {
   const companyOptions = companies.map((item) => ({ id: item.id, label: item.name, meta: item.type }))
   const roleOptions = roles.map((item) => ({ id: item.id, label: item.title, meta: item.category }))
-  const hasTarget = target.companyName.trim() && target.roleTitle.trim()
+  // Only show the sample company profile when one of our sample companies is picked
+  const showInsight = target.companyId && target.roleTitle.trim()
+
+  // Fill the job title from the first line of the job description, if it is still empty
+  const handleJobDescriptionChange = (jobDescription) => {
+    const roleTitle = target.roleTitle.trim() ? target.roleTitle : guessJobTitle(jobDescription)
+    onTargetChange({ ...target, jobDescription, roleTitle, roleId: roleTitle === target.roleTitle ? target.roleId : '' })
+  }
 
   return (
     <div className="space-y-6">
+      <JobDescriptionBox
+        id="target-job-description"
+        value={target.jobDescription}
+        onChange={handleJobDescriptionChange}
+        error={errors.jobDescription}
+        hint="Recommended. The skills it asks for are used for your summary, keywords and ATS score."
+      />
+
       <div className="grid gap-5 md:grid-cols-2">
         <Autocomplete
-          id="target-company"
-          label="Target company"
-          value={target.companyName}
-          options={companyOptions}
-          placeholder="e.g. Nimbus Labs"
-          hint="Pick a sample company or type any other company name."
-          error={errors.companyName}
-          // Typing clears the id, so the text can be a custom company
-          onTextChange={(text) => onTargetChange({ ...target, companyName: text, companyId: '' })}
-          onSelect={(option) => onTargetChange({ ...target, companyName: option.label, companyId: option.id })}
-        />
-        <Autocomplete
           id="target-role"
-          label="Job role"
+          label="Job title"
           value={target.roleTitle}
           options={roleOptions}
           placeholder="e.g. Frontend Developer"
-          hint="Pick a role or type your own."
+          hint="Type the job title from the post, or pick one."
           error={errors.roleTitle}
           onTextChange={(text) => onTargetChange({ ...target, roleTitle: text, roleId: '' })}
           onSelect={(option) => onTargetChange({ ...target, roleTitle: option.label, roleId: option.id })}
         />
+        <Autocomplete
+          id="target-company"
+          label="Company (optional)"
+          value={target.companyName}
+          options={companyOptions}
+          placeholder="e.g. Infosys"
+          hint="Type any company, or pick a sample one."
+          // Typing clears the id, so the text can be any company
+          onTextChange={(text) => onTargetChange({ ...target, companyName: text, companyId: '' })}
+          onSelect={(option) => onTargetChange({ ...target, companyName: option.label, companyId: option.id })}
+        />
       </div>
 
-      {hasTarget && <CompanyInsight company={company} role={role} templateName={templateName} />}
+      {showInsight && <CompanyInsight company={company} role={role} templateName={templateName} />}
     </div>
   )
 }
