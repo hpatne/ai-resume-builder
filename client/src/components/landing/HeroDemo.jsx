@@ -15,17 +15,22 @@ const DEMO_TARGETS = [
   { companyId: 'ledgerline-capital', roleId: 'data-analyst' },
 ]
 
+// A sample student's own details: the demo only reorders and retitles them per target
 const DEMO_BASICS = {
   fullName: 'Aarav Sharma',
   email: 'aarav@example.com',
   phone: '+91 98200 12345',
   location: 'Mumbai',
-  degree: 'B.E. in Computer Engineering',
+  degree: 'B.Tech in Computer Science',
   institution: 'Vidyanagar Institute of Technology',
   graduationYear: '2027',
   score: 'CGPA 8.6 / 10',
-  experienceLevel: 'internship',
-  lastCompany: 'Brightpath Software',
+  skills: ['JavaScript', 'React', 'Java', 'Python', 'SQL', 'Excel', 'Power BI', 'Git'],
+  experience: [{ jobTitle: 'Web Developer Intern', company: 'Brightpath Software', startDate: 'May 2026', endDate: 'Jul 2026', bullets: 'Built 12 React components for an internal dashboard\nCut page load time by 30% by lazy-loading images' }],
+  projects: [
+    { name: 'Campus Events Portal', techStack: 'React, Firebase', link: '', bullets: 'Built a portal used by 800+ students to register for college events' },
+    { name: 'Placement Data Dashboard', techStack: 'SQL, Power BI', link: '', bullets: 'Analysed 5 years of placement data for 1,200 students' },
+  ],
 }
 
 function HeroDemo() {

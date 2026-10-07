@@ -15,6 +15,7 @@ import EmptyState from '../components/EmptyState'
 import ConfirmDialog from '../components/ConfirmDialog'
 import PrintableResume from '../components/PrintableResume'
 import CreateResumeDialog from '../components/CreateResumeDialog'
+import TailorDialog from '../components/TailorDialog'
 
 function DashboardPage() {
   const { resumes, isResumesLoading, deleteResume, duplicateResume } = useResumes()
@@ -25,6 +26,7 @@ function DashboardPage() {
   const [resumeToDelete, setResumeToDelete] = useState(null)
   const [resumeToPrint, setResumeToPrint] = useState(null)
   const [isCreateOpen, setIsCreateOpen] = useState(false)
+  const [resumeToTailor, setResumeToTailor] = useState(null)
   const printRef = useRef(null)
 
   // PDF download: print a hidden copy of the resume
@@ -121,6 +123,7 @@ function DashboardPage() {
                   onDuplicate={handleDuplicate}
                   onDownload={handleDownload}
                   onDelete={setResumeToDelete}
+                  onTailor={setResumeToTailor}
                 />
               ))}
             </div>
@@ -139,6 +142,7 @@ function DashboardPage() {
       )}
 
       {isCreateOpen && <CreateResumeDialog onClose={() => setIsCreateOpen(false)} />}
+      {resumeToTailor && <TailorDialog resume={resumeToTailor} onClose={() => setResumeToTailor(null)} />}
 
       <PrintableResume resume={resumeToPrint} layout={resumeToPrint && getTemplateLayout(templates, resumeToPrint.templateId)} printRef={printRef} />
     </>

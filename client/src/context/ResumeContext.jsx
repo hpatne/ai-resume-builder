@@ -44,8 +44,8 @@ export function ResumeProvider({ children }) {
         await resumeService.deleteResume(resumeId)
         updateList((list) => list.filter((resume) => resume.id !== resumeId))
       },
-      saveScore: async (resumeId, score) => {
-        const scoredResume = await resumeService.saveAtsScore(resumeId, score)
+      saveScore: async (resumeId, score, extra) => {
+        const scoredResume = await resumeService.saveAtsScore(resumeId, score, extra)
         updateList((list) => list.map((resume) => (resume.id === resumeId ? scoredResume : resume)))
       },
       duplicateResume: async (resumeId) => {

@@ -1,13 +1,13 @@
 // Landing page list of the main features.
-import { PenLine, Building2, ScanSearch, Columns2, FileDown, Files } from 'lucide-react'
+import { FileUp, ClipboardList, ScanSearch, Target, Columns2, FileDown } from 'lucide-react'
 
 const FEATURES = [
-  { icon: PenLine, title: 'AI-written first draft', text: 'Summary, skills, experience and projects written for your target role in a few seconds. You can then rewrite any section with AI.' },
-  { icon: Building2, title: 'Company and role templates', text: 'Each company profile sets the recommended template, the section order and whether projects or experience come first.' },
-  { icon: ScanSearch, title: 'ATS checker', text: 'Paste a job description to get a score out of 100, matched and missing keywords, and a list of what to fix first.' },
-  { icon: Columns2, title: 'Live preview', text: 'The A4 page next to the form updates with every keystroke, so you always see what you will send.' },
+  { icon: FileUp, title: 'Import your resume', text: 'Upload a PDF or Word file, or paste the text. We fill in the fields and you check them before editing.' },
+  { icon: ClipboardList, title: 'Built from the job description', text: 'Paste the job post and see the skills it asks for. Your draft uses only your own details, with the matching skills first.' },
+  { icon: ScanSearch, title: 'Honest ATS score', text: 'A score out of 100 with matched and missing skills, fixes ranked by impact, and a plain explanation of every point.' },
+  { icon: Target, title: 'Tailor for a new job', text: 'Make a copy of any resume for a new job description in a minute. The original stays unchanged.' },
+  { icon: Columns2, title: 'Live preview and score', text: 'The A4 page and the ATS score update with every keystroke, so you see what you will send.' },
   { icon: FileDown, title: 'PDF download', text: 'Downloads a text-based PDF that applicant tracking systems can read. Not an image of your resume.' },
-  { icon: Files, title: 'Multiple resumes', text: 'Keep one version per application. Duplicate a resume, retarget it, and see each one’s ATS score on your dashboard.' },
 ]
 
 function FeatureIndex() {

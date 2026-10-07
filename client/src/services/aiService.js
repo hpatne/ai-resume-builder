@@ -1,49 +1,206 @@
-// Mock AI: writes the first draft and improves sections using the company and role data.
+// AI service (DEMO MODE).
+// These functions follow simple written rules for now, and use only what the user typed.
+// Phase 3: only the bodies of these functions change. Each one will call the Express backend,
+// which calls a real AI model and keeps the API key secret. Pages and components only call these
+// functions, and they already return the same data the backend will return, so nothing else changes.
 import { simulateRequest, createId } from '../utils/mockApi'
-import { containsKeyword } from '../utils/keywordUtils'
+import { findSkillsInText, textHasSkill, findListedSkill } from '../utils/jobDescription'
 
-// Role summary + the company's own sentence
-function writeSummary(company, role) {
-  const roleSummary = role.sampleSummary.replaceAll('{company}', company.name)
-  return company.summaryLine ? `${roleSummary} ${company.summaryLine}` : roleSummary
+const AI_DELAY_MS = 900
+
+// ---------- Small text helpers ----------
+
+// Weak openings and the action verb that replaces them
+const WEAK_STARTS = [
+  [/^(i\s+)?worked on\s+/i, 'Developed '],
+  [/^(i\s+)?was responsible for\s+/i, 'Handled '],
+  [/^(i\s+)?responsible for\s+/i, 'Handled '],
+  [/^(i\s+)?helped (with |in )?/i, 'Supported '],
+  [/^(i\s+)?was part of\s+/i, 'Contributed to '],
+  [/^(i\s+)?made\s+/i, 'Built '],
+  [/^(i\s+)?did\s+/i, 'Completed '],
+  [/^i\s+/i, ''],
+]
+
+const capitalise = (text) => text.charAt(0).toUpperCase() + text.slice(1)
+const countWords = (text) => (text.trim() ? text.trim().split(/\s+/).length : 0)
+
+// "worked on the login page." → "Developed the login page"
+function cleanBullet(line) {
+  let bullet = line.trim().replace(/^[•\-*–·]\s*/, '').replace(/[.;]+$/, '')
+  WEAK_STARTS.forEach(([pattern, replacement]) => {
+    bullet = bullet.replace(pattern, replacement)
+  })
+  return capitalise(bullet.trim())
 }
 
-// Experience-focused companies get more bullets; project-focused ones get more projects
-function writeExperience(basics, company, role) {
-  if (basics.experienceLevel === 'fresher') return []
-  const bulletCount = company.emphasis === 'experience' ? 4 : 3
-  return [
-    {
-      id: createId('exp'),
-      jobTitle: basics.experienceLevel === 'internship' ? `${role.title} Intern` : role.title,
-      company: basics.lastCompany || '',
-      location: '',
-      startDate: '',
-      endDate: '',
-      bullets: role.experienceBullets.slice(0, bulletCount).join('\n'),
-    },
+// Splits a paragraph into sentences and lines; numbers are never changed
+function textToBullets(text) {
+  return (text || '')
+    .split(/\n|(?<=[a-z0-9%)])\.\s+(?=[A-Za-z])/)
+    .map(cleanBullet)
+    .filter((bullet) => bullet.length > 2)
+}
+
+// "React, Node.js and MongoDB" → "React, Node.js and MongoDB"; one item → itself
+function joinWithAnd(items) {
+  if (items.length <= 1) return items.join('')
+  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`
+}
+
+// Standard skill names ("reactjs" → "React"), without repeats
+function standardiseSkills(skills) {
+  const names = skills.map((skill) => findListedSkill(skill)?.name || skill.trim()).filter(Boolean)
+  return names.filter((name, index) => names.findIndex((other) => other.toLowerCase() === name.toLowerCase()) === index)
+}
+
+// User's skills, with the ones the job asks for first
+function sortSkillsByJob(skills, jobDescription) {
+  const jobSkills = findSkillsInText(jobDescription)
+  const inJob = skills.filter((skill) => jobSkills.some((jobSkill) => textHasSkill(skill, jobSkill)))
+  return [...inJob, ...skills.filter((skill) => !inJob.includes(skill))]
+}
+
+// The project with the most numbers in it (numbers show impact), else the first one
+function pickBestProject(projects) {
+  const withName = projects.filter((project) => project.name?.trim())
+  const numberCount = (project) => (project.bullets || '').match(/\d+/g)?.length || 0
+  return [...withName].sort((first, second) => numberCount(second) - numberCount(first))[0] || null
+}
+
+// ---------- Summary ----------
+
+// profile: { degree, graduationYear, roleTitle, companyName, skills, projects, experience }
+function buildSummary(profile, jobDescription) {
+  const thisYear = new Date().getFullYear()
+  const year = Number(profile.graduationYear)
+  const degree = profile.degree?.trim()
+  const role = profile.roleTitle?.trim() || 'entry-level'
+  const company = profile.companyName?.trim()
+
+  const sentences = []
+  if (degree) {
+    const stage = year && year >= thisYear ? `student graduating in ${year}` : year ? `graduate (${year})` : 'graduate'
+    sentences.push(`${degree} ${stage}, applying for the ${role} role${company ? ` at ${company}` : ''}.`)
+  } else {
+    sentences.push(`Applying for the ${role} role${company ? ` at ${company}` : ''}.`)
+  }
+
+  const topSkills = sortSkillsByJob(profile.skills || [], jobDescription).slice(0, 5)
+  if (topSkills.length) sentences.push(`Skilled in ${joinWithAnd(topSkills)}.`)
+
+  const project = pickBestProject(profile.projects || [])
+  if (project) {
+    const firstPoint = textToBullets(project.bullets)[0]
+    const tech = project.techStack?.trim() ? ` (${project.techStack.trim()})` : ''
+    sentences.push(`Key project: ${project.name.trim()}${tech}.`)
+    if (firstPoint) sentences.push(`${firstPoint}.`)
+  }
+
+  const internship = (profile.experience || []).find((entry) => entry.jobTitle?.trim())
+  if (internship) sentences.push(`Worked as ${internship.jobTitle.trim()}${internship.company?.trim() ? ` at ${internship.company.trim()}` : ''}.`)
+
+  // Neutral closing lines (no new facts) until the summary reaches 40 words
+  const closingLines = [
+    `Looking to apply these skills to real problems${company ? ` at ${company}` : ''} and keep learning.`,
+    'Open to feedback and ready to learn the tools the team uses.',
   ]
+  let summary = sentences.join(' ')
+  closingLines.forEach((line) => {
+    if (countWords(summary) < 40) summary = `${summary} ${line}`
+  })
+
+  // Keep it under 80 words
+  const words = summary.split(/\s+/)
+  return words.length > 80 ? `${words.slice(0, 80).join(' ').replace(/[,:;]$/, '')}.` : summary
 }
 
-function writeProjects(company, role) {
-  const projectCount = company.emphasis === 'projects' ? role.projects.length : 1
-  return role.projects.slice(0, projectCount).map((project) => ({
-    id: createId('proj'),
-    name: project.name,
-    techStack: project.techStack,
-    link: '',
-    bullets: project.bullets.join('\n'),
-  }))
+// Resume → the profile used to write a summary
+function profileFromResume(resume) {
+  const education = resume.education?.[0] || {}
+  return {
+    degree: education.degree,
+    graduationYear: education.endYear,
+    roleTitle: resume.roleTitle,
+    companyName: resume.companyName,
+    skills: resume.skills,
+    projects: resume.projects,
+    experience: resume.experience,
+  }
 }
 
-// Builds the draft right away (also used by the landing page demo)
-export function buildResumeDraft({ basics, company, role, templateId }) {
-  const graduationYear = Number(basics.graduationYear) || new Date().getFullYear()
+// ---------- The AI functions pages call ----------
 
-  const draft = {
-    title: `${company.name} – ${role.title}`,
+// Turns the user's sentences into bullet points. Returns { bullets: [...] }
+export function generateBullets(text, jobDescription = '') {
+  // TODO (Phase 3): POST /api/ai/bullets { text, jobDescription }
+  void jobDescription
+  return simulateRequest({ bullets: textToBullets(text) }, AI_DELAY_MS)
+}
+
+// A 40–80 word summary from the user's own degree, role, skills and best project. Returns { summary }
+export function writeSummary(profile, jobDescription = '') {
+  // TODO (Phase 3): POST /api/ai/summary { profile, jobDescription }
+  return simulateRequest({ summary: buildSummary(profile, jobDescription) }, AI_DELAY_MS)
+}
+
+// Cleans up one section without adding facts. content = the section's value
+// (summary text, skills list, or experience/project entries). Returns { value, note }
+export function improveSection(section, content, jobDescription = '') {
+  // TODO (Phase 3): POST /api/ai/improve { section, content, jobDescription }
+  void jobDescription
+  let result
+
+  if (section === 'summary') {
+    const cleaned = content
+      .replace(/\s+/g, ' ')
+      .replace(/\bi am\b/gi, '')
+      .split(/(?<=[.!?])\s+/)
+      .map((sentence) => capitalise(sentence.trim()))
+      .filter(Boolean)
+      .join(' ')
+    result = { value: cleaned, note: 'Summary cleaned up: spacing, capital letters and "I am" removed.' }
+  }
+
+  if (section === 'skills') {
+    const unique = standardiseSkills(content)
+    const changed = unique.length !== content.length || unique.some((name, index) => name !== content[index])
+    result = { value: unique, note: changed ? 'Skill names standardised and repeats removed.' : 'Skills already look clean.' }
+  }
+
+  if (section === 'experience' || section === 'projects') {
+    const entries = content.map((entry) => ({ ...entry, bullets: textToBullets(entry.bullets).join('\n') }))
+    const withoutNumbers = entries.flatMap((entry) => entry.bullets.split('\n')).filter((line) => line && !/\d/.test(line)).length
+    result = {
+      value: entries,
+      note: withoutNumbers ? `Bullets now start with action verbs. ${withoutNumbers} still need a number (%, users, time saved).` : 'Bullets now start with action verbs.',
+    }
+  }
+
+  return simulateRequest(result, AI_DELAY_MS)
+}
+
+// Rewrites the summary for the resume's (new) job title and the job's skills. Returns { summary }
+export function tailorSummary(resume, jobDescription) {
+  // TODO (Phase 3): POST /api/ai/tailor-summary { resume, jobDescription }
+  return simulateRequest({ summary: buildSummary(profileFromResume(resume), jobDescription) }, AI_DELAY_MS)
+}
+
+// ---------- First draft from the create form ----------
+
+// Builds the resume right away from what the user typed (also used for the live preview).
+// companyName = the company the user typed ('' if none).
+export function buildResumeDraft({ basics, company, role, templateId, jobDescription = '', companyName = company.name }) {
+  const skills = sortSkillsByJob(standardiseSkills(basics.skills || []), jobDescription)
+  const toEntry = (entry, prefix) => ({ ...entry, id: entry.id || createId(prefix), bullets: textToBullets(entry.bullets).join('\n') })
+  const experience = (basics.experience || []).filter((entry) => entry.jobTitle?.trim() || entry.company?.trim()).map((entry) => toEntry(entry, 'exp'))
+  const projects = (basics.projects || []).filter((entry) => entry.name?.trim()).map((entry) => toEntry(entry, 'proj'))
+  const graduationYear = Number(basics.graduationYear) || ''
+
+  return {
+    title: [companyName, role.title].filter(Boolean).join(' – '),
     companyId: company.id,
-    companyName: company.name,
+    companyName,
     roleId: role.id,
     roleTitle: role.title,
     templateId,
@@ -56,101 +213,26 @@ export function buildResumeDraft({ basics, company, role, templateId }) {
       linkedin: '',
       portfolio: '',
     },
-    summary: writeSummary(company, role),
-    skills: [...role.requiredSkills],
-    experience: writeExperience(basics, company, role),
+    summary: buildSummary({ ...basics, roleTitle: role.title, companyName, skills, projects, experience }, jobDescription),
+    skills,
+    experience,
     education: [
       {
         id: createId('edu'),
         degree: basics.degree,
         institution: basics.institution,
         location: '',
-        startYear: String(graduationYear - 4),
-        endYear: String(graduationYear),
+        startYear: graduationYear ? String(graduationYear - 4) : '',
+        endYear: graduationYear ? String(graduationYear) : '',
         score: basics.score || '',
       },
     ],
-    projects: writeProjects(company, role),
-    certifications: role.certifications.map((cert) => ({ id: createId('cert'), name: cert.name, issuer: cert.issuer, year: '' })),
+    projects,
+    certifications: [],
   }
-  return draft
 }
 
-export function generateResume({ basics, company, role, templateId }) {
-  // TODO (Phase 2): replace mock with real API call to the Express backend
-  const draft = buildResumeDraft({ basics, company, role, templateId })
-  // Delay so the loading screen is visible
-  return simulateRequest(draft, 2200)
-}
-
-// Weak openings and stronger replacements
-const WEAK_PHRASES = [
-  [/^worked on/i, 'Led work on'],
-  [/^responsible for/i, 'Took ownership of'],
-  [/^helped (the team )?(with )?/i, 'Contributed to '],
-  [/^was part of/i, 'Collaborated on'],
-  [/^did /i, 'Completed '],
-  [/^made /i, 'Built '],
-]
-
-// Stronger first word, capital letter, no full stop
-function strengthenBullets(bulletText) {
-  return bulletText
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => {
-      let improvedLine = line.replace(/\.$/, '')
-      WEAK_PHRASES.forEach(([pattern, replacement]) => {
-        improvedLine = improvedLine.replace(pattern, replacement)
-      })
-      return improvedLine.charAt(0).toUpperCase() + improvedLine.slice(1)
-    })
-    .join('\n')
-}
-
-function countUnmeasuredBullets(entries) {
-  return entries.flatMap((entry) => entry.bullets.split('\n').filter((line) => line.trim() && !/\d/.test(line))).length
-}
-
-// Returns { value, note }: the new section content and a short message for the toast
-export function improveSection(sectionKey, resume, { company, role }) {
-  // TODO (Phase 2): replace mock with real API call to the Express backend
-  let result
-
-  if (sectionKey === 'summary') {
-    const currentSummary = resume.summary.trim()
-    if (currentSummary.length < 60) {
-      result = { value: writeSummary(company, role), note: `Summary rewritten for ${role.title} at ${company.name}.` }
-    } else {
-      // Keep the user's text and add missing keywords
-      const missingKeywords = [...company.keywords, ...role.keywords].filter((word) => !containsKeyword(currentSummary, word)).slice(0, 2)
-      const addition = missingKeywords.length ? ` Comfortable with ${missingKeywords.join(' and ')}.` : ''
-      const hasCompanyLine = company.summaryLine && currentSummary.includes(company.summaryLine)
-      const companyLine = company.summaryLine && !hasCompanyLine ? ` ${company.summaryLine}` : ''
-      result = {
-        value: `${currentSummary}${companyLine}${addition}`.trim(),
-        note: missingKeywords.length ? `Added keywords: ${missingKeywords.join(', ')}.` : 'Summary already covers the key terms.',
-      }
-    }
-  }
-
-  if (sectionKey === 'skills') {
-    const missingSkills = role.requiredSkills.filter((skill) => !resume.skills.some((existing) => existing.toLowerCase() === skill.toLowerCase())).slice(0, 4)
-    result = {
-      value: [...resume.skills, ...missingSkills],
-      note: missingSkills.length ? `Added ${missingSkills.length} skills ${role.title}s are expected to have.` : 'Your skills already cover this role.',
-    }
-  }
-
-  if (sectionKey === 'experience' || sectionKey === 'projects') {
-    const entries = resume[sectionKey].map((entry) => ({ ...entry, bullets: strengthenBullets(entry.bullets) }))
-    const unmeasured = countUnmeasuredBullets(entries)
-    result = {
-      value: entries,
-      note: unmeasured ? `Stronger action verbs added. ${unmeasured} bullet(s) still need a number (%, users, time saved).` : 'Stronger action verbs added.',
-    }
-  }
-
-  return simulateRequest(result, 1300)
+export function generateResume(options) {
+  // TODO (Phase 3): POST /api/ai/generate (the backend writes the draft with a real AI model)
+  return simulateRequest(buildResumeDraft(options), 2200)
 }

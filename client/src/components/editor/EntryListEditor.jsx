@@ -45,6 +45,7 @@ function EntryListEditor({ sectionKey, entries, onChange, fields, entryName, cre
                   id={`${entry.id}-${field.name}`}
                   label={field.label}
                   hint={field.hint}
+                  placeholder={field.placeholder}
                   rows={4}
                   className="sm:col-span-2"
                   value={entry[field.name] || ''}

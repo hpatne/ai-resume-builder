@@ -1,4 +1,9 @@
-// Sample resumes so the demo account has data.
+// Sample resumes so the demo account has data. "Reset demo data" (admin) brings these back.
+// ATS scores are worked out by the real scoring function, not typed in.
+import sampleJobDescriptions from './sampleJobDescriptions'
+import { findSkillsInText } from '../utils/jobDescription'
+import { calculateAtsScore } from '../utils/atsScore'
+
 const demoPersonal = {
   fullName: 'Aarav Sharma',
   email: 'demo@resumeai.dev',
@@ -11,7 +16,7 @@ const demoPersonal = {
 const demoEducation = [
   {
     id: 'edu-1',
-    degree: 'B.E. in Computer Engineering',
+    degree: 'B.Tech in Computer Science and Engineering',
     institution: 'Vidyanagar Institute of Technology (sample)',
     location: 'Mumbai',
     startYear: '2023',
@@ -20,9 +25,81 @@ const demoEducation = [
   },
 ]
 
-const sampleResumes = [
+const demoExperience = [
   {
-    id: 'r-nimbus-frontend',
+    id: 'exp-1',
+    jobTitle: 'Web Developer Intern',
+    company: 'Brightpath Software (sample)',
+    location: 'Remote',
+    startDate: 'May 2026',
+    endDate: 'Jul 2026',
+    bullets:
+      'Built 12 reusable React components for an internal dashboard, cutting new-page development time by 30%\nImproved the Lighthouse performance score from 62 to 91 by lazy-loading images and splitting bundles\nFixed 40+ cross-browser and accessibility issues reported during testing',
+  },
+]
+
+const demoProjects = [
+  {
+    id: 'proj-1',
+    name: 'Campus Events Portal',
+    techStack: 'React, Node.js, Express, MongoDB',
+    link: 'github.com/aarav-demo/campus-events',
+    bullets:
+      'Built a portal used by 800+ students to find and register for college events\nDeveloped REST APIs for events, sign-ups and admin approval with JWT login\nAdded search and filters that return results in under 100 ms',
+  },
+  {
+    id: 'proj-2',
+    name: 'Expense Tracker',
+    techStack: 'React, Firebase, Chart.js',
+    link: 'github.com/aarav-demo/expense-tracker',
+    bullets: 'Built a responsive app to log daily spending, used by 50 friends and classmates\nCreated monthly charts that show spending by category',
+  },
+  {
+    id: 'proj-3',
+    name: 'Railway Reservation Simulator',
+    techStack: 'Java, OOP',
+    link: '',
+    bullets: 'Modelled trains, coaches and bookings with classes and interfaces\nImplemented waitlist confirmation for 3 coach types using a priority queue',
+  },
+]
+
+const demoCertifications = [
+  { id: 'cert-1', name: 'Responsive Web Design', issuer: 'freeCodeCamp', year: '2025' },
+  { id: 'cert-2', name: 'Programming in Java', issuer: 'NPTEL', year: '2025' },
+]
+
+const frontendJob = sampleJobDescriptions['frontend-developer']
+
+const sampleResumes = [
+  // 1. Complete fresher resume (made with the create form, no job description yet)
+  {
+    id: 'r-aarav-main',
+    userId: 'u-demo',
+    title: 'Software Engineer – Main resume',
+    companyId: '',
+    companyName: '',
+    roleId: 'software-engineer',
+    roleTitle: 'Software Engineer',
+    templateId: 'classic',
+    sectionOrder: ['summary', 'skills', 'experience', 'projects', 'education', 'certifications'],
+    personal: demoPersonal,
+    summary:
+      'B.Tech in Computer Science and Engineering student graduating in 2027, applying for Software Engineer roles. Skilled in JavaScript, React, Node.js, Java and SQL. Key project: Campus Events Portal, a web app used by 800+ students. Worked as Web Developer Intern at Brightpath Software. Looking to apply these skills to real problems and keep learning.',
+    skills: ['JavaScript', 'React', 'Node.js', 'Express', 'MongoDB', 'Java', 'Python', 'SQL', 'HTML', 'CSS', 'Tailwind CSS', 'Git', 'Data Structures', 'REST APIs'],
+    experience: demoExperience,
+    education: demoEducation,
+    projects: demoProjects,
+    certifications: demoCertifications,
+    jobDescription: '',
+    jobSkills: [],
+    createdVia: 'form',
+    atsScore: 'calculate',
+    createdAt: '2026-09-25T09:00:00.000Z',
+    updatedAt: '2026-10-02T18:20:00.000Z',
+  },
+  // 2. Copy of resume 1, tailored for a Frontend Developer job ("Tailor for a new job")
+  {
+    id: 'r-aarav-frontend',
     userId: 'u-demo',
     title: 'Nimbus Labs – Frontend Developer',
     companyId: 'nimbus-labs',
@@ -33,114 +110,19 @@ const sampleResumes = [
     sectionOrder: ['summary', 'skills', 'projects', 'experience', 'education', 'certifications'],
     personal: demoPersonal,
     summary:
-      'Frontend developer skilled in React, JavaScript and responsive design, focused on fast and accessible user interfaces. Looking to help Nimbus Labs turn product requirements into clean, reusable components, with a strong base in data structures and performance.',
-    skills: ['JavaScript', 'React', 'HTML5', 'CSS3', 'Tailwind CSS', 'Git', 'REST APIs', 'Responsive Design', 'Data Structures'],
-    experience: [
-      {
-        id: 'exp-1',
-        jobTitle: 'Frontend Developer Intern',
-        company: 'Brightpath Software (sample)',
-        location: 'Remote',
-        startDate: 'May 2026',
-        endDate: 'Jul 2026',
-        bullets:
-          'Built 12 reusable React components for an internal dashboard, cutting new-page development time by 30%\nImproved the Lighthouse performance score from 62 to 91 by lazy-loading images and splitting bundles\nFixed 40+ cross-browser and accessibility issues reported during QA',
-      },
-    ],
+      'B.Tech in Computer Science and Engineering student graduating in 2027, applying for the Frontend Developer role at Nimbus Labs. Skilled in JavaScript, React, HTML, CSS and Tailwind CSS. Key project: Campus Events Portal (React, Node.js, Express, MongoDB). Built a portal used by 800+ students to find and register for college events. Worked as Web Developer Intern at Brightpath Software.',
+    skills: ['JavaScript', 'React', 'HTML', 'CSS', 'Tailwind CSS', 'REST APIs', 'Git', 'Data Structures', 'Node.js', 'Express', 'MongoDB', 'Java', 'Python', 'SQL'],
+    experience: demoExperience,
     education: demoEducation,
-    projects: [
-      {
-        id: 'proj-1',
-        name: 'Campus Events Portal',
-        techStack: 'React, Tailwind CSS, Firebase',
-        link: 'github.com/aarav-demo/campus-events',
-        bullets:
-          'Built a responsive portal used by 800+ students to discover and register for college events\nAdded search and filters with debounced input, keeping results under 100 ms',
-      },
-      {
-        id: 'proj-2',
-        name: 'Weather Dashboard',
-        techStack: 'JavaScript, REST APIs, Chart.js',
-        link: '',
-        bullets:
-          'Fetched live forecast data from a public REST API and charted 7-day trends\nCached responses in local storage to cut repeat API calls by 70%',
-      },
-    ],
-    certifications: [{ id: 'cert-1', name: 'Responsive Web Design', issuer: 'freeCodeCamp', year: '2025' }],
-    atsScore: 82,
-    createdAt: '2026-09-25T09:00:00.000Z',
-    updatedAt: '2026-10-02T18:20:00.000Z',
-  },
-  {
-    id: 'r-corewave-se',
-    userId: 'u-demo',
-    title: 'Corewave IT Services – Software Engineer',
-    companyId: 'corewave-it',
-    companyName: 'Corewave IT Services',
-    roleId: 'software-engineer',
-    roleTitle: 'Software Engineer',
-    templateId: 'classic',
-    sectionOrder: ['summary', 'education', 'skills', 'experience', 'certifications', 'projects'],
-    personal: demoPersonal,
-    summary:
-      'Final-year computer engineering student with strong foundations in Java, OOP and problem solving. Worked on team projects using agile practices and keen to learn client technologies at Corewave IT Services.',
-    skills: ['Java', 'Python', 'OOP', 'SQL', 'Git', 'Problem Solving'],
-    experience: [
-      {
-        id: 'exp-1',
-        jobTitle: 'Software Developer Intern',
-        company: 'Brightpath Software (sample)',
-        location: 'Remote',
-        startDate: 'May 2026',
-        endDate: 'Jul 2026',
-        bullets:
-          'Worked on refactoring a legacy Java module\nResponsible for writing unit tests for the billing service\nHelped the team with documentation',
-      },
-    ],
-    education: demoEducation,
-    projects: [
-      {
-        id: 'proj-1',
-        name: 'Railway Reservation Simulator',
-        techStack: 'Java, OOP, File I/O',
-        link: '',
-        bullets: 'Modelled trains, coaches and bookings with classes and interfaces\nImplemented waitlist confirmation using a priority queue',
-      },
-    ],
-    certifications: [{ id: 'cert-1', name: 'Programming in Java', issuer: 'NPTEL', year: '2025' }],
-    atsScore: 64,
-    createdAt: '2026-09-20T11:00:00.000Z',
-    updatedAt: '2026-09-28T16:45:00.000Z',
-  },
-  {
-    id: 'r-ledgerline-da',
-    userId: 'u-demo',
-    title: 'Ledgerline Capital – Data Analyst',
-    companyId: 'ledgerline-capital',
-    companyName: 'Ledgerline Capital',
-    roleId: 'data-analyst',
-    roleTitle: 'Data Analyst',
-    templateId: 'minimal',
-    sectionOrder: ['summary', 'experience', 'skills', 'certifications', 'education', 'projects'],
-    personal: demoPersonal,
-    summary:
-      'Data analyst skilled in SQL, Excel and Python, turning raw data into clear reports. Looking to support accurate, compliant reporting at Ledgerline Capital.',
-    skills: ['SQL', 'Excel', 'Python', 'Pandas', 'Power BI', 'Reporting'],
-    experience: [],
-    education: demoEducation,
-    projects: [
-      {
-        id: 'proj-1',
-        name: 'College Placement Dashboard',
-        techStack: 'SQL, Power BI',
-        link: '',
-        bullets: 'Modelled 5 years of placement data and built branch-wise KPI views\nHighlighted top recruiters and salary trends for the placement cell',
-      },
-    ],
-    certifications: [{ id: 'cert-1', name: 'Data Analytics with Python', issuer: 'NPTEL', year: '2026' }],
-    atsScore: null,
-    createdAt: '2026-09-18T10:00:00.000Z',
-    updatedAt: '2026-09-20T12:10:00.000Z',
+    projects: demoProjects,
+    certifications: demoCertifications,
+    jobDescription: frontendJob,
+    jobSkills: findSkillsInText(frontendJob),
+    createdVia: 'form',
+    tailoredFrom: 'r-aarav-main',
+    atsScore: 'calculate',
+    createdAt: '2026-10-03T10:00:00.000Z',
+    updatedAt: '2026-10-03T10:05:00.000Z',
   },
   {
     id: 'r-priya-sprintly',
@@ -159,7 +141,7 @@ const sampleResumes = [
     education: [{ id: 'edu-1', degree: 'B.Tech in Information Technology', institution: 'Coastal College of Engineering (sample)', location: 'Kochi', startYear: '2022', endYear: '2026', score: 'CGPA 8.9 / 10' }],
     projects: [],
     certifications: [],
-    atsScore: 71,
+    atsScore: 'calculate',
     createdAt: '2026-09-05T10:00:00.000Z',
     updatedAt: '2026-09-30T10:00:00.000Z',
   },
@@ -186,4 +168,7 @@ const sampleResumes = [
   },
 ]
 
-export default sampleResumes
+// Work out each 'calculate' score with the real ATS function
+export default sampleResumes.map((resume) =>
+  resume.atsScore === 'calculate' ? { ...resume, atsScore: calculateAtsScore(resume, resume.jobDescription).score, atsCheckedAt: resume.updatedAt } : resume
+)

@@ -2,9 +2,10 @@
 import { useState } from 'react'
 import ResumePreview from '../templates/ResumePreview'
 import KeywordPanel from './KeywordPanel'
+import AtsScoreBox from './AtsScoreBox'
 import EditorSections from './EditorSections'
 
-function EditorWorkspace({ resumeData, layout, company, role, printRef, onAddSkill, sectionProps }) {
+function EditorWorkspace({ resumeData, layout, company, role, printRef, onAddSkill, onCheckAts, sectionProps }) {
   const [activeTab, setActiveTab] = useState('edit')
   const tabClasses = (tab) => `h-10 flex-1 rounded-md text-[15px] font-semibold ${activeTab === tab ? 'bg-navy text-white' : 'text-ink-soft'}`
 
@@ -17,6 +18,7 @@ function EditorWorkspace({ resumeData, layout, company, role, printRef, onAddSki
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className={`${activeTab === 'edit' ? 'block' : 'hidden'} min-w-0 space-y-3 lg:block`}>
+          <AtsScoreBox resumeData={resumeData} onOpenReport={onCheckAts} />
           <KeywordPanel company={company} role={role} resumeData={resumeData} onAddSkill={onAddSkill} />
           <EditorSections resumeData={resumeData} {...sectionProps} />
         </div>

@@ -182,7 +182,6 @@ export function validateBasicsForm(basics) {
   return {
     degree: validateText(basics.degree, { required: true, label: 'your degree' }),
     institution: validateText(basics.institution, { required: true, label: 'your college', min: 3 }),
-    lastCompany: validateText(basics.lastCompany || '', { max: 80 }),
     fullName: validateName(basics.fullName),
     email: validateEmail(basics.email),
     phone: validatePhone(basics.phone, { required: true }),

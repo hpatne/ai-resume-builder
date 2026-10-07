@@ -21,7 +21,7 @@ function TargetStrip({ companyName, roleTitle, detail, action, size = 'md' }) {
               <span className={`font-board leading-tight font-semibold ${roleSize}`}>{roleTitle || 'Any role'}</span>
             </>
           ) : (
-            <span className="board-text text-lg">Choose a target company and role</span>
+            <span className="board-text text-lg">Paste a job or type a job title</span>
           )}
         </div>
         {detail && <p className="text-sm font-semibold text-ink/80">{detail}</p>}
