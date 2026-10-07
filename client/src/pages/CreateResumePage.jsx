@@ -6,8 +6,8 @@ import { useAuth } from '../context/AuthContext'
 import { useCatalog } from '../context/CatalogContext'
 import { useResumes } from '../context/ResumeContext'
 import { useToast } from '../context/ToastContext'
-import { resolveCompany, resolveRole, getTargetKeywords } from '../utils/targetProfile'
-import { validateRequiredFields, validateBasicsForm, hasErrors } from '../utils/validation'
+import { resolveCompany, resolveRole } from '../utils/targetProfile'
+import { validateRequiredFields, validateBasicsForm, validateEntry, hasErrors } from '../utils/validation'
 import { buildResumeDraft, generateResume } from '../services/aiService'
 import { findSkillsInText } from '../utils/jobDescription'
 import { SECTION_LABELS } from '../data/sections'
@@ -20,6 +20,7 @@ import StepTarget from '../components/wizard/StepTarget'
 import StepTemplate from '../components/wizard/StepTemplate'
 import StepBasics from '../components/wizard/StepBasics'
 import GeneratingState from '../components/wizard/GeneratingState'
+import AiDemoBadge, { AI_DEMO_TOOLTIP } from '../components/AiDemoBadge'
 
 // Stop letters being typed into number fields
 const INPUT_FILTERS = {
@@ -39,9 +40,10 @@ function CreateResumePage() {
   const [target, setTarget] = useState({ jobDescription: '', companyName: '', companyId: '', roleTitle: '', roleId: '' })
   // '' = use the company's recommended template
   const [chosenTemplateId, setChosenTemplateId] = useState(searchParams.get('template') || '')
-  const [basics, setBasics] = useState({ fullName: user.name, email: user.email, phone: '', location: '', degree: '', institution: '', graduationYear: '', score: '', experienceLevel: 'internship', lastCompany: '' })
+  const [basics, setBasics] = useState({ fullName: user.name, email: user.email, phone: '', location: '', degree: '', institution: '', graduationYear: '', score: '', skills: [], projects: [], experience: [] })
   const [errors, setErrors] = useState({})
   const [isGenerating, setIsGenerating] = useState(false)
+  const [showEntryErrors, setShowEntryErrors] = useState(false) // project/internship errors after a failed Generate
 
   // Worked out from the target
   const company = resolveCompany(companies, target.companyId, target.companyName)
@@ -50,7 +52,9 @@ function CreateResumePage() {
   const selectedTemplate = templates.find((template) => template.id === selectedTemplateId) || templates[0]
   const recommendedIds = [...new Set([company.preferredTemplate, ...templates.filter((template) => template.roles.includes(role.id)).map((template) => template.id)])]
 
-  const previewResume = useMemo(() => buildResumeDraft({ basics, company, role, templateId: selectedTemplateId }), [basics, company, role, selectedTemplateId])
+  // The company the user typed ('' if none)
+  const companyName = target.companyName.trim() ? company.name : ''
+  const previewResume = useMemo(() => buildResumeDraft({ basics, company, role, companyName, templateId: selectedTemplateId, jobDescription: target.jobDescription }), [basics, company, role, companyName, selectedTemplateId, target.jobDescription])
 
   const handleNext = () => {
     if (step === 1) {
@@ -75,22 +79,27 @@ function CreateResumePage() {
     if (errors[name]) setErrors({ ...errors, [name]: validateBasicsForm(newValues)[name] })
   }
 
+  // For skills, projects and internships (they are lists, not text boxes)
+  const handleBasicsFieldChange = (name, value) => setBasics({ ...basics, [name]: value })
+
   // Check a field when the user leaves it
   const handleBasicsBlur = (event) => setErrors({ ...errors, [event.target.name]: validateBasicsForm(basics)[event.target.name] })
 
   const handleGenerate = async () => {
     const basicsErrors = validateBasicsForm(basics)
+    const entryHasErrors = ['projects', 'experience'].some((key) => basics[key].some((entry) => hasErrors(validateEntry(key, entry))))
     setErrors(basicsErrors)
-    if (hasErrors(basicsErrors)) return
+    setShowEntryErrors(entryHasErrors)
+    if (hasErrors(basicsErrors) || entryHasErrors) {
+      showToast('Fix the highlighted fields first.', 'error')
+      return
+    }
 
     setIsGenerating(true)
-    const draft = await generateResume({ basics, company, role, templateId: selectedTemplate.id })
-    // Save the job the resume is for; an empty company stays empty
-    const companyName = target.companyName.trim() ? company.name : ''
+    // Uses only what the user typed
+    const draft = await generateResume({ basics, company, role, companyName, templateId: selectedTemplate.id, jobDescription: target.jobDescription })
     const newResume = await createResume({
       ...draft,
-      title: [companyName, role.title].filter(Boolean).join(' – '),
-      companyName,
       jobDescription: target.jobDescription.trim(),
       jobSkills: findSkillsInText(target.jobDescription),
       createdVia: 'form',
@@ -101,17 +110,18 @@ function CreateResumePage() {
 
   if (isCatalogLoading) return <PageLoader message="Loading companies and roles…" />
 
+  const jobSkillCount = findSkillsInText(target.jobDescription).length
   const generatingSteps = [
-    `Reading the ${company.name} profile`,
+    jobSkillCount ? `Reading the job description: ${jobSkillCount} skills found` : 'No job description, using your details only',
     `Ordering sections: ${company.sectionOrder.slice(0, 3).map((key) => SECTION_LABELS[key]).join(', ')}…`,
-    `Writing a summary for a ${role.title}`,
-    `Adding ${role.requiredSkills.length} skills and ${getTargetKeywords(company, role).length} keywords`,
+    `Writing a summary from your degree, skills and best project`,
+    `Turning your sentences into bullet points`,
     `Applying the ${selectedTemplate?.name} template`,
   ]
 
   return (
     <div className="mx-auto max-w-5xl">
-      <PageHeader title="Create a resume" description="Start with where you are applying. Everything else is tailored to it." />
+      <PageHeader title="Create a resume" description="Paste the job you are applying for, then add your own details. The draft uses only what you type." />
 
       <div className="mb-6">
         <TargetStrip companyName={target.companyName} roleTitle={target.roleTitle} detail={target.roleTitle && `${selectedTemplate?.name} template`} />
@@ -124,7 +134,7 @@ function CreateResumePage() {
           <WizardProgress currentStep={step} />
           {step === 1 && <StepTarget target={target} onTargetChange={setTarget} companies={companies} roles={roles} errors={errors} company={company} role={role} templateName={templates.find((template) => template.id === company.preferredTemplate)?.name} />}
           {step === 2 && <StepTemplate templates={templates} selectedTemplateId={selectedTemplate?.id} onSelect={setChosenTemplateId} recommendedIds={recommendedIds} previewResume={previewResume} companyName={company.name} />}
-          {step === 3 && <StepBasics basics={basics} onChange={handleBasicsChange} onBlur={handleBasicsBlur} errors={errors} />}
+          {step === 3 && <StepBasics basics={basics} onChange={handleBasicsChange} onBlur={handleBasicsBlur} onFieldChange={handleBasicsFieldChange} errors={errors} role={role} showEntryErrors={showEntryErrors} />}
 
           <div className="mt-8 flex items-center justify-between gap-3 border-t border-line pt-5">
             {step > 1 ? (
@@ -139,8 +149,8 @@ function CreateResumePage() {
                 Next <ArrowRight size={18} aria-hidden="true" />
               </Button>
             ) : (
-              <Button size="lg" onClick={handleGenerate}>
-                <PenLine size={18} aria-hidden="true" /> Generate with AI
+              <Button size="lg" onClick={handleGenerate} title={AI_DEMO_TOOLTIP}>
+                <PenLine size={18} aria-hidden="true" /> Generate with AI <AiDemoBadge />
               </Button>
             )}
           </div>

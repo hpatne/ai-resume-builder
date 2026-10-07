@@ -48,6 +48,12 @@ function joinWithAnd(items) {
   return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`
 }
 
+// Standard skill names ("reactjs" → "React"), without repeats
+function standardiseSkills(skills) {
+  const names = skills.map((skill) => findListedSkill(skill)?.name || skill.trim()).filter(Boolean)
+  return names.filter((name, index) => names.findIndex((other) => other.toLowerCase() === name.toLowerCase()) === index)
+}
+
 // User's skills, with the ones the job asks for first
 function sortSkillsByJob(skills, jobDescription) {
   const jobSkills = findSkillsInText(jobDescription)
@@ -86,8 +92,9 @@ function buildSummary(profile, jobDescription) {
   const project = pickBestProject(profile.projects || [])
   if (project) {
     const firstPoint = textToBullets(project.bullets)[0]
-    const tech = project.techStack?.trim() ? ` using ${project.techStack.trim()}` : ''
-    sentences.push(`Built ${project.name.trim()}${tech}${firstPoint ? `: ${firstPoint.charAt(0).toLowerCase()}${firstPoint.slice(1)}` : ''}.`)
+    const tech = project.techStack?.trim() ? ` (${project.techStack.trim()})` : ''
+    sentences.push(`Key project: ${project.name.trim()}${tech}.`)
+    if (firstPoint) sentences.push(`${firstPoint}.`)
   }
 
   const internship = (profile.experience || []).find((entry) => entry.jobTitle?.trim())
@@ -156,10 +163,8 @@ export function improveSection(section, content, jobDescription = '') {
   }
 
   if (section === 'skills') {
-    // Use the standard name for each skill ("reactjs" → "React") and remove repeats
-    const standardNames = content.map((skill) => findListedSkill(skill)?.name || skill.trim())
-    const unique = standardNames.filter((skill, index) => skill && standardNames.findIndex((other) => other.toLowerCase() === skill.toLowerCase()) === index)
-    const changed = content.length - unique.length + standardNames.filter((name, index) => name !== content[index]).length
+    const unique = standardiseSkills(content)
+    const changed = unique.length !== content.length || unique.some((name, index) => name !== content[index])
     result = { value: unique, note: changed ? 'Skill names standardised and repeats removed.' : 'Skills already look clean.' }
   }
 
@@ -186,7 +191,7 @@ export function tailorSummary(resume, jobDescription) {
 // Builds the resume right away from what the user typed (also used for the live preview).
 // companyName = the company the user typed ('' if none).
 export function buildResumeDraft({ basics, company, role, templateId, jobDescription = '', companyName = company.name }) {
-  const skills = sortSkillsByJob(basics.skills || [], jobDescription)
+  const skills = sortSkillsByJob(standardiseSkills(basics.skills || []), jobDescription)
   const toEntry = (entry, prefix) => ({ ...entry, id: entry.id || createId(prefix), bullets: textToBullets(entry.bullets).join('\n') })
   const experience = (basics.experience || []).filter((entry) => entry.jobTitle?.trim() || entry.company?.trim()).map((entry) => toEntry(entry, 'exp'))
   const projects = (basics.projects || []).filter((entry) => entry.name?.trim()).map((entry) => toEntry(entry, 'proj'))
